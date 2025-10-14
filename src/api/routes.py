@@ -443,7 +443,7 @@ def edit_user_mission():
 #-------------------------SET ACTIVE UNIQUE User Mission----------------#
 
 
-@api.route('/user/mission/set_active', methods=['PATCH'])
+@api.route('/user/mission/active', methods=['PATCH'])
 def set_active():
 
     data = request.get_json()
@@ -472,9 +472,32 @@ def set_active():
     return jsonify({"message": f"the actual is_active value of the mission {mission.title} is {mission.is_active}"}),200
 
 
-##-----------------------------VER INACTIVE UNIQUE User Missions---------------------#
+##-----------------------------VER INACTIVE/ACTIVE UNIQUE User Missions---------------------#
 
 
+
+@api.route('/user/mission/active', methods=["GET"])
+def get_active_missions():
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"error": "send a body with user_id and missions_state"}),400
+    
+    user_id = data.get("user_id")
+    missions_state = data.get("missions_state")
+
+    if not user_id and not missions_state:
+        return jsonify({"error": "user_id and missions_state field is missing"})
+    
+    missions = Mission.query.filter_by(user_id=user_id, is_active=missions_state).all()
+
+    if not missions:
+        return jsonify({"error": f"user {user_id} hasn't missions with the state: {missions_state}"}),400
+    
+    return jsonify([mission.serialize() for mission in missions])
+
+    
 
 
 
