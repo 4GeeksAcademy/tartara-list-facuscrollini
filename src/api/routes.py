@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Friend, Todo, GroupTodo
+from api.models import db, User, Friendship, Mission, FriendshipMission
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from sqlalchemy import and_, or_
@@ -68,6 +68,10 @@ def protected_access():
 @api.route('/users', methods=['GET'])
 def get_users():
     users = User.query.all()
+
+    if not users:
+        return jsonify({"error" : "no users has been founded"}), 400
+    
     return jsonify([user.serialize() for user in users]), 200
 
 
@@ -164,7 +168,7 @@ def get_frienship():
     if not user_id:
         return jsonify({"error": "please send a user_id information on the body"}),400
     
-    friendships = Friend.query.filter((Friend.user_from_id ==user_id)  | (Friend.user_to_id ==user_id)).all()
+    friendships = Friendship.query.filter((Friendship.user_from_id ==user_id)  | (Friendship.user_to_id ==user_id)).all()
 
     if not friendships:
         return jsonify({"error": "none friendships founded for the given user_id"}),400
@@ -187,7 +191,7 @@ def get_friendship():
     if not user_to_id or not user_from_id:
         return jsonify({"error": "please send the user_to_id and user_from_id to find the friendship correctly"}),400
     
-    friendship = Friend.query.filter(and_(Friend.user_from_id== user_from_id, Friend.user_to_id == user_to_id)).first()
+    friendship = Friendship.query.filter(and_(Friendship.user_from_id== user_from_id, Friendship.user_to_id == user_to_id)).first()
 
     if not friendship:
         return jsonify({"error": "none friendship has been founded with both provided id's"}),400
@@ -232,13 +236,13 @@ def create_friendship():
         return jsonify({"error": "none user has been founded with the provided user_to_id"}),400
     
 
-    existing_friendship = Friend.query.filter(and_(Friend.user_from_id == user_from_id, Friend.user_to_id == user_to_id)).first()
+    existing_friendship = Friendship.query.filter(and_(Friendship.user_from_id == user_from_id, Friendship.user_to_id == user_to_id)).first()
     
     if existing_friendship:
         return jsonify({"error": "this friendship relation already exists"}), 400
     
 
-    friendship = Friend(user_from_id=user_from_id, user_to_id=user_to_id)
+    friendship = Friendship(user_from_id=user_from_id, user_to_id=user_to_id)
 
     db.session.add(friendship)
     db.session.commit()
@@ -262,7 +266,7 @@ def delete_friendship():
     if not user_from_id or not user_to_id:
         return jsonify({"error": "please send the user_to_id and user_from_id to delete the friendship correctly"}),400
     
-    friendship = Friend.query.filter(and_(Friend.user_from_id == user_from_id, Friend.user_to_id == user_to_id)).first()
+    friendship = Friendship.query.filter(and_(Friendship.user_from_id == user_from_id, Friendship.user_to_id == user_to_id)).first()
 
     if not friendship:
         return jsonify({"error": "friendship not founded"}), 400
@@ -293,7 +297,7 @@ def get_user_todos():
     if not user_id:
         return jsonify({"error": "missing user_id field on the body"}),400
     
-    todos = Todo.query.filter_by(user_id=user_id).all()
+    todos = Mission.query.filter_by(user_id=user_id).all()
 
     if not todos:
         return jsonify({"error": "there is no todos for this user_id"}), 400
@@ -318,7 +322,7 @@ def get_user_todo():
     if not user_id and not todo_id:
         return jsonify({"error": "missing user_id and todo_id field on the body"}),400
     
-    todo = Todo.query.filter_by(user_id=user_id, id=todo_id).first()
+    todo = Mission.query.filter_by(user_id=user_id, id=todo_id).first()
 
     if not todo:
         return jsonify({"error": "none todo has been founded with the user_id or todo_id"}), 400
@@ -350,7 +354,7 @@ def create_user_todo():
     if not user:
         return jsonify({"error": "there is not user with this user_id"}), 400
 
-    todo = Todo(title=title, user_id=user_id)
+    todo = Mission(title=title, user_id=user_id)
 
     if description:
         todo.description = description
@@ -381,7 +385,7 @@ def delete_user_todo():
         if not user:
             return jsonify({"error": "no user was founded with the provided user_id"}),400
         
-        todo = Todo.query.filter_by(user_id=user_id, id=todo_id).first()
+        todo = Mission.query.filter_by(user_id=user_id, id=todo_id).first()
 
         if not todo:
             return jsonify({"error": "no todo was founded with the provided todo_id"}),400
@@ -413,7 +417,7 @@ def edit_user_todo():
         return jsonify({"error": "no user was founded with the provided user_id"}),400
     
 
-    todo = Todo.query.filter_by(user_id=user_id, id=todo_id).first()
+    todo = Mission.query.filter_by(user_id=user_id, id=todo_id).first()
 
     if not todo:
         return jsonify({"error": "there was not todo founded with the provided user_id and todo_id"}),400
@@ -453,12 +457,12 @@ def get_friendship_todos():
     if not friendship_id:
         return jsonify({"error": "none friendship_id provided"}),400
     
-    group_todos = GroupTodo.query.filter_by(friend_id=friendship_id).all()
+    friendship_missions = FriendshipMission.query.filter_by(friend_id=friendship_id).all()
 
-    if not group_todos:
+    if not friendship_missions:
         return jsonify({"error": "none group todos has been founded with the provided friendship_id"}),400
     
-    return jsonify([group_todo.serialize() for group_todo in group_todos]),200
+    return jsonify([friendship_mission.serialize() for friendship_mission in friendship_missions]),200
 
 
 
@@ -478,12 +482,12 @@ def get_friendship_todo():
     if not friendship_id or not group_todo_id:
         return jsonify({"error": "you have not provided a friendship_id or group_todo_id"}),400
     
-    group_todo = GroupTodo.query.filter_by(friend_id=friendship_id, id=group_todo_id).first()
+    friendship_mission =  FriendshipMission.query.filter_by(friend_id=friendship_id, id=group_todo_id).first()
 
     if not group_todo_id:
         return jsonify({"error": "none group todo has been founded with the provided friendship_id or group_todo_id"}),400
     
-    return jsonify(group_todo.serialize()),200
+    return jsonify(friendship_mission.serialize()),200
     
 
 
@@ -506,20 +510,20 @@ def create_friendship_todo():
 
         return jsonify({"error": "please provide a friendship_id and a title"}),400
     
-    friendship = Friend.query.get(friendship_id)
+    friendship = Friendship.query.get(friendship_id)
 
     if not friendship:
         return jsonify({"error": "there is not friendship with this friendship_id"}), 400
     
-    group_todo = GroupTodo(friend_id=friendship_id, title=title)
+    friendship_mission =  FriendshipMission(friend_id=friendship_id, title=title)
 
     if description:
-        group_todo.description = description
+        friendship_mission.description = description
 
-    db.session.add(group_todo)
+    db.session.add(friendship_mission)
     db.session.commit()
 
-    return jsonify(group_todo.serialize()),200
+    return jsonify(friendship_mission.serialize()),200
 
 
 
@@ -544,17 +548,17 @@ def delete_friendship_todo():
     if not isinstance(friendship_id, int) or not isinstance(group_todo_id,int):
         return jsonify({"error": "friendship_id and group_todo_id must be integer numbers"}),400
     
-    friendship = Friend.query.get(friendship_id)
+    friendship = Friendship.query.get(friendship_id)
 
     if not friendship:
         return jsonify({"error":"none friendship has been founded with the provided friendship_id"}),400
     
-    group_todo = GroupTodo.query.filter_by(friend_id=friendship_id, id=group_todo_id).first()
+    friendship_mission =  FriendshipMission.query.filter_by(friend_id=friendship_id, id=group_todo_id).first()
 
-    if not group_todo:
+    if not friendship_mission:
         return jsonify({"error": "none group_todo has been founded with the provided friendship_id and group_todo_id"}),400
     
-    db.session.delete(group_todo)
+    db.session.delete(friendship_mission)
     db.session.commit()
 
     return jsonify({"message": "group_todo successfully deleted"}),200
@@ -578,14 +582,14 @@ def edit_friendship_todo():
     if not isinstance(friendship_id, int) or not isinstance(group_todo_id,int):
         return jsonify({"error": "friendship_id and group_todo_id must be integer numbers"}),400
     
-    friendship = Friend.query.get(friendship_id)
+    friendship = Friendship.query.get(friendship_id)
 
     if not friendship:
         return jsonify({"error":"none friendship has been founded with the provided friendship_id"}),400
     
-    group_todo = GroupTodo.query.filter_by(friend_id=friendship_id, id=group_todo_id).first()
+    friendship_mission =  FriendshipMission.query.filter_by(friend_id=friendship_id, id=group_todo_id).first()
 
-    if not group_todo:
+    if not friendship_mission:
         return jsonify({"error": "none group_todo has been founded with the provided friendship_id and group_todo_id"}),400
     
     title = data.get("title")
@@ -596,25 +600,25 @@ def edit_friendship_todo():
 
     if title:
 
-        old_title = group_todo.title.replace(" ", "").lower()
+        old_title = friendship_mission.title.replace(" ", "").lower()
         new_title = title.replace(" ", "").lower()
 
         if old_title == new_title:
             return jsonify({"error": "new title can not be the same as the older one"}),400
 
-        group_todo.title = title
+        friendship_mission.title = title
 
     if description:
 
-        old_description = group_todo.description.replace(" ", "").lower()
+        old_description = friendship_mission.description.replace(" ", "").lower()
         new_description = description.replace(" ", "").lower()
 
         if old_description == new_description:
             return jsonify({"error": "new description can not be the same as the older one"}),400
 
-        group_todo.description = description
+        friendship_mission.description = description
 
     db.session.commit()
 
-    return jsonify(group_todo.serialize()), 200
+    return jsonify(friendship_mission.serialize()), 200
     
