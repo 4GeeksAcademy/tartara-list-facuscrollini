@@ -775,7 +775,7 @@ def get_friendship_requests():
 # ---------------------CAMBIAR Estado FriendshipRequests desde un Usuario ----------------------#
 
 
-@api.route('/user/friendship/request', methods=['POST'])
+@api.route('/user/friendship/request/state', methods=['POST'])
 def set_friendship_request():
 
     data = request.get_json()
@@ -825,8 +825,7 @@ def set_friendship_request():
 
             return jsonify({"message": f"friendship between {user_from.user_name} and {user_to.user_name} was successfully created"}), 200
         else:
-            return jsonify({"error": "just the user who recieve the request can accept it"}),400
-
+            return jsonify({"error": "just the user who recieve the request can accept it"}), 400
 
     elif state == "denied":
 
@@ -837,3 +836,48 @@ def set_friendship_request():
 
     else:
         return jsonify({"error": "state must be 'accepted' or 'denied'"}), 400
+
+
+# ---------------------CREAR FriendshipRequests desde un Usuario ----------------------#
+
+@api.route('/user/friendship/request', methods=['POST'])
+def create_friendship_request():
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"error": "body was not found, please send 'user_to_id' and 'user_from_id' fields"}), 400
+
+    user_to_id = data.get("user_to_id")
+    user_from_id = data.get("user_from_id")
+
+    if not user_to_id or not user_from_id:
+        return jsonify({"error": "the 'user_to_id' and 'user_from_id' are required"})
+
+    user_to = User.query.get(user_to_id)
+
+    if not user_to:
+        return jsonify({"error": "there's no user with the proportionated 'used_to_id' "}), 404
+
+    user_from = User.query.get(user_from_id)
+
+    if not user_from:
+        return jsonify({"error": "there's no user with the proportionated 'used_from_id' "}), 404
+
+    existing_friendship = Friendship.query.filter(or_(and_(Friendship.user_to_id == user_to_id, Friendship.user_from_id == user_from_id), and_(
+        Friendship.user_from_id == user_to_id, Friendship.user_to_id == user_from_id))).first()
+    
+    if existing_friendship:
+        return jsonify({"error": f"a friendship between {user_from.user_name} and {user_to.user_name} already exists"}),400
+    
+    existing_friendship_request = FriendshipRequest.query.filter(or_(and_(FriendshipRequest.user_from_id == user_from_id, FriendshipRequest.user_to_id == user_to_id),and_(FriendshipRequest.user_from_id == user_to_id, FriendshipRequest.user_to_id == user_from_id))).first()
+
+    if existing_friendship_request:
+        return jsonify({"error": "already exist a request for this users", "existing_friendship_request": existing_friendship_request.serialize()}),400
+    
+    friendship_request = FriendshipRequest(user_from_id=user_from_id, user_to_id=user_to_id)
+
+    db.session.add(friendship_request)
+    db.session.commit()
+
+    return jsonify({"message": f"friendship request from id {user_from.id}({user_from.user_name}) to id {user_to.id}({user_to.user_name}) was successfully created"})

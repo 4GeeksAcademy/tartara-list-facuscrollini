@@ -136,6 +136,15 @@ class FriendshipRequest(db.Model):
             "friendship_request_id": self.id
             }
     
+    def serialize(self):
+        return {
+            "from": self.user_from.user_name,
+            "from_id": self.user_from_id,
+            "to": self.user_to.user_name,
+            "to_id": self.user_to_id,
+            "id": self.id
+
+        }
 
 
    
