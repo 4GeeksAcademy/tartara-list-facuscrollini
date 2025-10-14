@@ -440,11 +440,11 @@ def edit_user_mission():
 
 
 
-#-------------------------SET ACTIVE UNIQUE User Mission----------------#
+#-------------------------PATCH is_active User Mission----------------#
 
 
 @api.route('/user/mission/active', methods=['PATCH'])
-def set_active():
+def set_mission_active():
 
     data = request.get_json()
 
@@ -476,7 +476,7 @@ def set_active():
 
 
 
-@api.route('/user/mission/active', methods=["GET"])
+@api.route('/user/missions/active', methods=["GET"])
 def get_active_missions():
 
     data = request.get_json()
@@ -521,7 +521,7 @@ def get_friendship_missions():
     if not friendship_id:
         return jsonify({"error": "none friendship_id provided"}),400
     
-    friendship_missions = FriendshipMission.query.filter_by(friend_id=friendship_id).all()
+    friendship_missions = FriendshipMission.query.filter_by(friendship_id=friendship_id).all()
 
     if not friendship_missions:
         return jsonify({"error": "none friendship missions has been founded with the provided friendship_id"}),400
@@ -546,7 +546,7 @@ def get_friendship_mission():
     if not friendship_id or not friendship_mission_id:
         return jsonify({"error": "you have not provided a friendship_id or friendship_mission_id"}),400
     
-    friendship_mission =  FriendshipMission.query.filter_by(friend_id=friendship_id, id=friendship_mission_id).first()
+    friendship_mission =  FriendshipMission.query.filter_by(friendship_id=friendship_id, id=friendship_mission_id).first()
 
     if not friendship_mission_id:
         return jsonify({"error": "none friendship mission has been founded with the provided friendship_id or friendship_mission_id"}),400
@@ -579,7 +579,7 @@ def create_friendship_mission():
     if not friendship:
         return jsonify({"error": "there is not friendship with this friendship_id"}), 400
     
-    friendship_mission =  FriendshipMission(friend_id=friendship_id, title=title)
+    friendship_mission =  FriendshipMission(friendship_id=friendship_id, title=title)
 
     if description:
         friendship_mission.description = description
@@ -617,7 +617,7 @@ def delete_friendship_mission():
     if not friendship:
         return jsonify({"error":"none friendship has been founded with the provided friendship_id"}),400
     
-    friendship_mission =  FriendshipMission.query.filter_by(friend_id=friendship_id, id=friendship_mission_id).first()
+    friendship_mission =  FriendshipMission.query.filter_by(friendship_id=friendship_id, id=friendship_mission_id).first()
 
     if not friendship_mission:
         return jsonify({"error": "none friendship mission  has been founded with the provided friendship_id and friendship_mission_id"}),400
@@ -651,7 +651,7 @@ def edit_friendship_mission():
     if not friendship:
         return jsonify({"error":"none friendship has been founded with the provided friendship_id"}),400
     
-    friendship_mission =  FriendshipMission.query.filter_by(friend_id=friendship_id, id=friendship_mission_id).first()
+    friendship_mission =  FriendshipMission.query.filter_by(friendship_id=friendship_id, id=friendship_mission_id).first()
 
     if not friendship_mission:
         return jsonify({"error": "none friendship mission has been founded with the provided friendship_id and friendship_mission_id"}),400
@@ -686,3 +686,57 @@ def edit_friendship_mission():
 
     return jsonify(friendship_mission.serialize()), 200
     
+#----------------- PATCH is_active FriendshipMission-------------------------#
+
+@api.route('/friendship/mission/active', methods=['PATCH'])
+def set_friendship_mission_active():
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"error": "none field has been founded, please send a body"})
+
+    friendship_id = data.get("friendship_id")
+    mission_id = data.get("mission_id")
+
+    if not friendship_id or not mission_id:
+        return jsonify({"error": "friendship_id and mission_id fields are missing"}), 400
+
+    mission = FriendshipMission.query.filter_by(friendship_id=friendship_id, id=mission_id).first()
+
+    if not mission:
+        return jsonify({"error": "there's no mission with the provided friendship_id and mission_id"}), 400
+
+    mission.is_active = not mission.is_active
+
+    db.session.commit()
+
+    return jsonify({"message": f"mission {mission.title} is_active was successfully changed to {mission.is_active}"}), 200
+
+
+#----------------GET is_active FriendshipMisisons---------------#
+
+@api.route('/friendship/missions/active', methods=['GET'])
+def get_active_friendship_missions():
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"error": "none field has been founded, please send a body"})
+    
+    friendship_id = data.get("friendship_id")
+    missions_state = data.get("missions_state")
+
+    if not friendship_id or not missions_state:
+        return jsonify({"error": "friendship_id and missions_state fields are necessary"}), 400
+
+    if not isinstance(missions_state,bool):
+        return jsonify({"error": "missions_state must be a boolean"})
+
+    
+    missions = FriendshipMission.query.filter_by(friendship_id=friendship_id, is_active=missions_state).all()
+
+    if not missions:
+        return jsonify({"error": f"friendship {friendship_id} hasn't missions with the {missions_state} state"})
+
+    return jsonify([mission.serialize() for mission in missions]), 200

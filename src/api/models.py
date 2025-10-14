@@ -76,8 +76,10 @@ class Friendship(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "user_to": self.user_to_id,
-            "user_from": self.user_from_id,
+            "user_to_id": self.user_to_id,
+            "user_from_id": self.user_from_id,
+            "user_to": self.user_to.user_name,
+            "user_from": self.user_from.user_name,
             "friendship_missions": [mission.serialize() for mission in self.friendship_missions]
 
         }
