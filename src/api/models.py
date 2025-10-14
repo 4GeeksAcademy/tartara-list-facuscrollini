@@ -125,10 +125,16 @@ class FriendshipRequest(db.Model):
     
 
     def request_to(self):
-        return self.user_to.user_name
+        return {
+            "to":self.user_to.user_name,
+            "friendship_request_id": self.id
+            }
     
     def request_from(self):
-        return self.user_from.user_name
+        return {
+            "from":self.user_from.user_name,
+            "friendship_request_id": self.id
+            }
     
 
 
