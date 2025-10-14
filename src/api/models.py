@@ -31,8 +31,8 @@ class User(db.Model):
             "email": self.email,
             "is_active": self.is_active,
             "user_name": self.user_name,
-            "friendships_request_sended": [request.request_to for request in self.friendships_request_from],
-            "friendships_request_recieved": [request.request_from for request in self.friendships_request_to],
+            "friendships_request_sended": [request.request_to() for request in self.friendship_requests_from],
+            "friendships_request_recieved": [request.request_from() for request in self.friendship_requests_to],
             # do not serialize the password, its a security breach
         }
     

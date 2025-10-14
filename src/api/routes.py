@@ -281,11 +281,11 @@ def delete_friendship():
 #-------------------------------------------FIN CRUD FRIEND --------------------------------------------------------------------------------------------#
 
 
-#------------------------------------------- Todo'S CRUD  --------------------------------------------------------------------------------------------#
+#------------------------------------------- Mission'S CRUD  --------------------------------------------------------------------------------------------#
     
- #-----------------GET ALL USER Todos------------------#
-@api.route('/user/todos', methods=['GET'])
-def get_user_todos():
+ #-----------------GET ALL USER Missions------------------#
+@api.route('/user/missions', methods=['GET'])
+def get_user_missions():
 
     data = request.get_json()
 
@@ -297,47 +297,47 @@ def get_user_todos():
     if not user_id:
         return jsonify({"error": "missing user_id field on the body"}),400
     
-    todos = Mission.query.filter_by(user_id=user_id).all()
+    missions = Mission.query.filter_by(user_id=user_id).all()
 
-    if not todos:
-        return jsonify({"error": "there is no todos for this user_id"}), 400
+    if not missions:
+        return jsonify({"error": "there is no missions for this user_id"}), 400
     
-    return jsonify([todo.serialize() for todo in todos]),200
+    return jsonify([mission.serialize() for mission in missions]),200
 
 
 
- #-----------------GET UNIQUE USER Todo------------------#
-@api.route('/user/todo', methods=['GET'])
-def get_user_todo():
+ #-----------------GET UNIQUE USER Mission------------------#
+@api.route('/user/mission', methods=['GET'])
+def get_user_mission():
     
     data = request.get_json()
 
     if not data:
-        return jsonify({"error": "send a body with info to get an user todo"}),400
+        return jsonify({"error": "send a body with info to get an user mission"}),400
     
     user_id = data["user_id"]
-    todo_id = data["todo_id"]
+    mission_id = data["mission_id"]
     
     
-    if not user_id and not todo_id:
-        return jsonify({"error": "missing user_id and todo_id field on the body"}),400
+    if not user_id and not mission_id:
+        return jsonify({"error": "missing user_id and mission_id field on the body"}),400
     
-    todo = Mission.query.filter_by(user_id=user_id, id=todo_id).first()
+    mission = Mission.query.filter_by(user_id=user_id, id=mission_id).first()
 
-    if not todo:
-        return jsonify({"error": "none todo has been founded with the user_id or todo_id"}), 400
+    if not mission:
+        return jsonify({"error": "none mission has been founded with the user_id or mission_id"}), 400
     
-    return jsonify(todo.serialize())
+    return jsonify(mission.serialize())
     
 
- #-----------------CREATE UNIQUE USER Todo------------------# 
-@api.route('/user/todo', methods=['POST'])
-def create_user_todo():
+ #-----------------CREATE UNIQUE USER Mission------------------# 
+@api.route('/user/mission', methods=['POST'])
+def create_user_mission():
     
     data = request.get_json()
     
     if not data:
-        return jsonify({"error": "send a body with info to create an user todo"}),400
+        return jsonify({"error": "title, description and user_id fields are missing"}),400
     
 
 
@@ -354,62 +354,62 @@ def create_user_todo():
     if not user:
         return jsonify({"error": "there is not user with this user_id"}), 400
 
-    todo = Mission(title=title, user_id=user_id)
+    mission = Mission(title=title, user_id=user_id)
 
     if description:
-        todo.description = description
+        mission.description = description
 
-    db.session.add(todo)
+    db.session.add(mission)
     db.session.commit()
 
-    return jsonify(todo.serialize())
+    return jsonify(mission.serialize())
 
- #-----------------DELETE UNIQUE USER Todo------------------# 
+ #-----------------DELETE UNIQUE USER Mission------------------# 
 
-@api.route('/user/todo', methods=['DELETE'])
-def delete_user_todo():
+@api.route('/user/mission', methods=['DELETE'])
+def delete_user_mission():
         
         data = request.get_json()
 
         if not data:
-            return jsonify({"error": "send a body with info to delete an user todo"}),400
+            return jsonify({"error": "send a body with info to delete an user mission"}),400
 
         user_id = data.get("user_id")
-        todo_id = data.get("todo_id")
+        mission_id = data.get("mission_id")
 
-        if not user_id or not todo_id:
-            return jsonify({"error": "user_id and todo_id fields are missing"}), 400
+        if not user_id or not mission_id:
+            return jsonify({"error": "user_id and mission_id fields are missing"}), 400
         
         user = User.query.get(user_id)
 
         if not user:
             return jsonify({"error": "no user was founded with the provided user_id"}),400
         
-        todo = Mission.query.filter_by(user_id=user_id, id=todo_id).first()
+        mission = Mission.query.filter_by(user_id=user_id, id=mission_id).first()
 
-        if not todo:
-            return jsonify({"error": "no todo was founded with the provided todo_id"}),400
+        if not mission:
+            return jsonify({"error": "no mission was founded with the provided mission_id"}),400
         
-        db.session.delete(todo)
+        db.session.delete(mission)
         db.session.commit()
 
-        return jsonify({"message": f"the todo with the id {todo_id} associated with the user {user_id} was successfully deleted"}), 200
+        return jsonify({"message": f"the mission with the id {mission_id} associated with the user {user_id} was successfully deleted"}), 200
  
 
- #-----------------EDIT UNIQUE USER Todo------------------# 
-@api.route('/user/todo', methods=['PATCH'])
-def edit_user_todo():
+ #-----------------EDIT UNIQUE USER Mission------------------# 
+@api.route('/user/mission', methods=['PATCH'])
+def edit_user_mission():
     
     data = request.get_json()
 
     if not data:
-         return jsonify({"error": "send a body with info to modify an user todo"}),400
+         return jsonify({"error": "send a body with info to modify an user mission"}),400
 
     user_id = data.get("user_id")
-    todo_id = data.get("todo_id")
+    mission_id = data.get("mission_id")
 
-    if not user_id or not todo_id:
-            return jsonify({"error": "user_id and todo_id fields are missing"}), 400
+    if not user_id or not mission_id:
+            return jsonify({"error": "user_id and mission_id fields are missing"}), 400
     
     user = User.query.get(user_id)
 
@@ -417,10 +417,10 @@ def edit_user_todo():
         return jsonify({"error": "no user was founded with the provided user_id"}),400
     
 
-    todo = Mission.query.filter_by(user_id=user_id, id=todo_id).first()
+    mission = Mission.query.filter_by(user_id=user_id, id=mission_id).first()
 
-    if not todo:
-        return jsonify({"error": "there was not todo founded with the provided user_id and todo_id"}),400
+    if not mission:
+        return jsonify({"error": "there was not mission founded with the provided user_id and mission_id"}),400
     
     title = data.get("title")
     description = data.get("description")
@@ -429,28 +429,69 @@ def edit_user_todo():
         return jsonify({"error":"no fields to update, please provide a title or a description"}),400
 
     if title:
-        todo.title = title
+        mission.title = title
     if description:
-        todo.description = description
+        mission.description = description
 
 
     db.session.commit()
 
-    return jsonify(todo.serialize()), 200
+    return jsonify(mission.serialize()), 200
+
+
+
+#-------------------------SET ACTIVE UNIQUE User Mission----------------#
+
+
+@api.route('/user/mission/set_active', methods=['PATCH'])
+def set_active():
+
+    data = request.get_json()
+
+    if not data:
+         return jsonify({"error": "send a body with info with user_id and mission_id"}),400
+    
+    user_id = data.get("user_id")
+    mission_id = data.get("mission_id")
+
+    if not user_id or not mission_id:
+        return jsonify({"error": "user_id and mission_id fields are missing"})
+    
+    mission = Mission.query.filter_by(id=mission_id, user_id=user_id).first()
+
+    if not mission:
+        return jsonify({"error": "there's no mission with the provided user_id and mission_id"}), 400
+    
+    
+    mission.is_active = not mission.is_active
+
     
 
-#-------------------------------------------FIN CRUD Todo --------------------------------------------------------------------------------------------#
+    db.session.commit()
 
-#-------------------------------------------GROUPTODO CRUD --------------------------------------------------------------------------------------------#
+    return jsonify({"message": f"the actual is_active value of the mission {mission.title} is {mission.is_active}"}),200
 
-#-----------------GET ALL FRIEND Todos------------------#
-@api.route('/friendship/todos', methods=['GET'])
-def get_friendship_todos():
+
+##-----------------------------VER INACTIVE UNIQUE User Missions---------------------#
+
+
+
+
+
+    
+
+#-------------------------------------------FIN CRUD Mission --------------------------------------------------------------------------------------------#
+
+#-------------------------------------------FriendshipMissions CRUD --------------------------------------------------------------------------------------------#
+
+#-----------------GET ALL FRIEND Missions------------------#
+@api.route('/friendship/missions', methods=['GET'])
+def get_friendship_missions():
     
     data = request.get_json()
 
     if not data:
-        return jsonify({"error": "send a body with info to see all friendship todos"}),400
+        return jsonify({"error": "frienship_id field is missing"}),400
     
     friendship_id = data.get("friendship_id")
 
@@ -460,16 +501,16 @@ def get_friendship_todos():
     friendship_missions = FriendshipMission.query.filter_by(friend_id=friendship_id).all()
 
     if not friendship_missions:
-        return jsonify({"error": "none group todos has been founded with the provided friendship_id"}),400
+        return jsonify({"error": "none friendship missions has been founded with the provided friendship_id"}),400
     
     return jsonify([friendship_mission.serialize() for friendship_mission in friendship_missions]),200
 
 
 
    
- #-----------------GET UNIQUE FRIEND Todo------------------#
-@api.route('/friendship/todo', methods=['GET'])
-def get_friendship_todo():
+ #-----------------GET UNIQUE FRIEND Mission------------------#
+@api.route('/friendship/mission', methods=['GET'])
+def get_friendship_mission():
     
     data = request.get_json()
 
@@ -477,24 +518,24 @@ def get_friendship_todo():
         return jsonify({"error": "none body information has been provided"}),400
     
     friendship_id = data.get("friendship_id")
-    group_todo_id = data.get("group_todo_id")
+    friendship_mission_id = data.get("friendship_mission_id")
 
-    if not friendship_id or not group_todo_id:
-        return jsonify({"error": "you have not provided a friendship_id or group_todo_id"}),400
+    if not friendship_id or not friendship_mission_id:
+        return jsonify({"error": "you have not provided a friendship_id or friendship_mission_id"}),400
     
-    friendship_mission =  FriendshipMission.query.filter_by(friend_id=friendship_id, id=group_todo_id).first()
+    friendship_mission =  FriendshipMission.query.filter_by(friend_id=friendship_id, id=friendship_mission_id).first()
 
-    if not group_todo_id:
-        return jsonify({"error": "none group todo has been founded with the provided friendship_id or group_todo_id"}),400
+    if not friendship_mission_id:
+        return jsonify({"error": "none friendship mission has been founded with the provided friendship_id or friendship_mission_id"}),400
     
     return jsonify(friendship_mission.serialize()),200
     
 
 
 
- #-----------------CREATE UNIQUE FRIEND Todo------------------# 
-@api.route('/friendship/todo', methods=['POST'])
-def create_friendship_todo():
+ #-----------------CREATE UNIQUE FRIEND Mission------------------# 
+@api.route('/friendship/mission', methods=['POST'])
+def create_friendship_mission():
 
 
     data = request.get_json()
@@ -528,10 +569,10 @@ def create_friendship_todo():
 
 
 
- #-----------------DELETE UNIQUE FRIEND Todo------------------# 
+ #-----------------DELETE UNIQUE FRIEND Mission------------------# 
 
-@api.route('/friendship/todo', methods=['DELETE'])
-def delete_friendship_todo():
+@api.route('/friendship/mission', methods=['DELETE'])
+def delete_friendship_mission():
     
     data = request.get_json()
 
@@ -540,33 +581,33 @@ def delete_friendship_todo():
 
 
     friendship_id = data.get("friendship_id")
-    group_todo_id = data.get("group_todo_id")
+    friendship_mission_id = data.get("friendship_mission_id")
 
-    if not friendship_id or not group_todo_id:
-        return jsonify({"error": "none friendship_id or group_todo_id has been provided"}),400
+    if not friendship_id or not friendship_mission_id:
+        return jsonify({"error": "none friendship_id or friendship_mission_id has been provided"}),400
     
-    if not isinstance(friendship_id, int) or not isinstance(group_todo_id,int):
-        return jsonify({"error": "friendship_id and group_todo_id must be integer numbers"}),400
+    if not isinstance(friendship_id, int) or not isinstance(friendship_mission_id,int):
+        return jsonify({"error": "friendship_id and friendship_mission_id must be integer numbers"}),400
     
     friendship = Friendship.query.get(friendship_id)
 
     if not friendship:
         return jsonify({"error":"none friendship has been founded with the provided friendship_id"}),400
     
-    friendship_mission =  FriendshipMission.query.filter_by(friend_id=friendship_id, id=group_todo_id).first()
+    friendship_mission =  FriendshipMission.query.filter_by(friend_id=friendship_id, id=friendship_mission_id).first()
 
     if not friendship_mission:
-        return jsonify({"error": "none group_todo has been founded with the provided friendship_id and group_todo_id"}),400
+        return jsonify({"error": "none friendship mission  has been founded with the provided friendship_id and friendship_mission_id"}),400
     
     db.session.delete(friendship_mission)
     db.session.commit()
 
-    return jsonify({"message": "group_todo successfully deleted"}),200
+    return jsonify({"message": "friendship mission successfully deleted"}),200
 
 
- #-----------------EDIT UNIQUE FRIEND Todo------------------# 
-@api.route('/friendship/todo', methods=['PATCH'])
-def edit_friendship_todo():
+ #-----------------EDIT UNIQUE FRIEND Mission------------------# 
+@api.route('/friendship/mission', methods=['PATCH'])
+def edit_friendship_mission():
     
     data = request.get_json()
 
@@ -574,29 +615,29 @@ def edit_friendship_todo():
         return jsonify({"error": "none body information has been provided"}),400
 
     friendship_id = data.get("friendship_id")
-    group_todo_id = data.get("group_todo_id")
+    friendship_mission_id = data.get("friendship_mission_id")
 
-    if not friendship_id or not group_todo_id:
-        return jsonify({"error": "none friendship_id or group_todo_id has been provided"}),400
+    if not friendship_id or not friendship_mission_id:
+        return jsonify({"error": "none friendship_id or friendship_mission_id has been provided"}),400
     
-    if not isinstance(friendship_id, int) or not isinstance(group_todo_id,int):
-        return jsonify({"error": "friendship_id and group_todo_id must be integer numbers"}),400
+    if not isinstance(friendship_id, int) or not isinstance(friendship_mission_id,int):
+        return jsonify({"error": "friendship_id and friendship_mission_id must be integer numbers"}),400
     
     friendship = Friendship.query.get(friendship_id)
 
     if not friendship:
         return jsonify({"error":"none friendship has been founded with the provided friendship_id"}),400
     
-    friendship_mission =  FriendshipMission.query.filter_by(friend_id=friendship_id, id=group_todo_id).first()
+    friendship_mission =  FriendshipMission.query.filter_by(friend_id=friendship_id, id=friendship_mission_id).first()
 
     if not friendship_mission:
-        return jsonify({"error": "none group_todo has been founded with the provided friendship_id and group_todo_id"}),400
+        return jsonify({"error": "none friendship mission has been founded with the provided friendship_id and friendship_mission_id"}),400
     
     title = data.get("title")
     description = data.get("description")
 
     if not title and not description:
-        return jsonify({"error": "please provide a title or a description data to modify the actual group_todo"}),400
+        return jsonify({"error": "please provide a title or a description data to modify the actual friendship_mission"}),400
 
     if title:
 
