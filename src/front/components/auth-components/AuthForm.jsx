@@ -8,6 +8,9 @@ const AuthForm = ({ color, fields }) => {
     const [formData, setFormData] = useState({})
     const [loading, setLoading] = useState(false)
 
+    const [signupError, setSignupError] = useState()
+    const [showModal, setShowModal] = useState(false)
+
     const navigate = useNavigate()
 
 
@@ -54,33 +57,50 @@ const AuthForm = ({ color, fields }) => {
         setFormData(prev => ({ ...prev, [name]: type === "checkbox" ? checked : value }))
     }
 
+    //Funcion para manejar el envio del formulario
 
-    const handleSubmit = async(event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
         if (formType == "login") {
             setLoading(true)
             const { token, user_id } = await login(formData.identificator, formData.password)
-            if(formData.staySigned){
+            if (formData.staySigned) {
                 localStorage.setItem("token", token)
                 localStorage.setItem("user_id", user_id)
-            } else{
+            } else {
                 sessionStorage.setItem("token", token)
                 sessionStorage.setItem("user_id", user_id)
             }
             setLoading(false)
-        } else if(formType == "signup"){
+        } else if (formType == "signup") {
             setLoading(true)
-            const user_created = createAccount(formData.user_name, formData.email,formData.password)
+            const user_created = await createAccount(formData.user_name, formData.email, formData.password)
 
-            if(user_created == "done"){
-                navigate("/auth", {state: {type: "login"}})
-            } else{
-                console.log(user_created)
+            if (user_created != "done") {
+                setShowModal(true)
+                setSignupError(user_created)
             }
+            setLoading(false)
         }
 
-
     }
+    //Fin funcion para manejar el envio del formuilario
+
+
+
+    //Funcion para cerrar modal del error al registrarse
+
+    const handleCloseModal = () => {
+        setShowModal(false)
+    }
+
+    //Fin funcion para cerrar modal del error al registrarse
+
+
+
+
+
+
 
 
 
@@ -102,7 +122,7 @@ const AuthForm = ({ color, fields }) => {
                                 :
                                 <>
                                     <label className="form-label fw-semibold pt-3" htmlFor={`input-${field.fieldName}`}  >{field.fieldName}</label>
-                                    <input value={formData[field.name] || ""} onChange={handleInputChange} className="form-control" id={`input-${field.fieldName}`} type={field.type} placeholder={field.placeholder} name={field.name && field.name} ></input>
+                                    <input value={formData[field.name] || ""} onChange={handleInputChange} className="form-control" maxLength={(field.name === "password" || field.name === "confirmPassword") ? 20 : undefined} minLength={field.name == "password" ? 8 : field.name == "user_name" ? 4 : field.name == "email" ? 5 : 8} id={`input-${field.fieldName}`} type={field.type} placeholder={field.placeholder} name={field.name && field.name} required ></input>
                                 </>
                         )
                     })}
@@ -113,6 +133,38 @@ const AuthForm = ({ color, fields }) => {
                     {endMessage}
                 </form>
             </div>
+
+
+            {/* Error Modal */}
+
+            {showModal && (
+                <div className="font-color-1">
+                {/*Modal*/}
+                <div className="modal fade show d-block" id="exampleModal" tabindex="-1" >
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">Sign up error</h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={handleCloseModal}></button>
+                        </div>
+                        <div className="modal-body">
+                            {signupError}
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleCloseModal}>Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                {/*Fondo escuro del modal*/}
+            <div className="modal-backdrop fade show" onClick={handleCloseModal}>
+            </div>
+                </div>
+            
+            )}
+
+
+
         </div>
     )
 }

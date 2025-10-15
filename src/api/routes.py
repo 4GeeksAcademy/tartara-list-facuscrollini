@@ -94,10 +94,28 @@ def create_user():
     email = recieved.get("email")
     password = recieved.get("password")
 
+
     if not user_name or not email:
-        return jsonify({"message": "user_name and email are obligatory"}), 400
+        return jsonify({"error": "user_name and email are obligatory"}), 400
     if not password:
-        return jsonify({"message": "password are obligatory"}), 400
+        return jsonify({"error": "password are obligatory"}), 400
+    
+    existing_user_email = User.query.filter(and_(User.user_name == user_name, User.email == email)).first()
+
+    if existing_user_email:
+        return jsonify({"error": "already exist a user with provided user_name or email"}),400
+    
+    existing_user_name = User.query.filter_by(user_name = user_name).first()
+
+    if existing_user_name:
+        return jsonify({"error" : "already exist a user with provided user_name"}),400
+    
+    existing_email = User.query.filter_by(email= email).first()
+
+    if existing_email:
+        return jsonify({"error" : "already exist a user with provided email"}),400
+    
+
 
     user = User(user_name=user_name, email=email, password=password)
     db.session.add(user)
