@@ -39,7 +39,7 @@ def login():
 
     access_token = create_access_token(identity=str(user.id))
 
-    return jsonify({"token": access_token, "user_id": user.id}), 200
+    return jsonify({"token": access_token, "user_id": user.id, "user_name": user.user_name}), 200
 
 # -----------------------------TOKEN VERIFICATION--------------------------#
 

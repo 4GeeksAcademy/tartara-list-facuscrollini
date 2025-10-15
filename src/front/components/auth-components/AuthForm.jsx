@@ -9,9 +9,34 @@ const AuthForm = ({ color, fields }) => {
     const [loading, setLoading] = useState(false)
 
     const [formError, setFormError] = useState({
-        title:"",
-        message:""
+        title: "",
+        message: ""
     })
+
+    const [formState, setFormState] = useState("")
+
+    const [formSuccess, setFormSuccess] = useState({
+        title: "",
+        message: ""
+    })
+
+
+    //Funcion para dar mensaje de bienvenida al azar dandole el nombre de usuario
+    const loginMessage = (user_name) => {
+
+        const loginMessages = [
+            { title: `Welcome back,${user_name}!`, message: "Help Claude complete 3,000 missions to find his home on Tartara." },
+            { title: `Ahoy, ${user_name}`, message: "Guide Claude through 3,000 missions and discover the island of Tartara." },
+            { title: `Hi ${user_name}!`, message: "Finish 3,000 missions and a sailor will reveal where Claude's home, Tartara, is." }
+        ]
+
+        const randomLoginMessage = loginMessages[Math.floor(Math.random() * loginMessages.length)]
+
+        return randomLoginMessage
+    }
+    // Fin loginMessage
+
+
     const [showModal, setShowModal] = useState(false)
 
     const navigate = useNavigate()
@@ -60,6 +85,8 @@ const AuthForm = ({ color, fields }) => {
         setFormData(prev => ({ ...prev, [name]: type === "checkbox" ? checked : value }))
     }
 
+
+
     //Funcion para manejar el envio del formulario
 
     const handleSubmit = async (event) => {
@@ -68,13 +95,22 @@ const AuthForm = ({ color, fields }) => {
             setLoading(true)
             const user_login = await login(formData.identificator, formData.password)
 
-            const {token, user_id} = await user_login
+            const { token, user_id, user_name } = await user_login
 
-            if(!token || !user_id){
-                setFormError({title:"LOGIN ERROR", message: user_login})
-                setLoading(false)
+            if (!token || !user_id) {
+                setFormError({ title: "LOGIN ERROR", message: user_login })
+                setFormState("error")
                 setShowModal(true)
+                setLoading(false)
                 return
+            } else {
+
+                const {title, message} = loginMessage(user_name)
+                setFormSuccess({title: title, message: message})
+                setFormState("success")
+                setShowModal(true)
+                setLoading(false)
+
             }
 
             if (formData.staySigned) {
@@ -90,7 +126,12 @@ const AuthForm = ({ color, fields }) => {
             const user_created = await createAccount(formData.user_name, formData.email, formData.password)
 
             if (user_created != "done") {
-                setFormError({title: "SIGN UP ERROR", message: user_created})
+                setFormError({ title: "SIGN UP ERROR", message: user_created })
+                setFormState("error")
+                setShowModal(true)
+            } else {
+                setFormSuccess({ title: "Account created", message: "Let's rock!" })
+                setFormState("success")
                 setShowModal(true)
             }
             setLoading(false)
@@ -105,6 +146,14 @@ const AuthForm = ({ color, fields }) => {
 
     const handleCloseModal = () => {
         setShowModal(false)
+        if(formState== "success"){
+            if(formType == "login"){
+                navigate("/", {replace:true})
+            }else if(formType == "signup"){
+
+                navigate("/auth", {state:{type:"login"}})
+            }
+        }
     }
 
     //Fin funcion para cerrar modal del error al registrarse
@@ -123,7 +172,7 @@ const AuthForm = ({ color, fields }) => {
         <div className={`d-flex flex-column justify-content-center align-items-center ${color == "a" ? "font-color-1" : "font-color-3"} h-100 w-100`}>
             <div> <h2 className={`display-3 ${color == "a" ? "font-color-3" : "font-color-1"} mb-4 pb-5`}>{fields.title}</h2></div>
             <div className={`${color == "a" ? "back-color-3" : "back-color-1"} rounded-4  d-inline-flex px-5  py-2 shadow-lg`}>
-                <form  className="" onSubmit={handleSubmit}>
+                <form className="" onSubmit={handleSubmit}>
                     {fields.fields.map((field) => {
                         return (
                             field.type == "checkbox" ?
@@ -135,7 +184,7 @@ const AuthForm = ({ color, fields }) => {
                                 :
                                 <>
                                     <label className="form-label fw-semibold pt-3" htmlFor={`input-${field.fieldName}`}  >{field.fieldName}</label>
-                                    <input value={formData[field.name] || ""} onChange={handleInputChange} className="form-control" maxLength={(field.name === "password" || field.name === "confirmPassword") ? 20 : undefined} minLength={field.name == "password" ? 8 : field.name == "user_name" ? 4 : field.name == "email" ? 5 : field.name == "identificator"? 4: 8} id={`input-${field.fieldName}`} type={field.type} placeholder={field.placeholder} name={field.name && field.name} required ></input>
+                                    <input value={formData[field.name] || ""} onChange={handleInputChange} className="form-control" maxLength={(field.name === "password" || field.name === "confirmPassword") ? 20 : undefined} minLength={field.name == "password" ? 8 : field.name == "user_name" ? 4 : field.name == "email" ? 5 : field.name == "identificator" ? 4 : 8} id={`input-${field.fieldName}`} type={field.type} placeholder={field.placeholder} name={field.name && field.name} required ></input>
                                 </>
                         )
                     })}
@@ -151,31 +200,62 @@ const AuthForm = ({ color, fields }) => {
             {/* Error Modal */}
 
             {showModal && (
-                <div className="font-color-4">
-                {/*Modal*/}
-                <div className="modal fade show d-block text-center" id="exampleModal" tabindex="-1" >
-                <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content">
-                        <div className="modal-header back-color-2 font-color-3">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">{formError.title}<i class="fa-solid fa-circle-exclamation"></i></h1>
-                            <button type="button" className="btn button-color-3 font-color-1 fa-regular fa-x fw-bold" data-bs-dismiss="modal" aria-label="Close" onClick={handleCloseModal}></button>
+                formState == "error" ? (
+
+                    <div className="font-color-4">
+                        {/*Modal*/}
+                        <div className="modal fade show d-block text-center" id="exampleModal" tabindex="-1" >
+                            <div className="modal-dialog modal-dialog-centered">
+                                <div className="modal-content">
+                                    <div className="modal-header back-color-2 font-color-3">
+                                        <h1 className="modal-title fs-5" id="exampleModalLabel">{formError.title}<i class="fa-solid fa-circle-exclamation"></i></h1>
+                                        <button type="button" className="btn button-color-3 font-color-1 fa-regular fa-x fw-bold" data-bs-dismiss="modal" aria-label="Close" onClick={handleCloseModal}></button>
+                                    </div>
+                                    <div className="modal-body">
+                                        <p className="fs-5 py-4 m-0 fw-bold">
+                                            {formError.message}
+                                        </p>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn button-color-2 text-white" data-bs-dismiss="modal" onClick={handleCloseModal}>Accept</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className="modal-body">
-                            <p className="fs-5 py-4 m-0 fw-bold">
-                            {formError.message}
-                            </p>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn button-color-2 text-white" data-bs-dismiss="modal" onClick={handleCloseModal}>Accept</button>
+                        {/*Fondo escuro del modal*/}
+                        <div className="modal-backdrop fade show" onClick={handleCloseModal}>
                         </div>
                     </div>
-                </div>
-            </div>
-                {/*Fondo escuro del modal*/}
-            <div className="modal-backdrop fade show" onClick={handleCloseModal}>
-            </div>
-                </div>
-            
+                ) :
+                    (
+                        <div className="font-color-4">
+                            {/*Modal*/}
+                            <div className="modal fade show d-block text-center" id="exampleModal" tabindex="-1" >
+                                <div className="modal-dialog modal-dialog-centered">
+                                    <div className="modal-content">
+                                        <div className="modal-header back-color-2 font-color-3">
+                                            <h1 className="modal-title fs-5" id="exampleModalLabel">{formSuccess.title} <i class="fa-solid fa-circle-exclamation"></i></h1>
+                                            <button type="button" className="btn button-color-3 font-color-1 fa-regular fa-x fw-bold" data-bs-dismiss="modal" aria-label="Close" onClick={handleCloseModal}></button>
+                                        </div>
+                                        <div className="modal-body">
+                                            <p className="fs-5 py-4 m-0 fw-bold">
+                                                {formSuccess.message}
+                                            </p>
+                                        </div>
+                                        <div className="modal-footer">
+                                            <button type="button" className="btn button-color-2 text-white" data-bs-dismiss="modal" onClick={handleCloseModal}>Accept</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {/*Fondo escuro del modal*/}
+                            <div className="modal-backdrop fade show" onClick={handleCloseModal}>
+                            </div>
+                        </div>
+
+
+                    )
+
             )}
 
 
