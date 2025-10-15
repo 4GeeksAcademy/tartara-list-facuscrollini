@@ -16,7 +16,7 @@ export const login = async(identificator, password) =>{
     const data = await response.json()
 
     if(response.status != 200){
-        console.log(data)
+        return "Invalid email or password"
     }
     return data
 }

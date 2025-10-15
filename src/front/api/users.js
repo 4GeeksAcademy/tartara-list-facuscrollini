@@ -18,13 +18,13 @@ export const createAccount = async (user_name, email, password) => {
   if (response.status != 200) {
 
     if (data.error == "already exist a user with provided user_name or email") {
-      return "This Username and Email are already registered";
+      return "Username and Email already exists.";
     } 
     else if (data.error == "already exist a user with provided user_name") {
-      return "This Username is already registered";
+      return "Username already exists.";
     } 
     else if (data.error == "already exist a user with provided email") {
-      return "This email is already registered";
+      return "Email already exists.";
     }
   } else {
     return "done";

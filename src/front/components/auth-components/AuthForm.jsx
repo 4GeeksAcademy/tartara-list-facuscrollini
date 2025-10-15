@@ -8,7 +8,10 @@ const AuthForm = ({ color, fields }) => {
     const [formData, setFormData] = useState({})
     const [loading, setLoading] = useState(false)
 
-    const [signupError, setSignupError] = useState()
+    const [formError, setFormError] = useState({
+        title:"",
+        message:""
+    })
     const [showModal, setShowModal] = useState(false)
 
     const navigate = useNavigate()
@@ -63,7 +66,17 @@ const AuthForm = ({ color, fields }) => {
         event.preventDefault()
         if (formType == "login") {
             setLoading(true)
-            const { token, user_id } = await login(formData.identificator, formData.password)
+            const user_login = await login(formData.identificator, formData.password)
+
+            const {token, user_id} = await user_login
+
+            if(!token || !user_id){
+                setFormError({title:"LOGIN ERROR", message: user_login})
+                setLoading(false)
+                setShowModal(true)
+                return
+            }
+
             if (formData.staySigned) {
                 localStorage.setItem("token", token)
                 localStorage.setItem("user_id", user_id)
@@ -77,8 +90,8 @@ const AuthForm = ({ color, fields }) => {
             const user_created = await createAccount(formData.user_name, formData.email, formData.password)
 
             if (user_created != "done") {
+                setFormError({title: "SIGN UP ERROR", message: user_created})
                 setShowModal(true)
-                setSignupError(user_created)
             }
             setLoading(false)
         }
@@ -110,7 +123,7 @@ const AuthForm = ({ color, fields }) => {
         <div className={`d-flex flex-column justify-content-center align-items-center ${color == "a" ? "font-color-1" : "font-color-3"} h-100 w-100`}>
             <div> <h2 className={`display-3 ${color == "a" ? "font-color-3" : "font-color-1"} mb-4 pb-5`}>{fields.title}</h2></div>
             <div className={`${color == "a" ? "back-color-3" : "back-color-1"} rounded-4  d-inline-flex px-5  py-2 shadow-lg`}>
-                <form onSubmit={handleSubmit}>
+                <form  className="" onSubmit={handleSubmit}>
                     {fields.fields.map((field) => {
                         return (
                             field.type == "checkbox" ?
@@ -122,7 +135,7 @@ const AuthForm = ({ color, fields }) => {
                                 :
                                 <>
                                     <label className="form-label fw-semibold pt-3" htmlFor={`input-${field.fieldName}`}  >{field.fieldName}</label>
-                                    <input value={formData[field.name] || ""} onChange={handleInputChange} className="form-control" maxLength={(field.name === "password" || field.name === "confirmPassword") ? 20 : undefined} minLength={field.name == "password" ? 8 : field.name == "user_name" ? 4 : field.name == "email" ? 5 : 8} id={`input-${field.fieldName}`} type={field.type} placeholder={field.placeholder} name={field.name && field.name} required ></input>
+                                    <input value={formData[field.name] || ""} onChange={handleInputChange} className="form-control" maxLength={(field.name === "password" || field.name === "confirmPassword") ? 20 : undefined} minLength={field.name == "password" ? 8 : field.name == "user_name" ? 4 : field.name == "email" ? 5 : field.name == "identificator"? 4: 8} id={`input-${field.fieldName}`} type={field.type} placeholder={field.placeholder} name={field.name && field.name} required ></input>
                                 </>
                         )
                     })}
@@ -138,20 +151,22 @@ const AuthForm = ({ color, fields }) => {
             {/* Error Modal */}
 
             {showModal && (
-                <div className="font-color-1">
+                <div className="font-color-4">
                 {/*Modal*/}
-                <div className="modal fade show d-block" id="exampleModal" tabindex="-1" >
+                <div className="modal fade show d-block text-center" id="exampleModal" tabindex="-1" >
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
-                        <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">Sign up error</h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={handleCloseModal}></button>
+                        <div className="modal-header back-color-2 font-color-3">
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">{formError.title}<i class="fa-solid fa-circle-exclamation"></i></h1>
+                            <button type="button" className="btn button-color-3 font-color-1 fa-regular fa-x fw-bold" data-bs-dismiss="modal" aria-label="Close" onClick={handleCloseModal}></button>
                         </div>
                         <div className="modal-body">
-                            {signupError}
+                            <p className="fs-5 py-4 m-0 fw-bold">
+                            {formError.message}
+                            </p>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleCloseModal}>Close</button>
+                            <button type="button" className="btn button-color-2 text-white" data-bs-dismiss="modal" onClick={handleCloseModal}>Accept</button>
                         </div>
                     </div>
                 </div>
