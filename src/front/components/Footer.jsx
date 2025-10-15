@@ -11,7 +11,7 @@ export const Footer = () => (
 				</div>
 				<div className="col-lg-2 col-3 d-flex flex-column justify-content-center align-items-end">
 					<div className="border-white border-end border-3 pe-2">
-						<i class="fs-1 fa-regular fa-envelope">
+						<i className="fs-1 fa-regular fa-envelope">
 						</i> <p className="fs-4">Contact</p>
 					</div>
 				</div>
@@ -25,7 +25,7 @@ export const Footer = () => (
 				<div className="col-lg-2 col-3 d-flex flex-column justify-content-center align-items-end">
 					<div className="border-white border-3 border-end pe-2">
 
-					<i class="fs-1 fa-solid fa-sailboat"></i>
+					<i className="fs-1 fa-solid fa-sailboat"></i>
 					 <p className="fs-4">Navigate</p>
 					 
 					 </div>

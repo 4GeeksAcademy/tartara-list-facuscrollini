@@ -8,14 +8,13 @@ const Auth = () => {
 
     const {type} = location.state
 
-    const signupFields = {type: "signup",title: "Sign up", button: "Sign up", fields: [{fieldName: "Username", type: "text", placeholder: "example"}, {fieldName: "Email", type: "email", placeholder: "email@email.com"},{fieldName:"Password", type : "password", placeholder:"password"}, {fieldName: "Confirm password", type: "password", placeholder:"password"},{fieldName: "I agree to the terms and conditions", type: "checkbox"} ] }
-    const loginFields = { type: "login", title: "Login", button: "Login", fields: [{ fieldName: "Username/Email", type: "text", placeholder:"username/email@email.com" }, {fieldName: "Password", type: "password", placeholder:"password"}, {fieldName: "Stay signed in", type: "checkbox"}] }
+    const signupFields = {type: "signup",title: "Sign up", button: "Sign up", fields: [{fieldName: "Username", type: "text", placeholder: "example", name: "user_name"}, {fieldName: "Email", type: "email", placeholder: "email@email.com", name:"email"},{fieldName:"Password", type : "password", placeholder:"password", name:"password"}, {fieldName: "Confirm password", type: "password", placeholder:"confirm password", name: "confirmPassword"},{fieldName: "I agree to the terms and conditions", type: "checkbox", name: "agreeWithTerms"} ] }
+    const loginFields = { type: "login", title: "Login", button: "Login", fields: [{ fieldName: "Username/Email", type: "text", placeholder:"username/email@email.com", name:"identificator" }, {fieldName: "Password", type: "password", placeholder:"password", name:"password"}, {fieldName: "Stay signed in", type: "checkbox", name : "staySigned"}] }
 
     const color = type == "login" ? "a" : "b"
 
-    useEffect(()=>{
-        console.log(location)
-    },[])
+
+    
 
     return (
         <div className="container-fluid flex-fill">
