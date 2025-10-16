@@ -166,6 +166,71 @@ const AuthForm = ({ color, fields }) => {
         }
     }
 
+
+
+    const validationMessage = (name, event) => {
+        
+        let password = formData.password
+        
+        if (name == "confirmPassword") {
+            
+            let confirmPassword = formData.confirmPassword
+
+            if (password != confirmPassword) {
+                event.target.setCustomValidity("Passwords do not match. Please try again.")
+            } else if (!confirmPassword) {
+                event.target.setCustomValidity("Please confirm your password.")
+            }
+        }
+        else if (name == "user_name") {
+
+            let user = formData.user_name
+            
+            let userLength = user.length
+
+            if (!user) {
+                event.target.setCustomValidity("Please enter your username.")
+            } else if(userLength < 8 || userLength > 15){
+                event.target.setCustomValidity(`Username must be between 4 and 15 characters. You entered ${formData.user_name.length}`)
+            }
+        }
+        else if (name == "email") {
+
+            let email = event.target.value
+
+            let regexEmail = "/^.+@.+\..+$"
+
+            let emailFormat = email.match(regexEmail)
+
+
+
+            if (!email) {
+                event.target.setCustomValidity("Please enter your email address.")
+            } else if(!emailFormat){
+                event.target.setCustomValidity("Please enter a valid email, with text before the @ and a domain after it, for example: user@domain.com") 
+            }
+
+        } else if (name == "password") {
+            console.log(password)
+            console.log(password.length)
+            if (!formData.password) {
+                event.target.setCustomValidity("Please enter your password.")
+            }
+            else if (password.length < 8 || password.length >20){
+                
+                console.log("Contraseña indebida")
+                event.target.setCustomValidity(`Password must be between 8 and 20 characters long. You entered ${password.length}`)
+            }
+
+        } else if (name == "agreeWithTerms") {
+            if (!formData.agreeWithTerms) {
+                event.target.setCustomValidity("You must agree to the Terms and Conditions to create an account.")
+            }
+
+        }
+
+    }
+
     //Fin funcion para cerrar modal del error al registrarse
 
 
@@ -182,21 +247,32 @@ const AuthForm = ({ color, fields }) => {
             <div> <h2 className={`display-3 ${color == "a" ? "font-color-3" : "font-color-1"} mb-4 pb-5`}>{fields.title}</h2></div>
             <div className={`${color == "a" ? "back-color-3" : "back-color-1"} rounded-4  d-inline-flex px-5  py-2 shadow-lg`}>
                 <form className="" onSubmit={handleSubmit}>
-                    {fields.fields.map((field,index) => {
+                    {fields.fields.map((field, index) => {
                         return (
                             field.type == "checkbox" ?
 
                                 // Renderizacion de ambos checkboxs primero, tanto en login como signup
                                 <div className="mt-3" key={index}>
                                     <input onChange={field.name && handleInputChange} className="form-check-input " name={field.name && field.name} type={field.type} required={formType == "signup"}></input>
-                                    <label className="form-label mb-0" >{field.fieldName} {field.link ? <span title="Select to view the terms and conditions" onClick={()=>setShowTermsAndConditions(true)} className="link-color-5">{field.link}</span>: ""}</label>
+                                    <label className="form-label mb-0" >{field.fieldName} {field.link ? <span title="Select to view the terms and conditions" onClick={() => setShowTermsAndConditions(true)} className="link-color-5">{field.link}</span> : ""}</label>
                                 </div>
                                 :
-                                
+
                                 //Renderizacion de el resto de inputs
                                 <div key={index}>
                                     <label className="form-label fw-semibold pt-3" htmlFor={`input-${field.fieldName}`}  >{field.fieldName}</label>
-                                    <input value={formData[field.name] || ""} onChange={handleInputChange} className="form-control" maxLength={(field.name === "password" || field.name === "confirmPassword") ? 20 : undefined} minLength={field.name == "password" ? 8 : field.name == "user_name" ? 4 : field.name == "email" ? 5 : field.name == "identificator" ? 4 : 8} id={`input-${field.fieldName}`} type={field.type} placeholder={field.placeholder} name={field.name && field.name} required ></input>
+                                    <input value={formData[field.name] || ""}
+                                        onChange={handleInputChange}
+                                        className="form-control"
+                                        pattern={`${field.name == "confirmPassword" ? formData.password ? formData.password : ".*" : ".*"}`}
+                                        maxLength={field.name === "password" ? field.name == "user_name" ? 15: 20 : undefined}
+                                        minLength={field.name == "password" ? 8 : field.name == "user_name" ? 4 : field.name == "email" ? 5 : field.name == "identificator" ? 4 : undefined}
+                                        id={`input-${field.fieldName}`} type={field.type}
+                                        placeholder={field.placeholder} name={field.name && field.name}
+                                        onInvalid={(event)=> validationMessage(field.name, event)}
+                                        onInput={(event )=> event.target.setCustomValidity("")}
+                                        required
+                                    ></input>
                                 </div>
                         )
                     })}
@@ -215,7 +291,7 @@ const AuthForm = ({ color, fields }) => {
             {showModal && (
                 formState == "error" ? (
 
-                    <FormErrorModal title={formError.title} message={formError.message} handleCloseModal={handleCloseModal}/>
+                    <FormErrorModal title={formError.title} message={formError.message} handleCloseModal={handleCloseModal} />
                 ) :
                     (
                         <FormSuccessModal title={formSuccess.title} message={formSuccess.message} handleCloseModal={handleCloseModal} />
@@ -227,14 +303,14 @@ const AuthForm = ({ color, fields }) => {
             {/* Modal cuando esta cargando la informacion al acceder o crear cuenta */}
             {
                 loading && (
-                   <LoadingModal/>
+                    <LoadingModal />
                 )
             }
 
             {
                 showTermsAndConditions && (
 
-                    <TermsAndConditionsModal setModal={setShowTermsAndConditions}/>
+                    <TermsAndConditionsModal setModal={setShowTermsAndConditions} />
                 )
             }
 
