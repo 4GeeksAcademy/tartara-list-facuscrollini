@@ -5,7 +5,7 @@ const FormSuccessModal = ({ title, message, handleCloseModal }) => {
 
         <div className="font-color-4">
             {/*Modal*/}
-            <div className="modal fade show d-block text-center" id="exampleModal" tabindex="-1" >
+            <div className="modal fade show d-block text-center" id="exampleModal" tabIndex="-1" >
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header back-color-2 font-color-3">

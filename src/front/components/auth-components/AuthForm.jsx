@@ -6,6 +6,7 @@ import Loading from "./auth-form-components/LoadingModal"
 import FormErrorModal from "./auth-form-components/FormErrorModal"
 import FormSuccessModal from "./auth-form-components/FormSuccessModal"
 import TermsAndConditionsModal from "./auth-form-components/TermsAndConditionsModal"
+import LoadingModal from "./auth-form-components/LoadingModal"
 
 const AuthForm = ({ color, fields }) => {
 
@@ -99,6 +100,7 @@ const AuthForm = ({ color, fields }) => {
         event.preventDefault()
         if (formType == "login") {
             setLoading(true)
+
             const user_login = await login(formData.identificator, formData.password)
 
             const { token, user_id, user_name } = await user_login
@@ -128,6 +130,7 @@ const AuthForm = ({ color, fields }) => {
             }
             setLoading(false)
         } else if (formType == "signup") {
+
             setLoading(true)
 
             const user_created = await createAccount(formData.user_name, formData.email, formData.password)
@@ -174,28 +177,27 @@ const AuthForm = ({ color, fields }) => {
 
 
 
-
     return (
         <div className={`d-flex flex-column justify-content-center align-items-center ${color == "a" ? "font-color-1" : "font-color-3"} h-100 w-100`}>
             <div> <h2 className={`display-3 ${color == "a" ? "font-color-3" : "font-color-1"} mb-4 pb-5`}>{fields.title}</h2></div>
             <div className={`${color == "a" ? "back-color-3" : "back-color-1"} rounded-4  d-inline-flex px-5  py-2 shadow-lg`}>
                 <form className="" onSubmit={handleSubmit}>
-                    {fields.fields.map((field) => {
+                    {fields.fields.map((field,index) => {
                         return (
                             field.type == "checkbox" ?
 
                                 // Renderizacion de ambos checkboxs primero, tanto en login como signup
-                                <div className="mt-3">
-                                    <input onChange={field.name && handleInputChange} className="form-check-input " id={`input-${field.fieldName}`} name={field.name && field.name} type={field.type} required={formType == "signup"}></input>
-                                    <label className="form-label mb-0" htmlFor={`input-${field.fieldName}`}>{field.fieldName} {field.link ? <span title="Select to view the terms and conditions" className="link-color-5">{field.link}</span>: ""}</label>
+                                <div className="mt-3" key={index}>
+                                    <input onChange={field.name && handleInputChange} className="form-check-input " name={field.name && field.name} type={field.type} required={formType == "signup"}></input>
+                                    <label className="form-label mb-0" >{field.fieldName} {field.link ? <span title="Select to view the terms and conditions" onClick={()=>setShowTermsAndConditions(true)} className="link-color-5">{field.link}</span>: ""}</label>
                                 </div>
                                 :
                                 
                                 //Renderizacion de el resto de inputs
-                                <>
+                                <div key={index}>
                                     <label className="form-label fw-semibold pt-3" htmlFor={`input-${field.fieldName}`}  >{field.fieldName}</label>
                                     <input value={formData[field.name] || ""} onChange={handleInputChange} className="form-control" maxLength={(field.name === "password" || field.name === "confirmPassword") ? 20 : undefined} minLength={field.name == "password" ? 8 : field.name == "user_name" ? 4 : field.name == "email" ? 5 : field.name == "identificator" ? 4 : 8} id={`input-${field.fieldName}`} type={field.type} placeholder={field.placeholder} name={field.name && field.name} required ></input>
-                                </>
+                                </div>
                         )
                     })}
                     <div className="d-flex justify-content-center mt-2">
@@ -216,7 +218,7 @@ const AuthForm = ({ color, fields }) => {
                     <FormErrorModal title={formError.title} message={formError.message} handleCloseModal={handleCloseModal}/>
                 ) :
                     (
-                        <FormSuccessModal title={formError.title} message={formError.message} handleCloseModal={handleCloseModal} />
+                        <FormSuccessModal title={formSuccess.title} message={formSuccess.message} handleCloseModal={handleCloseModal} />
                     )
 
             )}
@@ -232,7 +234,7 @@ const AuthForm = ({ color, fields }) => {
             {
                 showTermsAndConditions && (
 
-                    <TermsAndConditionsModal/>
+                    <TermsAndConditionsModal setModal={setShowTermsAndConditions}/>
                 )
             }
 

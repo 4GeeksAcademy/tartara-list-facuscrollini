@@ -25,8 +25,66 @@ const Auth = () => {
     if (!type) return null
 
 
-    const signupFields = { type: "signup", title: "Sign up", button: "Sign up", fields: [{ fieldName: "Username", type: "text", placeholder: "example", name: "user_name" }, { fieldName: "Email", type: "email", placeholder: "email@email.com", name: "email" }, { fieldName: "Password", type: "password", placeholder: "password", name: "password" }, { fieldName: "Confirm password", type: "password", placeholder: "confirm password", name: "confirmPassword" }, { fieldName: "I agree to the", link:"terms and conditions", type: "checkbox", name: "agreeWithTerms" }] }
-    const loginFields = { type: "login", title: "Login", button: "Login", fields: [{ fieldName: "Username/Email", type: "text", placeholder: "username/email@email.com", name: "identificator" }, { fieldName: "Password", type: "password", placeholder: "Enter 8-20 characters", name: "password" }, { fieldName: "Stay signed in", type: "checkbox", name: "staySigned" }] }
+    const signupFields = {
+        type: "signup",
+        title: "Sign up",
+        button: "Sign up",
+        fields: [
+            {
+                fieldName: "Username",
+                type: "text",
+                placeholder: "example",
+                name: "user_name"
+            },
+            {
+                fieldName: "Email",
+                type: "email",
+                placeholder: "email@email.com",
+                name: "email"
+            },
+            {
+                fieldName: "Password",
+                type: "password",
+                placeholder: "password",
+                name: "password"
+            },
+            {
+                fieldName: "Confirm password",
+                type: "password", placeholder: "confirm password",
+                name: "confirmPassword"
+            },
+            {
+                fieldName: "I agree to the",
+                link: "terms and conditions",
+                type: "checkbox",
+                name: "agreeWithTerms"
+            }
+        ]
+    }
+    const loginFields = {
+        type: "login",
+        title: "Login",
+        button: "Login",
+        fields: [
+            {
+                fieldName: "Username/Email",
+                type: "text",
+                placeholder: "username/email@email.com",
+                name: "identificator"
+            },
+            {
+                fieldName: "Password",
+                type: "password",
+                placeholder: "Enter 8-20 characters",
+                name: "password"
+            },
+            {
+                fieldName: "Stay signed in",
+                type: "checkbox",
+                name: "staySigned"
+            }
+        ]
+    }
 
     const color = type == "login" ? "a" : "b"
 
