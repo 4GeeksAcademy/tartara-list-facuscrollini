@@ -16,12 +16,12 @@ export const Navbar = () => {
 					<div className="collapse navbar-collapse" id="navbarNav">
 						<ul className="navbar-nav ms-auto">
 							<li className="nav-item d-flex align-items-center font-color-3 ">
-								<Link className="nav-link  py-0 text-center fw-semibold font-color-3" to="/auth/todo-panel"
+								<Link className="nav-link  py-0 text-center fw-semibold font-color-3" to="/auth/mission-panel"
 								>Missions</Link> |
 							</li>
 							<li className="nav-item d-flex align-items-center font-color-3 ">
 								<Link className="nav-link fw-semibold font-color-3" to="/about-us"
-								>About us</Link> 
+								>About us</Link>
 							</li>
 							<li className="nav-item">
 								<Link to="/auth" state={{ type: "login" }}>

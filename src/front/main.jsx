@@ -11,6 +11,8 @@ import Auth from './pages/public_pages/Auth';
 import AboutUs from './pages/public_pages/AboutUs';
 import TodoPanel from './pages/protected_pages/TodoPanel';
 import Dashboard from './pages/protected_pages/Dashboard';
+import MissingPermissions from './pages/public_pages/MissingPermissions';
+import NotFound from './pages/public_pages/NotFound';
 
 
 const Main = () => {
@@ -28,13 +30,20 @@ const Main = () => {
 
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={<PublicLayout />} errorElement={<h1>Not found!</h1>} >
+                        <Route path="/" element={<PublicLayout />} >
                             <Route path="" element={<Home />} />
                             <Route path="auth" element={<Auth />} />
                             <Route path="about-us" element={<AboutUs />} />
+                            <Route path="missing-permissions" element={<MissingPermissions/>}/>
+
+                            {/* Url not found */}
+
+                            <Route path="*" element={<NotFound/>}/>
+
+
                         </Route>
                         <Route path="auth" element={<ProtectedLayout />} errorElement={<h1>Not found!</h1>} >
-                            <Route path="todo-panel" element={<TodoPanel />} />
+                            <Route path="mission-panel" element={<TodoPanel />} />
                             <Route path="dashboard" element={<Dashboard />} />
 
                         </Route>

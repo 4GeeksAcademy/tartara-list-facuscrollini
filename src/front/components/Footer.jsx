@@ -6,7 +6,7 @@ export const Footer = () => (
 			<div className="row">
 				<div className="col-lg-3 col-12 h-100">
 					<div className="img-footer">
-					<img className="object-fit-cover h-100" src="https://res.cloudinary.com/dra2cr3uw/image/upload/v1760182053/Elio_ejemplo_zqfn5o.png"/>
+						<img className="object-fit-cover h-100" src="https://res.cloudinary.com/dra2cr3uw/image/upload/v1760182053/Elio_ejemplo_zqfn5o.png" />
 					</div>
 				</div>
 				<div className="col-lg-2 col-3 d-flex flex-column justify-content-center align-items-end">
@@ -25,35 +25,35 @@ export const Footer = () => (
 				<div className="col-lg-2 col-3 d-flex flex-column justify-content-center align-items-end">
 					<div className="border-white border-3 border-end pe-2">
 
-					<i className="fs-1 fa-solid fa-sailboat"></i>
-					 <p className="fs-4">Navigate</p>
-					 
-					 </div>
+						<i className="fs-1 fa-solid fa-sailboat"></i>
+						<p className="fs-4">Navigate</p>
+
 					</div>
+				</div>
 				<div className="col-lg-2 col-3 d-flex  flex-column justify-content-center align-items-start">
 					<ul className="p-0" style={{ "listStyle": "none" }}>
 						<li>
-							<Link to="/" className="text-decoration-none"> 
-							<p className="text-start m-0 fw-semibold font-color-3">Home</p>
+							<Link to="/" className="text-decoration-none">
+								<p className="text-start m-0 fw-semibold font-color-3">Home</p>
 							</Link>
 						</li>
 						<li>
-							<Link to="/auth/todo-panel" className="text-decoration-none"> 
-							<p className="text-start m-0 fw-semibold font-color-3">Missions</p>
-								</Link>
-							</li>
-						<li>
-							<Link to="/auth/dashboard" className="text-decoration-none"> 
-							<p className="text-start m-0 fw-semibold font-color-3">My dashboard</p>
-								</Link>
-							</li>
-						<li>
-							<Link to="/about-us" className="text-decoration-none"> 
-							<p className="text-start m-0 fw-semibold font-color-3">About us</p>
+							<Link to="/auth/mission-panel" className="text-decoration-none">
+								<p className="text-start m-0 fw-semibold font-color-3">Missions</p>
 							</Link>
-							</li>
+						</li>
+						<li>
+							<Link to="/auth/dashboard" className="text-decoration-none">
+								<p className="text-start m-0 fw-semibold font-color-3">My dashboard</p>
+							</Link>
+						</li>
+						<li>
+							<Link to="/about-us" className="text-decoration-none">
+								<p className="text-start m-0 fw-semibold font-color-3">About us</p>
+							</Link>
+						</li>
 					</ul>
-					</div>
+				</div>
 			</div>
 		</div>
 		<div className="footer-filled back-color-1">

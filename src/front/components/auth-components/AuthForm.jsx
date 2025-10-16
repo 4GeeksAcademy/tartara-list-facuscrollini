@@ -2,11 +2,17 @@ import { useEffect, useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { login } from "../../api/auth"
 import { createAccount } from "../../api/users"
+import Loading from "./auth-form-components/LoadingModal"
+import FormErrorModal from "./auth-form-components/FormErrorModal"
+import FormSuccessModal from "./auth-form-components/FormSuccessModal"
+import TermsAndConditionsModal from "./auth-form-components/TermsAndConditionsModal"
 
 const AuthForm = ({ color, fields }) => {
 
     const [formData, setFormData] = useState({})
     const [loading, setLoading] = useState(false)
+
+    const [showTermsAndConditions, setShowTermsAndConditions] = useState(false)
 
     const [formError, setFormError] = useState({
         title: "",
@@ -105,8 +111,8 @@ const AuthForm = ({ color, fields }) => {
                 return
             } else {
 
-                const {title, message} = loginMessage(user_name)
-                setFormSuccess({title: title, message: message})
+                const { title, message } = loginMessage(user_name)
+                setFormSuccess({ title: title, message: message })
                 setFormState("success")
                 setShowModal(true)
                 setLoading(false)
@@ -123,6 +129,7 @@ const AuthForm = ({ color, fields }) => {
             setLoading(false)
         } else if (formType == "signup") {
             setLoading(true)
+
             const user_created = await createAccount(formData.user_name, formData.email, formData.password)
 
             if (user_created != "done") {
@@ -146,12 +153,12 @@ const AuthForm = ({ color, fields }) => {
 
     const handleCloseModal = () => {
         setShowModal(false)
-        if(formState== "success"){
-            if(formType == "login"){
-                navigate("/", {replace:true})
-            }else if(formType == "signup"){
+        if (formState == "success") {
+            if (formType == "login") {
+                navigate("/", { replace: true })
+            } else if (formType == "signup") {
 
-                navigate("/auth", {state:{type:"login"}})
+                navigate("/auth", { state: { type: "login" } })
             }
         }
     }
@@ -177,11 +184,14 @@ const AuthForm = ({ color, fields }) => {
                         return (
                             field.type == "checkbox" ?
 
+                                // Renderizacion de ambos checkboxs primero, tanto en login como signup
                                 <div className="mt-3">
-                                    <input onChange={field.name && handleInputChange} className="form-check-input " id={`input-${field.fieldName}`} name={field.name && field.name} type={field.type}></input>
-                                    <label className="form-label mb-0" htmlFor={`input-${field.fieldName}`}>{field.fieldName}</label>
+                                    <input onChange={field.name && handleInputChange} className="form-check-input " id={`input-${field.fieldName}`} name={field.name && field.name} type={field.type} required={formType == "signup"}></input>
+                                    <label className="form-label mb-0" htmlFor={`input-${field.fieldName}`}>{field.fieldName} {field.link ? <span title="Select to view the terms and conditions" className="link-color-5">{field.link}</span>: ""}</label>
                                 </div>
                                 :
+                                
+                                //Renderizacion de el resto de inputs
                                 <>
                                     <label className="form-label fw-semibold pt-3" htmlFor={`input-${field.fieldName}`}  >{field.fieldName}</label>
                                     <input value={formData[field.name] || ""} onChange={handleInputChange} className="form-control" maxLength={(field.name === "password" || field.name === "confirmPassword") ? 20 : undefined} minLength={field.name == "password" ? 8 : field.name == "user_name" ? 4 : field.name == "email" ? 5 : field.name == "identificator" ? 4 : 8} id={`input-${field.fieldName}`} type={field.type} placeholder={field.placeholder} name={field.name && field.name} required ></input>
@@ -197,68 +207,34 @@ const AuthForm = ({ color, fields }) => {
             </div>
 
 
-            {/* Error Modal */}
+
+            {/*Modales con errores/felicitaciones a la hora de acceder o crear cuenta */}
 
             {showModal && (
                 formState == "error" ? (
 
-                    <div className="font-color-4">
-                        {/*Modal*/}
-                        <div className="modal fade show d-block text-center" id="exampleModal" tabindex="-1" >
-                            <div className="modal-dialog modal-dialog-centered">
-                                <div className="modal-content">
-                                    <div className="modal-header back-color-2 font-color-3">
-                                        <h1 className="modal-title fs-5" id="exampleModalLabel">{formError.title}<i class="fa-solid fa-circle-exclamation"></i></h1>
-                                        <button type="button" className="btn button-color-3 font-color-1 fa-regular fa-x fw-bold" data-bs-dismiss="modal" aria-label="Close" onClick={handleCloseModal}></button>
-                                    </div>
-                                    <div className="modal-body">
-                                        <p className="fs-5 py-4 m-0 fw-bold">
-                                            {formError.message}
-                                        </p>
-                                    </div>
-                                    <div className="modal-footer">
-                                        <button type="button" className="btn button-color-2 text-white" data-bs-dismiss="modal" onClick={handleCloseModal}>Accept</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {/*Fondo escuro del modal*/}
-                        <div className="modal-backdrop fade show" onClick={handleCloseModal}>
-                        </div>
-                    </div>
+                    <FormErrorModal title={formError.title} message={formError.message} handleCloseModal={handleCloseModal}/>
                 ) :
                     (
-                        <div className="font-color-4">
-                            {/*Modal*/}
-                            <div className="modal fade show d-block text-center" id="exampleModal" tabindex="-1" >
-                                <div className="modal-dialog modal-dialog-centered">
-                                    <div className="modal-content">
-                                        <div className="modal-header back-color-2 font-color-3">
-                                            <h1 className="modal-title fs-5" id="exampleModalLabel">{formSuccess.title} <i class="fa-solid fa-circle-exclamation"></i></h1>
-                                            <button type="button" className="btn button-color-3 font-color-1 fa-regular fa-x fw-bold" data-bs-dismiss="modal" aria-label="Close" onClick={handleCloseModal}></button>
-                                        </div>
-                                        <div className="modal-body">
-                                            <p className="fs-5 py-4 m-0 fw-bold">
-                                                {formSuccess.message}
-                                            </p>
-                                        </div>
-                                        <div className="modal-footer">
-                                            <button type="button" className="btn button-color-2 text-white" data-bs-dismiss="modal" onClick={handleCloseModal}>Accept</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {/*Fondo escuro del modal*/}
-                            <div className="modal-backdrop fade show" onClick={handleCloseModal}>
-                            </div>
-                        </div>
-
-
+                        <FormSuccessModal title={formError.title} message={formError.message} handleCloseModal={handleCloseModal} />
                     )
 
             )}
 
 
+            {/* Modal cuando esta cargando la informacion al acceder o crear cuenta */}
+            {
+                loading && (
+                   <LoadingModal/>
+                )
+            }
+
+            {
+                showTermsAndConditions && (
+
+                    <TermsAndConditionsModal/>
+                )
+            }
 
         </div>
     )
