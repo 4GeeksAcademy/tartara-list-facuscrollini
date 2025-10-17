@@ -124,9 +124,11 @@ const AuthForm = ({ color, fields }) => {
             if (formData.staySigned) {
                 localStorage.setItem("token", token)
                 localStorage.setItem("user_id", user_id)
+                localStorage.setItem("user_name", user_name)
             } else {
                 sessionStorage.setItem("token", token)
                 sessionStorage.setItem("user_id", user_id)
+                sessionStorage.setItem("user_name", user_name)
             }
             setLoading(false)
         } else if (formType == "signup") {

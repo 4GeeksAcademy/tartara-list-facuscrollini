@@ -1,6 +1,55 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export const Navbar = () => {
+
+
+	
+	
+	const user_local = localStorage.getItem("user_name")
+
+	const user_session = sessionStorage.getItem("user_name")
+
+	const [user, setUser] = useState(user_local ? true : user_session ? true : false)
+
+	const logout = () =>{
+
+		if(user_local){
+			localStorage.removeItem("token")
+			localStorage.removeItem("user_id")
+			localStorage.removeItem("user_name")
+		}else if(user_session){
+			sessionStorage.removeItem("token")
+			sessionStorage.removeItem("user_id")
+			sessionStorage.removeItem("user_name")
+		}
+		setUser(false)
+	}
+
+
+
+
+	//Codigo del boton cuando esta logeado
+
+	const buttonWithLogin = <div className="btn-group">
+		<button type="button" className="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+			Right-aligned menu example
+		</button>
+		<ul className="dropdown-menu dropdown-menu-end">
+			<li><button className="dropdown-item" type="button">Action</button></li>
+			<li><button className="dropdown-item" type="button">Another action</button></li>
+			<li><button onClick={logout} className="dropdown-item text-danger" type="button">Log out</button></li>
+		</ul>
+	</div>
+
+
+	//Codigo del boton sin estar logeado
+
+	const buttonWithOutLogin = <Link to="/auth" state={{ type: "login" }}>
+		<button type="button" className="btn back-color-2 button-color-1 font-color-3 fw-semibold">Log in</button>
+	</Link>
+
+
 
 	return (
 		<div>
@@ -24,9 +73,7 @@ export const Navbar = () => {
 								>About us</Link>
 							</li>
 							<li className="nav-item">
-								<Link to="/auth" state={{ type: "login" }}>
-									<button type="button" className="btn back-color-2 button-color-1 font-color-3 fw-semibold">Log in</button>
-								</Link>
+							{user_local || user_session ? buttonWithLogin : buttonWithOutLogin}
 							</li>
 
 						</ul>
