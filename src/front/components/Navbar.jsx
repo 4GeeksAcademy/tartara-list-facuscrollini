@@ -1,16 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Navbar = () => {
 
 
 	
-	
 	const user_local = localStorage.getItem("user_name")
 
 	const user_session = sessionStorage.getItem("user_name")
 
-	const [user, setUser] = useState(user_local ? true : user_session ? true : false)
+	const [logged, setLogged] = useState(false)
+
+
+	const {store, dispatch} = useGlobalReducer() 
 
 	const logout = () =>{
 
@@ -23,17 +26,25 @@ export const Navbar = () => {
 			sessionStorage.removeItem("user_id")
 			sessionStorage.removeItem("user_name")
 		}
-		setUser(false)
+		dispatch({type:"logout"})
 	}
 
+	useEffect(()=>{
 
+		if(store.login){
+			setLogged(true)
+		}else{
+			setLogged(false)
+		}
 
+	},[store])
+	
 
 	//Codigo del boton cuando esta logeado
 
 	const buttonWithLogin = <div className="btn-group">
-		<button type="button" className="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-			Right-aligned menu example
+		<button type="button" className="btn button-color-4 dropdown-toggle font-color-3" data-bs-toggle="dropdown" aria-expanded="false">
+			Hi <span className="text-decoration-underline fw-bold  m-0 ">{user_local || user_session}</span> !
 		</button>
 		<ul className="dropdown-menu dropdown-menu-end">
 			<li><button className="dropdown-item" type="button">Action</button></li>
@@ -73,7 +84,7 @@ export const Navbar = () => {
 								>About us</Link>
 							</li>
 							<li className="nav-item">
-							{user_local || user_session ? buttonWithLogin : buttonWithOutLogin}
+							{ logged ? buttonWithLogin : buttonWithOutLogin}
 							</li>
 
 						</ul>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useReducer, useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { login } from "../../api/auth"
 import { createAccount } from "../../api/users"
@@ -7,6 +7,7 @@ import FormErrorModal from "./auth-form-components/FormErrorModal"
 import FormSuccessModal from "./auth-form-components/FormSuccessModal"
 import TermsAndConditionsModal from "./auth-form-components/TermsAndConditionsModal"
 import LoadingModal from "./auth-form-components/LoadingModal"
+import useGlobalReducer from "../../hooks/useGlobalReducer"
 
 const AuthForm = ({ color, fields }) => {
 
@@ -26,6 +27,10 @@ const AuthForm = ({ color, fields }) => {
         title: "",
         message: ""
     })
+
+    //Importo el dispatch del useGlobalReducer, para usarlo en caso de logearse y poner login en true
+
+    const {dispatch} = useGlobalReducer()
 
 
     //Funcion para dar mensaje de bienvenida al azar dandole el nombre de usuario
@@ -119,17 +124,22 @@ const AuthForm = ({ color, fields }) => {
                 setShowModal(true)
                 setLoading(false)
 
+                //Uso el dispatch, y pongo login : true
+
+                dispatch({type:'login'})
+
+
+                if (formData.staySigned) {
+                    localStorage.setItem("token", token)
+                    localStorage.setItem("user_id", user_id)
+                    localStorage.setItem("user_name", user_name)
+                } else {
+                    sessionStorage.setItem("token", token)
+                    sessionStorage.setItem("user_id", user_id)
+                    sessionStorage.setItem("user_name", user_name)
+                }
             }
 
-            if (formData.staySigned) {
-                localStorage.setItem("token", token)
-                localStorage.setItem("user_id", user_id)
-                localStorage.setItem("user_name", user_name)
-            } else {
-                sessionStorage.setItem("token", token)
-                sessionStorage.setItem("user_id", user_id)
-                sessionStorage.setItem("user_name", user_name)
-            }
             setLoading(false)
         } else if (formType == "signup") {
 
