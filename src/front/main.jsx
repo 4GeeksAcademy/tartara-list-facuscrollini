@@ -9,7 +9,7 @@ import { ProtectedLayout } from './pages/ProtectedLayout';
 import { Home } from './pages/public_pages/Home';
 import Auth from './pages/public_pages/Auth';
 import AboutUs from './pages/public_pages/AboutUs';
-import TodoPanel from './pages/protected_pages/TodoPanel';
+import MissionPanel from './pages/protected_pages/MissionPanel';
 import Dashboard from './pages/protected_pages/Dashboard';
 import MissingPermissions from './pages/public_pages/MissingPermissions';
 import NotFound from './pages/public_pages/NotFound';
@@ -34,16 +34,16 @@ const Main = () => {
                             <Route path="" element={<Home />} />
                             <Route path="auth" element={<Auth />} />
                             <Route path="about-us" element={<AboutUs />} />
-                            <Route path="missing-permissions" element={<MissingPermissions/>}/>
+                            <Route path="missing-permissions" element={<MissingPermissions />} />
 
                             {/* Url not found */}
 
-                            <Route path="*" element={<NotFound/>}/>
+                            <Route path="*" element={<NotFound />} />
 
 
                         </Route>
                         <Route path="auth" element={<ProtectedLayout />} errorElement={<h1>Not found!</h1>} >
-                            <Route path="mission-panel" element={<TodoPanel />} />
+                            <Route path="mission-panel" element={<MissionPanel />} />
                             <Route path="dashboard" element={<Dashboard />} />
 
                         </Route>
