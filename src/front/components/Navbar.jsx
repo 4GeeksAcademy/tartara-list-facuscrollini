@@ -46,10 +46,12 @@ export const Navbar = () => {
 		<button type="button" className="btn button-color-4 dropdown-toggle font-color-3" data-bs-toggle="dropdown" aria-expanded="false">
 			Hi <span className="text-decoration-underline fw-bold  m-0 ">{user_local || user_session}</span> !
 		</button>
-		<ul className="dropdown-menu dropdown-menu-end">
-			<li><button className="dropdown-item" type="button">Action</button></li>
-			<li><button className="dropdown-item" type="button">Another action</button></li>
-			<li><button onClick={logout} className="dropdown-item text-danger" type="button">Log out</button></li>
+		<ul className="dropdown-menu dropdown-menu-end back-color-3 ">
+			<li><button className="dropdown-item" type="button">My dashboard</button></li>
+			<li><button className="dropdown-item" type="button">My friends</button></li>
+			<li><button className="dropdown-item" type="button">Settings</button></li>
+			<li><hr className="dropdown-divider"/></li>
+			<li className="text-end"><button onClick={logout} className="dropdown-item button-color-2 w-auto ms-auto me-1 rounded-2 font-color-3 " type="button">Log out</button></li>
 		</ul>
 	</div>
 
