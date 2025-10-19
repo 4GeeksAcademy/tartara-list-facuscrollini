@@ -23,8 +23,7 @@ export const getAllUserMissions = async (user_id) => {
 
     return data;
   } catch (error) {
-    console.log(`Failed from server:`, error);
-    alert(`An error ocurred while fetching usser missions: ${error.message}`);
+    return {"error": error}
   }
 };
 
@@ -73,26 +72,102 @@ export const createUserMission = async (formData) => {
 
 //Fetch para eliminar mision de un usuario
 
-export const deleteUserMission = async () => {
+export const deleteUserMission = async (deleteData) => {
   try {
-    const response = await fetch(API_URL);
-  } catch (error) {}
+    const response = await fetch(API_URL + "user/mission",{
+      method: "DELETE",
+      headers:{
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(deleteData)
+    });
+
+    let data;
+
+    try{
+      data = await response.json()
+    }catch(data_error){
+      throw new Error('Fetch has sended an invalid JSON response')
+    }
+
+    if(!response.ok){
+      const message = data?.error || `An error has occurred while fetchin: ${response.status} `
+      throw new Error(message)
+    }
+
+    return data
+
+  } catch (error) {
+    return {"error": error}
+  }
 };
 
 //Fetch para modificar una mision de un usuario
 
-export const modifyUserMission = async () => {
+export const modifyUserMission = async (modifyBody) => {
   try {
-    const response = await fetch(API_URL);
-  } catch (error) {}
+    const response = await fetch(API_URL + "user/mission", {
+      method: "PATCH",
+      headers: {
+        "Content-Type" : "application/json"
+      },
+      body: JSON.stringify(modifyBody)
+    });
+
+    let data;
+
+    try {
+      data = await response.json()
+    } catch (error) {
+      throw new Error('Fetch has sended an invalid JSON response')
+    }
+
+    if(!response.ok){
+      const message = data?.error 
+      throw new Error(message)
+    }
+
+    return data
+
+  } catch (error) {
+
+    return {'error': error.message}
+
+  }
 };
 
 //Fetch para activar/desactivar mision de un usuario
 
-export const switchMissionState = async () => {
+export const switchMissionState = async (missionInfoToSwitch) => {
   try {
-    const response = await fetch(API_URL);
-  } catch (error) {}
+    const response = await fetch(API_URL + "user/mission/active", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(missionInfoToSwitch)
+    });
+
+    let data;
+
+    try {
+      data = await response.json()
+    } catch (error) {
+      throw new Error('Fetch has sended an invalid JSON response')
+    }
+
+    if(!response.ok){
+      const message = data?.error
+      throw new Error(message)
+    }
+
+    return data
+
+  } catch (error) {
+
+    return {'error': error.message}
+
+  }
 };
 
 //Fetch para conseguir misiones activas/desactivas de un usuario
