@@ -1,42 +1,104 @@
-
 //Fetch para conseguir todas las misiones de un usuario
 
-const getAllUserMissions = () =>{
+import API_URL from "./apiUrl";
 
-}
+export const getAllUserMissions = async (user_id) => {
+  try {
+    const response = await fetch(API_URL + `user/missions?user_id=${user_id}`);
+
+    let data;
+
+    try {
+      data = await response.json();
+    } catch (error) {
+      throw new Error(`Invalid JSON Response from the server`);
+    }
+
+    if (!response.ok) {
+      const message =
+        data?.error || `Request failed with status:  ${response.status}`;
+
+      throw new Error(message);
+    }
+
+    return data;
+  } catch (error) {
+    console.log(`Failed from server:`, error);
+    alert(`An error ocurred while fetching usser missions: ${error.message}`);
+  }
+};
 
 //Fetch para conseguir mision especifica de un usuario
 
-const getUserMission = () =>{
-    
-}
+export const getUserMission = async () => {
+  try {
+    const response = await fetch(API_URL);
+  } catch (error) {}
+};
 
 //Fetch para crear mision de un usuario
 
-const createUserMission = () =>{
-    
-}
+export const createUserMission = async (formData) => {
+  try {
+    const response = await fetch(API_URL + "user/mission", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData)
+    });
+
+    let data;
+
+    try{
+        data =  await response.json()
+    } catch(error){
+        throw new Error('Fetch has sended a invalid JSON')
+    }
+
+    if(!response.ok){
+        const message = data?.error || `An error has occurred while fetching ${response.status}`
+        throw new Error(message)
+    }
+
+    return data
+
+  } catch (error) {
+    console.log(`Fetching error: ${error.message}`)
+    alert(`Error while fetching : ${error.message} `)
+  }
+};
+
+
 
 //Fetch para eliminar mision de un usuario
 
-const deleteUserMission = () =>{
-    
-}
+export const deleteUserMission = async () => {
+  try {
+    const response = await fetch(API_URL);
+  } catch (error) {}
+};
 
 //Fetch para modificar una mision de un usuario
 
-const modifyUserMission = () =>{
-    
-}
+export const modifyUserMission = async () => {
+  try {
+    const response = await fetch(API_URL);
+  } catch (error) {}
+};
 
 //Fetch para activar/desactivar mision de un usuario
 
-const switchMissionState = () =>{
-    
-}
+export const switchMissionState = async () => {
+  try {
+    const response = await fetch(API_URL);
+  } catch (error) {}
+};
 
 //Fetch para conseguir misiones activas/desactivas de un usuario
 
-const getAllMissionsByState = () =>{
-    
-}
+export const getAllMissionsByState = async () => {
+  try {
+    const response = await fetch(API_URL);
+  } catch (error) {}
+};

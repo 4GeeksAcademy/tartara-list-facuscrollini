@@ -298,15 +298,10 @@ def delete_friendship():
 @api.route('/user/missions', methods=['GET'])
 def get_user_missions():
 
-    data = request.get_json()
-
-    if not data:
-        return jsonify({"error": "send a body with info to create a friendship"}), 400
-
-    user_id = data["user_id"]
+    user_id = request.args.get('user_id')
 
     if not user_id:
-        return jsonify({"error": "missing user_id field on the body"}), 400
+        return jsonify({"error": "missing user_id field on params"}), 400
 
     missions = Mission.query.filter_by(user_id=user_id).all()
 

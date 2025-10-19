@@ -5,7 +5,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer";
 export const Navbar = () => {
 
 
-	
+
 	const user_local = localStorage.getItem("user_name")
 
 	const user_session = sessionStorage.getItem("user_name")
@@ -13,32 +13,48 @@ export const Navbar = () => {
 	const [logged, setLogged] = useState(false)
 
 
-	const {store, dispatch} = useGlobalReducer() 
+	const { store, dispatch } = useGlobalReducer()
 
-	const logout = () =>{
+	const logout = () => {
 
-		if(user_local){
+		if (user_local) {
 			localStorage.removeItem("token")
 			localStorage.removeItem("user_id")
 			localStorage.removeItem("user_name")
-		}else if(user_session){
+		} else if (user_session) {
 			sessionStorage.removeItem("token")
 			sessionStorage.removeItem("user_id")
 			sessionStorage.removeItem("user_name")
 		}
-		dispatch({type:"logout"})
+		dispatch({ type: "logout" })
 	}
 
-	useEffect(()=>{
 
-		if(store.login){
-			setLogged(true)
-		}else{
-			setLogged(false)
+	//useEffect para cambiar estado de logged(el que maneja el dropdown del usuario cuando esta logeado)
+	//si se logea, se cambia el estado en store.login, por lo que el estado logged  cambia su valor y el boton se muestra diferente
+
+	useEffect(() => {
+
+		setLogged(store.login)
+
+	}, [store.login])
+
+
+
+	//useEffect para cuando se monta el navbar sin haber hecho el paso del login(abrir la pagina y que ya este el usuario en localstorage)
+	//Evalua si store.login es false, y hay un usuario guardado en localStorage o sessionStorage y en ese caso lo pone en true
+	//Con esto el boton del navbar siempre va a estar cambiado dependiendo si el usuario esta logeado o no
+
+
+	useEffect(() => {
+		if (!store.login) {
+			if (user_session || user_local) {
+				dispatch({ type: "login" })
+			}
 		}
+	})
 
-	},[store])
-	
+
 
 	//Codigo del boton cuando esta logeado
 
@@ -50,7 +66,7 @@ export const Navbar = () => {
 			<li><button className="dropdown-item" type="button">My dashboard</button></li>
 			<li><button className="dropdown-item" type="button">My friends</button></li>
 			<li><button className="dropdown-item" type="button">Settings</button></li>
-			<li><hr className="dropdown-divider"/></li>
+			<li><hr className="dropdown-divider" /></li>
 			<li className="text-end"><button onClick={logout} className="dropdown-item button-color-2 w-auto ms-auto me-1 rounded-2 font-color-3 " type="button">Log out</button></li>
 		</ul>
 	</div>
@@ -86,7 +102,7 @@ export const Navbar = () => {
 								>About us</Link>
 							</li>
 							<li className="nav-item">
-							{ logged ? buttonWithLogin : buttonWithOutLogin}
+								{logged ? buttonWithLogin : buttonWithOutLogin}
 							</li>
 
 						</ul>
