@@ -8,6 +8,7 @@ import FormSuccessModal from "./auth-form-components/FormSuccessModal"
 import TermsAndConditionsModal from "./auth-form-components/TermsAndConditionsModal"
 import LoadingModal from "./auth-form-components/LoadingModal"
 import useGlobalReducer from "../../hooks/useGlobalReducer"
+import { saveFriendships } from "../../api/friendships"
 
 const AuthForm = ({ color, fields }) => {
 
@@ -120,6 +121,7 @@ const AuthForm = ({ color, fields }) => {
 
                 const { title, message } = loginMessage(user_name)
                 setFormSuccess({ title: title, message: message })
+                saveFriendships(dispatch)
                 setFormState("success")
                 setShowModal(true)
                 setLoading(false)

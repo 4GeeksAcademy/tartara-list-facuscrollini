@@ -21,6 +21,11 @@ useEffect(()=>{
 
 if(!store.login && !login){
     navigate("/missing-permissions")
+
+    if(store.loading){
+        console.log("Loading...")
+}
+
 }
 
 },[store])

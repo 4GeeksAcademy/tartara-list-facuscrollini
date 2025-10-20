@@ -2,7 +2,8 @@ export const initialStore = () => {
   return {
     login: false,
     allMissions: [],
-    friendshipMissions:{}
+    friendships: [],
+    loading:false
   };
 };
 
@@ -13,6 +14,9 @@ export default function storeReducer(store, action = {}) {
 
     case "logout":
       return { ...store, login: false };
+
+    case "loading":
+      return {...store, loading: !store.loading}
 
     case "save_all_user_missions":
       return { ...store, allMissions: action.payload };
@@ -46,10 +50,19 @@ export default function storeReducer(store, action = {}) {
         return mission
       })}
 
-    case "save_friendship_missions":
+    case "save_friendships":
 
-      return {...store, friendshipMissions : action.payload }
+    return {...store, friendships: action.payload}
 
+    case "delete_friendship_mission":
+
+
+      return {...store, friendships: store.friendships.map((friendship)=>{
+        if(friendship.id == action.payload.friendship_id){
+         friendship.friendship_missions =  friendship.friendship_missions.filter((mission)=> mission != action.payload.friendship_mission_id )
+        }
+        return friendship
+      })}
 
     default:
       throw Error("Unknown action.");

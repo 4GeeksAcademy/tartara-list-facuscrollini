@@ -8,7 +8,16 @@ import useGlobalReducer from "../hooks/useGlobalReducer"
 // Base component that maintains the navbar and footer throughout the page and the scroll to top functionality.
 export const PublicLayout = () => {
 
+    const {store} = useGlobalReducer()
 
+
+    useEffect(()=>{
+
+        if(store.login){
+            console.log("Loading...")
+        }
+
+    },[store])
 
     return (
         <ScrollToTop>

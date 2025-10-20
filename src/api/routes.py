@@ -170,12 +170,9 @@ def edit_user(id):
 @api.route('user/friendships/', methods=['GET'])
 def get_frienship():
 
-    data = request.get_json()
+  
 
-    if not data:
-        return jsonify({"error": "please send a body with the user_id information"}), 400
-
-    user_id = data["user_id"]
+    user_id = request.args.get("user_id")
 
     if not user_id:
         return jsonify({"error": "please send a user_id information on the body"}), 400

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'  // Global styles for your application
 import { BrowserRouter, Route, RouterProvider, Routes } from "react-router-dom";  // Import RouterProvider to use the router
@@ -22,12 +22,17 @@ const Main = () => {
             <BackendURL />
         </React.StrictMode>
     );
+
+
+
+
+
     return (
         <React.StrictMode>
             {/* Provide global state to all components */}
             <StoreProvider>
                 {/* Set up routing for the application */}
-
+                
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<PublicLayout />} >
