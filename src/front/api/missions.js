@@ -23,7 +23,7 @@ export const getAllUserMissions = async (user_id) => {
 
     return data;
   } catch (error) {
-    return {"error": error}
+    return { error: error };
   }
 };
 
@@ -44,61 +44,61 @@ export const createUserMission = async (formData) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     });
 
     let data;
 
-    try{
-        data =  await response.json()
-    } catch(error){
-        throw new Error('Fetch has sended a invalid JSON')
+    try {
+      data = await response.json();
+    } catch (error) {
+      throw new Error("Fetch has sended a invalid JSON");
     }
 
-    if(!response.ok){
-        const message = data?.error || `An error has occurred while fetching ${response.status}`
-        throw new Error(message)
+    if (!response.ok) {
+      const message =
+        data?.error ||
+        `An error has occurred while fetching ${response.status}`;
+      throw new Error(message);
     }
 
-    return data
-
+    return data;
   } catch (error) {
-    console.log(`Fetching error: ${error.message}`)
-    alert(`Error while fetching : ${error.message} `)
+    console.log(`Fetching error: ${error.message}`);
+    alert(`Error while fetching : ${error.message} `);
   }
 };
-
-
 
 //Fetch para eliminar mision de un usuario
 
 export const deleteUserMission = async (deleteData) => {
   try {
-    const response = await fetch(API_URL + "user/mission",{
+    const response = await fetch(API_URL + "user/mission", {
       method: "DELETE",
-      headers:{
-        "Content-Type": "application/json"
+      headers: {
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(deleteData)
+      body: JSON.stringify(deleteData),
     });
 
     let data;
 
-    try{
-      data = await response.json()
-    }catch(data_error){
-      throw new Error('Fetch has sended an invalid JSON response')
+    try {
+      data = await response.json();
+    } catch (data_error) {
+      throw new Error("Fetch has sended an invalid JSON response");
     }
 
-    if(!response.ok){
-      const message = data?.error || `An error has occurred while fetchin: ${response.status} `
-      throw new Error(message)
+    if (!response.ok) {
+      const message =
+        data?.error ||
+        `An error has occurred while fetchin: ${response.status} `;
+      throw new Error(message);
     }
 
-    return data
-
+    return data;
   } catch (error) {
-    return {"error": error}
+    return { error: error };
   }
 };
 
@@ -109,30 +109,27 @@ export const modifyUserMission = async (modifyBody) => {
     const response = await fetch(API_URL + "user/mission", {
       method: "PATCH",
       headers: {
-        "Content-Type" : "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(modifyBody)
+      body: JSON.stringify(modifyBody),
     });
 
     let data;
 
     try {
-      data = await response.json()
+      data = await response.json();
     } catch (error) {
-      throw new Error('Fetch has sended an invalid JSON response')
+      throw new Error("Fetch has sended an invalid JSON response");
     }
 
-    if(!response.ok){
-      const message = data?.error 
-      throw new Error(message)
+    if (!response.ok) {
+      const message = data?.error;
+      throw new Error(message);
     }
 
-    return data
-
+    return data;
   } catch (error) {
-
-    return {'error': error.message}
-
+    return { error: error.message };
   }
 };
 
@@ -143,37 +140,36 @@ export const switchMissionState = async (missionInfoToSwitch) => {
     const response = await fetch(API_URL + "user/mission/active", {
       method: "PATCH",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(missionInfoToSwitch)
+      body: JSON.stringify(missionInfoToSwitch),
     });
 
     let data;
 
     try {
-      data = await response.json()
+      data = await response.json();
     } catch (error) {
-      throw new Error('Fetch has sended an invalid JSON response')
+      throw new Error("Fetch has sended an invalid JSON response");
     }
 
-    if(!response.ok){
-      const message = data?.error
-      throw new Error(message)
+    if (!response.ok) {
+      const message = data?.error;
+      throw new Error(message);
     }
 
-    return data
-
+    return data;
   } catch (error) {
-
-    return {'error': error.message}
-
+    return { error: error.message };
   }
 };
 
 //Fetch para conseguir misiones activas/desactivas de un usuario
 
-export const getAllMissionsByState = async () => {
-  try {
-    const response = await fetch(API_URL);
-  } catch (error) {}
-};
+//La comento ya que no fue necesario que exista,
+// deja de ser funcional al utilizar un estado en la vista de usuario que maneje estados de misiones
+// export const getAllMissionsByState = async () => {
+//   try {
+//     const response = await fetch(API_URL);
+//   } catch (error) {}
+// };

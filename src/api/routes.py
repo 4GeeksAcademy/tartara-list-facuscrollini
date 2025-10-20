@@ -475,27 +475,29 @@ def set_mission_active():
 ## -----------------------------VER INACTIVE/ACTIVE UNIQUE User Missions---------------------#
 
 
-@api.route('/user/missions/active', methods=["GET"])
-def get_active_missions():
+# Comentado ya que la funcion no es necesaria al no tener que hacer una llamada a la api para ver las misiones inactivas/activas
 
-    data = request.get_json()
+# @api.route('/user/missions/active', methods=["GET"])
+# def get_active_missions():
 
-    if not data:
-        return jsonify({"error": "send a body with user_id and missions_state"}), 400
+#     data = request.get_json()
 
-    user_id = data.get("user_id")
-    missions_state = data.get("missions_state")
+#     if not data:
+#         return jsonify({"error": "send a body with user_id and missions_state"}), 400
 
-    if not user_id and not missions_state:
-        return jsonify({"error": "user_id and missions_state field is missing"})
+#     user_id = data.get("user_id")
+#     missions_state = data.get("missions_state")
 
-    missions = Mission.query.filter_by(
-        user_id=user_id, is_active=missions_state).all()
+#     if not user_id and not missions_state:
+#         return jsonify({"error": "user_id and missions_state field is missing"})
 
-    if not missions:
-        return jsonify({"error": f"user {user_id} hasn't missions with the state: {missions_state}"}), 400
+#     missions = Mission.query.filter_by(
+#         user_id=user_id, is_active=missions_state).all()
 
-    return jsonify([mission.serialize() for mission in missions])
+#     if not missions:
+#         return jsonify({"error": f"user {user_id} hasn't missions with the state: {missions_state}"}), 400
+
+#     return jsonify([mission.serialize() for mission in missions])
 
 
 # -------------------------------------------FIN CRUD Mission --------------------------------------------------------------------------------------------#
@@ -506,12 +508,8 @@ def get_active_missions():
 @api.route('/friendship/missions', methods=['GET'])
 def get_friendship_missions():
 
-    data = request.get_json()
 
-    if not data:
-        return jsonify({"error": "frienship_id field is missing"}), 400
-
-    friendship_id = data.get("friendship_id")
+    friendship_id = request.args.get("friendship_id")
 
     if not friendship_id:
         return jsonify({"error": "none friendship_id provided"}), 400

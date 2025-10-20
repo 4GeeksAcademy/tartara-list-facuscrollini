@@ -2,6 +2,7 @@ export const initialStore = () => {
   return {
     login: false,
     allMissions: [],
+    friendshipMissions:[]
   };
 };
 
@@ -44,6 +45,10 @@ export default function storeReducer(store, action = {}) {
         }
         return mission
       })}
+
+    case "save_friendship_missions":
+
+      return {...store, friendshipMissions : action.payload }
 
 
     default:
