@@ -158,8 +158,8 @@ const UserMissionPanel = () => {
         if (user_id) {
             showAllMissions(user_id)
         }
-
-    }, [])
+        console.log("Se monta el componente")
+    },[])
 
 
 
