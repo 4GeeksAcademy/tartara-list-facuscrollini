@@ -2,7 +2,7 @@ export const initialStore = () => {
   return {
     login: false,
     allMissions: [],
-    friendshipMissions:[]
+    friendshipMissions:{}
   };
 };
 
