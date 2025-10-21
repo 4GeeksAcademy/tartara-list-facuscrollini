@@ -9,7 +9,7 @@ const FETCH_URL = `${API_URL}friendship/mission`
 //method puede ser: "GET", "POST", "PATCH", "DELETE"
 
 
-export const fetchFriendshipMission = async(fetchData, method)=>{
+export const fetchFriendshipMission = async(fetchData, method, state)=>{
  
 
     const optionsObject = method == "GET"? {
@@ -24,8 +24,10 @@ export const fetchFriendshipMission = async(fetchData, method)=>{
 
     
     try {
-        const response = await fetch(`${FETCH_URL}${method == "GET" ? `s?friendship_id=${fetchData.friendship_id}` : ""}`, optionsObject)
+     
+            const response = await fetch(`${FETCH_URL}${method == "GET" ? `s?friendship_id=${fetchData.friendship_id}` : state ? "/active" : ""}`, optionsObject)
 
+      
         let data;
 
         try {
@@ -45,3 +47,5 @@ export const fetchFriendshipMission = async(fetchData, method)=>{
         console.log({error: error})
     }
 }
+
+
