@@ -49,7 +49,7 @@ const Main = () => {
                         </Route>
                         <Route path="auth" element={<ProtectedLayout />} errorElement={<h1>Not found!</h1>} >
                             <Route path="mission-panel" element={<MissionPanel />} />
-                            <Route path="dashboard" element={<Dashboard />} />
+                            <Route path="dashboard/:section" element={<Dashboard />} />
 
                         </Route>
                     </Routes>

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Navbar = () => {
 
 
+	const navigate = useNavigate()
 
 	const user_local = localStorage.getItem("user_name")
 
@@ -27,6 +28,12 @@ export const Navbar = () => {
 			sessionStorage.removeItem("user_name")
 		}
 		dispatch({ type: "logout" })
+	}
+
+
+	//funcion para navegar a Dashboard presionando en el dropdown menu del navbar cuando esta logeado
+	const navToDashboard = (section) =>{
+		navigate(`/auth/dashboard/${section}`)
 	}
 
 
@@ -63,9 +70,8 @@ export const Navbar = () => {
 			Hi <span className="text-decoration-underline fw-bold  m-0 ">{user_local || user_session}</span> !
 		</button>
 		<ul className="dropdown-menu dropdown-menu-end back-color-3 ">
-			<li><button className="dropdown-item" type="button">My dashboard</button></li>
-			<li><button className="dropdown-item" type="button">My friends</button></li>
-			<li><button className="dropdown-item" type="button">Settings</button></li>
+			<li onClick={()=>navToDashboard("my-profile")}><button className="dropdown-item item-dropdown" type="button">My profile</button></li>
+			<li><button onClick={()=>navToDashboard("my-friends")} className="dropdown-item  item-dropdown" type="button">My friends</button></li>
 			<li><hr className="dropdown-divider" /></li>
 			<li className="text-end"><button onClick={logout} className="dropdown-item button-color-2 w-auto ms-auto me-1 rounded-2 font-color-3 " type="button">Log out</button></li>
 		</ul>

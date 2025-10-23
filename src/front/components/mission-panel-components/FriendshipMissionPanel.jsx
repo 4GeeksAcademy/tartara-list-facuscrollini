@@ -121,6 +121,7 @@ const FriendshipMissionPanel = () => {
         }
 
         switchLoading()
+        
         const fetchSwitchMissionState = await fetchFriendshipMission(fetchBody, "PATCH", true)
 
         dispatch({ type: "switch_state_friendship_mission", payload: { friendship_id: friendship_id, mission_id: mission_id } })
