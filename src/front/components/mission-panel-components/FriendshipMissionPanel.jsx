@@ -101,31 +101,43 @@ const FriendshipMissionPanel = () => {
 
         switchLoading()
         const fetchEditMission = await fetchFriendshipMission(fetchBody, "PATCH", false)
-        dispatch({ type: "edit_friendship_mission", payload: { data: fetchEditMission, friendship_id: friendship_id } })
-        if (fetchEditMission) {
-            clearForm()
+
+        if(!fetchEditMission.error){
+
+            dispatch({ type: "edit_friendship_mission", payload: { data: fetchEditMission, friendship_id: friendship_id } })
+            if (fetchEditMission) {
+                clearForm()
+            }
+            switchLoading()
+        } else{
+            console.log(fetchEditMission)
+            switchLoading()
         }
-        switchLoading()
 
 
     }
 
-    const switchMissionState = async (fetchBody) => {
+    const switchMissionState = async (friendship_id, mission_id) => {
+
+        const fetchBody = {
+            friendship_id: friendship_id,
+            mission_id: mission_id
+        }
+
         switchLoading()
         const fetchSwitchMissionState = await fetchFriendshipMission(fetchBody, "PATCH", true)
+
+        dispatch({ type: "switch_state_friendship_mission", payload: { friendship_id: friendship_id, mission_id: mission_id } })
         switchLoading()
     }
-
 
 
 
 
 
     useEffect(() => {
-
-        console.log(formData)
-
-    }, [formData])
+        console.log(store.friendships)
+    }, [store])
 
 
 
@@ -175,53 +187,63 @@ const FriendshipMissionPanel = () => {
                     <div key={friendship.id}>
 
                         <p>{friendship.user_from}</p>
-                        {friendship.friendship_missions.length != 0 &&
+                        <p>Friendship id: {friendship.id}</p>
 
-                            <>
-                                <p className="fw-bold">Actives</p>
-                                {/* Map con las misiones activas de esta amistad */}
-                                {friendship.friendship_missions.map((mission, index) => {
+                        <p className="fw-bold">Actives</p>
 
+                        {/* Map con las misiones activas de esta amistad */}
 
-                                    if (mission.is_active) {
-                                        
-                                        return (
-
-                                            <div key={index}>
-                                                <p className="fw-bold">{mission.title}</p>
-                                                <button onClick={() => deleteMission(friendship.id, mission.id)} type="button" className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
-                                                <button onClick={() => handleEditButton(friendship.id, mission)} type="button" className="btn btn-warning"><i className="fa-solid fa-pen"></i></button>
-                                                <button onClick={switchMissionState} type="button" className="btn btn-info"><i className="fa-solid fa-circle"></i></button>
-                                            </div>
-                                        )
-                                    }
-                                })}
-
-
-                                <p className="fw-bold">Inactives</p>
-                                {/*Map con las misiones inactivas de esta amistad */}
-                                {friendship.friendship_missions.map((mission, index) => {
-
-                                    if (!mission.is_active) {
-                                        return (
-
-                                            <div key={index}>
-                                                <p className="fw-bold">{mission.title}</p>
-                                                <button onClick={() => deleteMission(friendship.id, mission.id)} type="button" className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
-                                                <button onClick={() => handleEditButton(friendship.id, mission)} type="button" className="btn btn-warning"><i className="fa-solid fa-pen"></i></button>
-                                                <button onClick={switchMissionState} type="button" className="btn btn-info"><i className="fa-solid fa-circle"></i></button>
-                                            </div>
-                                        )
-                                    }
-
-                                })}
-
-
-
-
-                            </>
-
+                        {
+                            friendship.friendship_missions.filter(mission => mission.is_active).length > 0 ? (
+                                friendship.friendship_missions.filter(mission => mission.is_active).map((mission, index) => (
+                                    <div key={index}>
+                                        <p className="fw-bold">{mission.title}</p>
+                                        <button onClick={() => deleteMission(friendship.id, mission.id)} type="button" className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
+                                        <button onClick={() => handleEditButton(friendship.id, mission)} type="button" className="btn btn-warning"><i className="fa-solid fa-pen"></i></button>
+                                        <button onClick={() => switchMissionState(friendship.id, mission.id)} type="button" className="btn btn-info"><i className="fa-regular fa-circle"></i></button>
+                                    </div>
+                                ))
+                            ) :
+                                <div>No active missions for missions with {friendship.user_from}</div>
                         }
+
+
+                        <p className="fw-bold">Inactives</p>
+                        {/*Map con las misiones inactivas de esta amistad */}
+                        {
+
+                            /* {friendship.friendship_missions.map((mission, index) => {
+                                
+                                if (!mission.is_active) {
+                                    return (
+
+                                        <div key={index}>
+                                            <p className="fw-bold">{mission.title}</p>
+                                            <button onClick={() => deleteMission(friendship.id, mission.id)} type="button" className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
+                                            <button onClick={() => handleEditButton(friendship.id, mission)} type="button" className="btn btn-warning"><i className="fa-solid fa-pen"></i></button>
+                                            <button onClick={switchMissionState} type="button" className="btn btn-info"><i className="fa-solid fa-circle"></i></button>
+                                        </div>
+                                    )
+                                }
+
+                            })} */
+                            friendship.friendship_missions.filter(mission => !mission.is_active).length > 0 ? (
+                                friendship.friendship_missions.filter(mission => !mission.is_active).map((mission, index) => (
+                                    <div key={index}>
+                                        <p className="fw-bold">{mission.title}</p>
+                                        <button onClick={() => deleteMission(friendship.id, mission.id)} type="button" className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
+                                        <button onClick={() => handleEditButton(friendship.id, mission)} type="button" className="btn btn-warning"><i className="fa-solid fa-pen"></i></button>
+                                        <button onClick={()=>switchMissionState(friendship.id, mission.id)} type="button" className="btn btn-info"><i className="fa-solid fa-circle"></i></button>
+                                    </div>
+                                ))
+                            ) :
+                                <div>No inactive missions for missions with {friendship.user_from}</div>
+                        }
+
+
+
+
+
 
                     </div>
                 )

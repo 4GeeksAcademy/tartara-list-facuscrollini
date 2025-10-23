@@ -66,17 +66,13 @@ const UserMissionPanel = () => {
 
         const { id, ...resto } = formData
 
-        const fetchData = { ...resto, mission_id: id }
-
-        if (!fetchData.user_id) {
-            alert('You have not edited the mission')
-        } else {
+        const fetchData = { ...resto, mission_id: id, user_id: user_id }
 
             const fetchModifyUserMission = await modifyUserMission(fetchData)
             clearForm()
             dispatch({ type: "edit_user_mission", payload: formData })
 
-        }
+        
         setLoading(false)
 
     }

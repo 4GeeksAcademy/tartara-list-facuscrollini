@@ -119,7 +119,20 @@ export default function storeReducer(store, action = {}) {
 
 
     case "switch_state_friendship_mission":
-      return store;
+      return {...store, friendships: store.friendships.map((friendship)=>{
+
+      if(friendship.id == action.payload.friendship_id){
+        return {...friendship, friendship_missions: friendship.friendship_missions.map((mission)=>{
+          if(mission.id === action.payload.mission_id){
+
+            return {...mission, is_active : !mission.is_active}
+          }
+          return mission
+        })}
+      }
+      return friendship
+
+      })}
 
     default:
       throw Error("Unknown action.");

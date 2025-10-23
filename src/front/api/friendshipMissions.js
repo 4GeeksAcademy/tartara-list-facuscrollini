@@ -44,7 +44,7 @@ export const fetchFriendshipMission = async(fetchData, method, state)=>{
         return data
 
     } catch (error) {
-        console.log({error: error})
+        return {error: error.message}
     }
 }
 

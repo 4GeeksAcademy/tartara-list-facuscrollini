@@ -430,10 +430,27 @@ def edit_user_mission():
     if not title and not description:
         return jsonify({"error": "no fields to update, please provide a title or a description"}), 400
 
-    if title:
+
+    if title and description:
+        old_title = mission.title.replace(" ", "").lower()
+        new_title = title.replace(" ", "").lower()
+        old_description = mission.description.replace(" ", "").lower()
+        new_description = description.replace(" ", "").lower()
+
+        if old_title == new_title and old_description == new_description:
+            return {"error": "new title and new description must be diffetent than the old ones"}
         mission.title = title
-    if description:
         mission.description = description
+
+    elif title:
+        
+        old_title = mission.title.replace(" ", "").lower()
+        new_title = title.replace(" ", "").lower()
+
+        if old_title == new_title:
+            return {"error": "new title must be different to the previous one"}
+
+        mission.title = title
 
     db.session.commit()
 
@@ -652,7 +669,19 @@ def edit_friendship_mission():
     if not title and not description:
         return jsonify({"error": "please provide a title or a description data to modify the actual friendship_mission"}), 400
 
-    if title:
+    if description and title:
+        old_title = friendship_mission.title.replace(" ", "").lower()
+        old_description = friendship_mission.description.replace(
+            " ", "").lower()
+        new_description = description.replace(" ", "").lower()
+        new_title = title.replace(" ", "").lower()
+
+        if old_description == new_description and old_title == new_title:
+            return jsonify({"error": "new description and new title can not be the same as the older ones"}), 400
+        friendship_mission.title = title
+        friendship_mission.description = description
+
+    elif title:
 
         old_title = friendship_mission.title.replace(" ", "").lower()
         new_title = title.replace(" ", "").lower()
@@ -662,16 +691,6 @@ def edit_friendship_mission():
 
         friendship_mission.title = title
 
-    if description:
-
-        old_description = friendship_mission.description.replace(
-            " ", "").lower()
-        new_description = description.replace(" ", "").lower()
-
-        if old_description == new_description:
-            return jsonify({"error": "new description can not be the same as the older one"}), 400
-
-        friendship_mission.description = description
 
     db.session.commit()
 
