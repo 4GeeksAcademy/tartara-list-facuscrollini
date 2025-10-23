@@ -200,38 +200,6 @@ const UserMissionPanel = () => {
             </form>
             <div className="container">
             <div className="row">
-                {/* <div className="col-4">
-                    <h2>Todas las misiones</h2>
-                {allUserMissions.length != 0 ? allUserMissions?.map((mission, index) => (
-                    
-                    
-                    <div key={index} className="rounded-4 border border-4 border-black m-5">
-                        <h2 className="text-center">{mission.title}</h2>
-                        <button onClick={() => handleDeleteUserMission(mission.id, user_id)} type="button" className="btn btn-danger">
-                            <i className="fa-solid fa-trash"></i>
-                        </button>
-                        <button className="btn btn-warning" onClick={() => setFormData(mission)}>
-                            <i className="fa-solid fa-pen"></i>
-                        </button>
-                        <button onClick={()=>handleMissionIsActive(user_id, mission.id)}className="btn btn-info">
-                            <i className={`fa-${mission.is_active ? "regular" : "solid"} fa-circle`}></i>
-                        </button>
-                        <h4>Description </h4>
-                        <hr />
-                        <p className="text-center" >{mission.description}</p>
-                        <hr />
-                        <h4>State</h4>
-                        <hr />
-                        <p className="text-center">{mission.is_active ? "Active" : "Inactive"}</p>
-                        <p className="display-1">{mission.id}</p>
-
-                    </div>
-                ))
-                :
-                <p>This user haven't missions</p>
-                
-            }
-            </div> */}
             <div className="col-6">
                 <h2>Misiones activas</h2>
                 {activeMissions != 0 ? 

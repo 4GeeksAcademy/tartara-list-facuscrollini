@@ -7,10 +7,6 @@ const FriendshipMissionPanel = () => {
 
     const { store, dispatch } = useGlobalReducer()
 
-
-    const [activeMissions, setActiveMissions] = useState([])
-    const [inactiveMissions, setInctiveMissions] = useState([])
-
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -133,16 +129,6 @@ const FriendshipMissionPanel = () => {
 
 
 
-
-
-    useEffect(() => {
-        console.log(store.friendships)
-    }, [store])
-
-
-
-
-
     useEffect(() => {
 
         if (store.friendships.length == 0) {
@@ -212,21 +198,6 @@ const FriendshipMissionPanel = () => {
                         {/*Map con las misiones inactivas de esta amistad */}
                         {
 
-                            /* {friendship.friendship_missions.map((mission, index) => {
-                                
-                                if (!mission.is_active) {
-                                    return (
-
-                                        <div key={index}>
-                                            <p className="fw-bold">{mission.title}</p>
-                                            <button onClick={() => deleteMission(friendship.id, mission.id)} type="button" className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
-                                            <button onClick={() => handleEditButton(friendship.id, mission)} type="button" className="btn btn-warning"><i className="fa-solid fa-pen"></i></button>
-                                            <button onClick={switchMissionState} type="button" className="btn btn-info"><i className="fa-solid fa-circle"></i></button>
-                                        </div>
-                                    )
-                                }
-
-                            })} */
                             friendship.friendship_missions.filter(mission => !mission.is_active).length > 0 ? (
                                 friendship.friendship_missions.filter(mission => !mission.is_active).map((mission, index) => (
                                     <div key={index}>
