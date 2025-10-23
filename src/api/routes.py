@@ -76,9 +76,15 @@ def get_users():
 
 # ----------------GET SPECIFIC USER----------------------------------#
 
-@api.route('/user/<int:id>', methods=['GET'])
-def get_user(id):
-    user = User.query.get(id)
+@api.route('/user', methods=['GET'])
+def get_user():
+
+    user_id = request.args.get("user_id")
+
+    if not user_id:
+        return {"error": "user_id was not provided on query params"}
+    
+    user = User.query.get(user_id)
     if not user:
         return jsonify({"error": "please use a correct user id, no user founded with the gived one "})
     return jsonify(user.serialize())
@@ -126,9 +132,15 @@ def create_user():
 # --------------------------DELETE USER----------------------------#
 
 
-@api.route('/user/<int:id>', methods=['DELETE'])
+@api.route('/user', methods=['DELETE'])
 def delete_user(id):
-    user = User.query.get(id)
+
+    user_id = request.args.get("user_id")
+
+    if not user_id:
+        return {"error": "user_id was not provided on query params"}
+
+    user = User.query.get(user_id)
     if not user:
         return jsonify({"error": "please send a correct id user to delete"})
     user_name = user.user_name
@@ -138,12 +150,19 @@ def delete_user(id):
 
 
 # --------------------------EDIT USER------------------------------#
-@api.route('/user/<int:id>', methods=['PATCH'])
+@api.route('/user', methods=['PATCH'])
 def edit_user(id):
 
-    user = User.query.get(id)
+
+    user_id = request.args.get("user_id")
+
+    if not user_id:
+        return {"error": "user_id was not provided on query params"}
+
+    user = User.query.get(user_id)
 
     data = request.get_json()
+
     if not data:
         return {"error": "please send information to update "}
 
@@ -768,13 +787,8 @@ def get_active_friendship_missions():
 @api.route('/user/friendship/requests', methods=['GET'])
 def get_friendship_requests():
 
-    data = request.get_json()
-
-    if not data:
-        return jsonify({"error": "body was not found, please send user_id field"}), 400
-
-    user_id = data.get("user_id")
-    direction = data.get("direction")
+    user_id = request.args.get("user_id")
+    direction = request.args.get("direction")
 
     if not user_id or not direction:
         return jsonify({"error": "user_id and direction fields are necessary"}), 400

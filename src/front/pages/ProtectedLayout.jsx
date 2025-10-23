@@ -4,37 +4,59 @@ import { Navbar } from "../components/Navbar"
 import { Footer } from "../components/Footer"
 import { useEffect } from "react"
 import useGlobalReducer from "../hooks/useGlobalReducer"
+import { saveRequestsFrom, saveRequestsTo } from "../api/friendships"
+
+
+
 
 // Base component that maintains the navbar and footer throughout the page and the scroll to top functionality.
 export const ProtectedLayout = () => {
 
 
-const navigate = useNavigate()
-
-const login = localStorage.getItem("user_id") || sessionStorage.getItem("user_id")
-
-
-const {store} = useGlobalReducer()
+    const navigate = useNavigate()
+    const user_id = localStorage.getItem("user_id") || sessionStorage.getItem("user_id")
 
 
-useEffect(()=>{
 
-if(!store.login && !login){
-    navigate("/missing-permissions")
+    const { store, dispatch, switchLoading} = useGlobalReducer()
 
-    if(store.loading){
-        console.log("Loading...")
-}
 
-}
 
-},[store])
+    useEffect(() => {
 
+        if (!store.login && !user_id) {
+            navigate("/missing-permissions")
+        } 
+
+}, [store])
+
+
+    useEffect(()=>{
+
+        saveRequestsFrom(user_id, dispatch, switchLoading)
+        saveRequestsTo(user_id, dispatch, switchLoading)
+
+    },[])
+
+   
 
     return (
         <ScrollToTop>
             <Navbar />
-                <Outlet />
+            <Outlet />
+            {store.loading &&
+                <div className="modal fade show d-block text-center" tabIndex="-1">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-body">
+                                <h1>Loading</h1>
+                                <div className="spinner-border" role="status">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
             <Footer />
         </ScrollToTop>
     )

@@ -7,11 +7,12 @@ export const Navbar = () => {
 
 	const navigate = useNavigate()
 
+	const [logged, setLogged] = useState(false)
+	
 	const user_local = localStorage.getItem("user_name")
 
 	const user_session = sessionStorage.getItem("user_name")
 
-	const [logged, setLogged] = useState(false)
 
 
 	const { store, dispatch } = useGlobalReducer()

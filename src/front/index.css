@@ -296,3 +296,8 @@ background-color: #a80404!important;
 .item-dropdown:hover {
     background-color:  #eec699!important;
 }
+
+.no-ring:focus {
+    outline:none!important;
+    box-shadow:none!important;
+}

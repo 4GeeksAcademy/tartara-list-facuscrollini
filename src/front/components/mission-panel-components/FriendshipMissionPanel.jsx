@@ -5,7 +5,7 @@ import { saveFriendships } from "../../api/friendships"
 
 const FriendshipMissionPanel = () => {
 
-    const { store, dispatch } = useGlobalReducer()
+    const { store, dispatch, switchLoading } = useGlobalReducer()
 
     const [formData, setFormData] = useState({
         title: "",
@@ -13,9 +13,7 @@ const FriendshipMissionPanel = () => {
         friendship_id: ""
     })
 
-    const switchLoading = () => {
-        dispatch({ type: "loading" })
-    }
+
 
     const handleChange = (event) => {
 

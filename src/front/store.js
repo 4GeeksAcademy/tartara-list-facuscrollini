@@ -4,18 +4,27 @@ export const initialStore = () => {
     allMissions: [],
     friendships: [],
     loading: false,
+    requests_from: [],
+    requests_to: [],
   };
 };
 
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
-    //Cases login
+    //Cases login y user
 
     case "login":
       return { ...store, login: true };
 
     case "logout":
-      return { ...store, login: false };
+      return {
+        login: false,
+        allMissions: [],
+        friendships: [],
+        loading: false,
+        requests_from: [],
+        requests_to: [],
+      };
 
     //Case loading
 
@@ -95,44 +104,77 @@ export default function storeReducer(store, action = {}) {
               friendship_missions: [
                 ...friendship.friendship_missions,
                 action.payload.data,
-              ]
+              ],
             };
           }
-          return friendship
-       
+          return friendship;
         }),
       };
 
     case "edit_friendship_mission":
-
-     return {...store, friendships: store.friendships.map((friendship)=>{
-      if(friendship.id == action.payload.friendship_id){
-        return {...friendship, friendship_missions: friendship.friendship_missions.map((mission)=>{
-          if(mission.id == action.payload.data.id){
-            return action.payload.data
+      return {
+        ...store,
+        friendships: store.friendships.map((friendship) => {
+          if (friendship.id == action.payload.friendship_id) {
+            return {
+              ...friendship,
+              friendship_missions: friendship.friendship_missions.map(
+                (mission) => {
+                  if (mission.id == action.payload.data.id) {
+                    return action.payload.data;
+                  }
+                  return mission;
+                }
+              ),
+            };
           }
-          return mission
-        })}
-      }
-      return friendship
-     }) }
-
+          return friendship;
+        }),
+      };
 
     case "switch_state_friendship_mission":
-      return {...store, friendships: store.friendships.map((friendship)=>{
-
-      if(friendship.id == action.payload.friendship_id){
-        return {...friendship, friendship_missions: friendship.friendship_missions.map((mission)=>{
-          if(mission.id === action.payload.mission_id){
-
-            return {...mission, is_active : !mission.is_active}
+      return {
+        ...store,
+        friendships: store.friendships.map((friendship) => {
+          if (friendship.id == action.payload.friendship_id) {
+            return {
+              ...friendship,
+              friendship_missions: friendship.friendship_missions.map(
+                (mission) => {
+                  if (mission.id === action.payload.mission_id) {
+                    return { ...mission, is_active: !mission.is_active };
+                  }
+                  return mission;
+                }
+              ),
+            };
           }
-          return mission
-        })}
-      }
-      return friendship
+          return friendship;
+        }),
+      };
 
-      })}
+      case "save_requests_from":
+        return {...store, requests_from: action.payload}
+
+      case "save_requests_to":
+        return {...store, requests_to: action.payload}
+
+      case "delete_request":
+
+        const fromRequest = store.request_from.find(request => request.id == action.payload)
+
+        const toRequest = store.request_from.find(request => request.id == action.payload)
+
+        if(fromRequest){
+          const requests = store.requests_from.filter(request => request.id != action.payload)
+
+          return {...store, requests_from: requests}
+        }
+        else if(toRequest){
+          const requests = store.requests_to.filter(request => request.id != action.payload)
+
+          return {...store, requests_to: requests}
+        }
 
     default:
       throw Error("Unknown action.");
