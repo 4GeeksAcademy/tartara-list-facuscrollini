@@ -3,9 +3,9 @@ import API_URL from "./apiUrl";
 
 const FETCH_URL = `${API_URL}user/friendship`;
 
-export const saveFriendships = async (dispatch) => {
+export const saveFriendships = async (dispatch, user_id) => {
   await dispatch({ type: "loading" });
-  const friendships = await fetchFriendship({ user_id: 2 }, "GET");
+  const friendships = await fetchFriendship({ user_id: user_id }, "GET");
   dispatch({ type: "save_friendships", payload: friendships.friendships });
   await dispatch({ type: "loading" });
 };
@@ -136,7 +136,7 @@ const fetchChangeRequestState = async (fetchData) => {
   }
 };
 
-export const changeRequestState = (
+export const changeRequestState = async(
   user_id,
   request_id,
   state,
@@ -151,7 +151,7 @@ export const changeRequestState = (
     friendship_request_id: request_id,
   };
 
-  const fetchRequest = fetchChangeRequestState(fetchData);
+  const fetchRequest = await fetchChangeRequestState(fetchData);
 
   if (fetchRequest.error) {
     console.log(fetchRequest);

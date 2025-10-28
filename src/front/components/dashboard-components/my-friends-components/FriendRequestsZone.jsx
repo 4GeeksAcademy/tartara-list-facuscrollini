@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import useGlobalReducer from "../../../hooks/useGlobalReducer"
 import { changeRequestState } from "../../../api/friendships"
+import { useRefresh } from "../../../hooks/useRefresh"
 
 
 const FriendRequestsZone = () => {
@@ -9,19 +10,20 @@ const FriendRequestsZone = () => {
     const user_id = localStorage.getItem("user_id") || sessionStorage.getItem("user_id")
 
 
-    const cancelRequest = (request_id) => {
-        changeRequestState(user_id, request_id, "denied", dispatch, switchLoading)
-    }
-
-    const acceptRequest = (request_id) => {
-        changeRequestState(user_id, request_id, "accepted",dispatch, switchLoading)
+    const cancelRequest = async(request_id) => {
+        await changeRequestState(user_id, request_id, "denied", dispatch, switchLoading)
+        await useRefresh(user_id, dispatch, switchLoading)
 
     }
 
+    const acceptRequest = async(request_id) => {
 
-    useEffect(() => {
-        console.log(store)
-    }, [store])
+        await changeRequestState(user_id, request_id, "accepted", dispatch, switchLoading)
+        await useRefresh(user_id, dispatch, switchLoading)
+
+    }
+
+
 
 
     return (
@@ -36,21 +38,31 @@ const FriendRequestsZone = () => {
                     </h2>
                     <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                         <div className="accordion-body">
-                            <p>Sended</p>
-                            {store.requests_from.map((request) => (
-                                <>
-                                    <p>{request.to}</p>
-                                    <button onClick={()=>cancelRequest(request.friendship_request_id)}>Cancel</button>
-                                </>
-                            ))}
-                            <p>Recieved</p>
-                            {store.requests_to.map((request) => (
-                                <>
-                                    <p>{request.from}</p>
-                                    <button onClick={()=>acceptRequest(request.friendship_request_id)} >Accept</button>
-                                    <button onClick={()=>cancelRequest(request.friendship_request_id)}>Deny</button>
-                                </>
-                            ))}
+                            <div className="border bg-dark text-light rounded p-2">
+                                {store.requests_from.length > 0 ? <>
+
+                                    <p className="fs-3">Sended</p>
+                                    <hr />
+                                    {store.requests_from.map((request, index) => (
+                                        <div key={index}>
+                                            <p>{request.to}</p>
+                                            <button onClick={() => cancelRequest(request.friendship_request_id)}>Cancel</button>
+                                        </div>
+                                    ))}
+                                </> : <><p>Theres no sended friendship requests</p></>}
+                            </div>
+                            <div className="border bg-ligth border-dark text-dark  rounded p-2 mt-2">
+                                {store.requests_to.length > 0 ? <><p className="fs-3">Recieved</p>
+                                    <hr />
+                                    {store.requests_to.map((request, index) => (
+                                        <div key={index}>
+                                            <p>{request.from}</p>
+                                            <button onClick={() => acceptRequest(request.friendship_request_id)} >Accept</button>
+                                            <button onClick={() => cancelRequest(request.friendship_request_id)}>Deny</button>
+                                        </div>
+                                    ))}</> : <p>There is no invitation recieved</p>}
+                            </div>
+
 
                         </div>
                     </div>

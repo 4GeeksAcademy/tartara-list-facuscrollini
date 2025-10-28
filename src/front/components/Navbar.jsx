@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
+import { useStorage } from "../hooks/useStorage";
+import { useLogout } from "../hooks/useLogout";
 
 export const Navbar = () => {
 
@@ -17,19 +19,7 @@ export const Navbar = () => {
 
 	const { store, dispatch } = useGlobalReducer()
 
-	const logout = () => {
 
-		if (user_local) {
-			localStorage.removeItem("token")
-			localStorage.removeItem("user_id")
-			localStorage.removeItem("user_name")
-		} else if (user_session) {
-			sessionStorage.removeItem("token")
-			sessionStorage.removeItem("user_id")
-			sessionStorage.removeItem("user_name")
-		}
-		dispatch({ type: "logout" })
-	}
 
 
 	//funcion para navegar a Dashboard presionando en el dropdown menu del navbar cuando esta logeado
@@ -74,7 +64,7 @@ export const Navbar = () => {
 			<li onClick={()=>navToDashboard("my-profile")}><button className="dropdown-item item-dropdown" type="button">My profile</button></li>
 			<li><button onClick={()=>navToDashboard("my-friends")} className="dropdown-item  item-dropdown" type="button">My friends</button></li>
 			<li><hr className="dropdown-divider" /></li>
-			<li className="text-end"><button onClick={logout} className="dropdown-item button-color-2 w-auto ms-auto me-1 rounded-2 font-color-3 " type="button">Log out</button></li>
+			<li className="text-end"><button onClick={useLogout} className="dropdown-item button-color-2 w-auto ms-auto me-1 rounded-2 font-color-3 " type="button">Log out</button></li>
 		</ul>
 	</div>
 

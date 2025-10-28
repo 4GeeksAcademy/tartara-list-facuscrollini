@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { fetchFriendshipMission } from "../../api/friendshipMissions"
 import useGlobalReducer from "../../hooks/useGlobalReducer"
 import { saveFriendships } from "../../api/friendships"
+import { useStorage } from "../../hooks/useStorage"
 
 const FriendshipMissionPanel = () => {
 
@@ -13,6 +14,9 @@ const FriendshipMissionPanel = () => {
         friendship_id: ""
     })
 
+    const {user_id} = useStorage()
+
+    
 
 
     const handleChange = (event) => {
@@ -96,14 +100,14 @@ const FriendshipMissionPanel = () => {
         switchLoading()
         const fetchEditMission = await fetchFriendshipMission(fetchBody, "PATCH", false)
 
-        if(!fetchEditMission.error){
+        if (!fetchEditMission.error) {
 
             dispatch({ type: "edit_friendship_mission", payload: { data: fetchEditMission, friendship_id: friendship_id } })
             if (fetchEditMission) {
                 clearForm()
             }
             switchLoading()
-        } else{
+        } else {
             console.log(fetchEditMission)
             switchLoading()
         }
@@ -119,7 +123,7 @@ const FriendshipMissionPanel = () => {
         }
 
         switchLoading()
-        
+
         const fetchSwitchMissionState = await fetchFriendshipMission(fetchBody, "PATCH", true)
 
         dispatch({ type: "switch_state_friendship_mission", payload: { friendship_id: friendship_id, mission_id: mission_id } })
@@ -128,14 +132,18 @@ const FriendshipMissionPanel = () => {
 
 
 
+
     useEffect(() => {
 
-        if (store.friendships.length == 0) {
-            saveFriendships(dispatch)
-        }
+        saveFriendships(dispatch, user_id)
+
 
     }, [])
 
+    
+    useEffect(() => {
+        console.log(store)
+    }, [store])
 
 
 
@@ -169,10 +177,11 @@ const FriendshipMissionPanel = () => {
             {
                 store.friendships.map((friendship) => (
 
-                    <div key={friendship.id}>
+                    <div className="border rounded border-2 border-dark m-3 p-3" key={friendship.id}>
 
-                        <p>{friendship.user_from}</p>
+                        <p className="display-3 text-dark">{friendship.user_from}</p>
                         <p>Friendship id: {friendship.id}</p>
+                        <hr/>
 
                         <p className="fw-bold">Actives</p>
 
@@ -203,7 +212,7 @@ const FriendshipMissionPanel = () => {
                                         <p className="fw-bold">{mission.title}</p>
                                         <button onClick={() => deleteMission(friendship.id, mission.id)} type="button" className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
                                         <button onClick={() => handleEditButton(friendship.id, mission)} type="button" className="btn btn-warning"><i className="fa-solid fa-pen"></i></button>
-                                        <button onClick={()=>switchMissionState(friendship.id, mission.id)} type="button" className="btn btn-info"><i className="fa-solid fa-circle"></i></button>
+                                        <button onClick={() => switchMissionState(friendship.id, mission.id)} type="button" className="btn btn-info"><i className="fa-solid fa-circle"></i></button>
                                     </div>
                                 ))
                             ) :

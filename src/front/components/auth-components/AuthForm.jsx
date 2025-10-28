@@ -121,7 +121,7 @@ const AuthForm = ({ color, fields }) => {
 
                 const { title, message } = loginMessage(user_name)
                 setFormSuccess({ title: title, message: message })
-                saveFriendships(dispatch)
+                saveFriendships(dispatch, user_id)
                 setFormState("success")
                 setShowModal(true)
                 setLoading(false)
