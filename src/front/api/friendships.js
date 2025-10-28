@@ -108,19 +108,15 @@ export const saveRequestsTo = async (user_id, dispatch, loading) => {
   loading();
 };
 
-
-const fetchChangeRequestState = async(fetchData) =>{
-
+const fetchChangeRequestState = async (fetchData) => {
   try {
-    const response = await fetch(
-      `${API_URL}user/friendship/request/state`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(fetchData)
-      }
-    );
+    const response = await fetch(`${API_URL}user/friendship/request/state`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(fetchData),
+    });
 
     let data;
 
@@ -140,26 +136,28 @@ const fetchChangeRequestState = async(fetchData) =>{
   }
 };
 
-
-export const changeRequestState = (user_id, request_id, state,dispatch, loading) => {
-
-  loading()
+export const changeRequestState = (
+  user_id,
+  request_id,
+  state,
+  dispatch,
+  loading
+) => {
+  loading();
 
   const fetchData = {
     user_id,
     state,
-    friendship_request_id: request_id
+    friendship_request_id: request_id,
+  };
+
+  const fetchRequest = fetchChangeRequestState(fetchData);
+
+  if (fetchRequest.error) {
+    console.log(fetchRequest);
+  } else {
+    dispatch({ type: "delete_request", payload: request_id });
   }
 
-  
-  const fetchRequest = fetchChangeRequestState(fetchData)
-
-  if(!fetchRequest.error){
-    console.log(fetchRequest)
-  }else {
-    dispatch({type: "delete_request", payload: request_id})
-  }
-
-  loading()
-
-}
+  loading();
+};

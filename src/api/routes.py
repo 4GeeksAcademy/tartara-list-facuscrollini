@@ -848,6 +848,9 @@ def set_friendship_request():
 
     if not state:
         return jsonify({"error": "state field was missing"}), 400
+    
+
+    user_id = int(user_id)
 
     if state == "accepted":
         if friendship_request.user_to_id == user_id:

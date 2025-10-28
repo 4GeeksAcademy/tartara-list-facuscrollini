@@ -153,28 +153,38 @@ export default function storeReducer(store, action = {}) {
         }),
       };
 
-      case "save_requests_from":
-        return {...store, requests_from: action.payload}
+    case "save_requests_from":
+      return { ...store, requests_from: action.payload };
 
-      case "save_requests_to":
-        return {...store, requests_to: action.payload}
+    case "save_requests_to":
+      return { ...store, requests_to: action.payload };
 
-      case "delete_request":
+    case "delete_request":
 
-        const fromRequest = store.request_from.find(request => request.id == action.payload)
+      const fromRequest = store.requests_from.find(
+        (request) => request.friendship_request_id == action.payload
+      );
 
-        const toRequest = store.request_from.find(request => request.id == action.payload)
+      const toRequest = store.requests_to.find(
+        (request) => request.friendship_request_id == action.payload
+      );
 
-        if(fromRequest){
-          const requests = store.requests_from.filter(request => request.id != action.payload)
+      let requests;
 
-          return {...store, requests_from: requests}
-        }
-        else if(toRequest){
-          const requests = store.requests_to.filter(request => request.id != action.payload)
+      if (fromRequest) {
+        requests = store.requests_from.filter(
+          (request) => request.friendship_request_id != action.payload
+        );
 
-          return {...store, requests_to: requests}
-        }
+
+        return { ...store, requests_from: requests };
+      } else if (toRequest) {
+         requests = store.requests_to.filter(
+          (request) => request.friendship_request_id != action.payload
+        );
+
+        return { ...store, requests_to: requests };
+      }
 
     default:
       throw Error("Unknown action.");
