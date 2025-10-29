@@ -12,14 +12,14 @@ const FriendRequestsZone = () => {
 
     const cancelRequest = async(request_id) => {
         await changeRequestState(user_id, request_id, "denied", dispatch, switchLoading)
-        await useRefresh(user_id, dispatch, switchLoading)
+
 
     }
 
     const acceptRequest = async(request_id) => {
 
         await changeRequestState(user_id, request_id, "accepted", dispatch, switchLoading)
-        await useRefresh(user_id, dispatch, switchLoading)
+
 
     }
 

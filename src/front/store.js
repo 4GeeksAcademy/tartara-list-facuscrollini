@@ -186,6 +186,14 @@ export default function storeReducer(store, action = {}) {
         return { ...store, requests_to: requests };
       }
 
+    case "send_request":
+
+      return {...store, requests_from: [...store.requests_from, action.payload]}
+
+    case "add_friendship":
+
+      return {...store, friendships: [...store.friendships, action.payload]}
+
     default:
       throw Error("Unknown action.");
   }

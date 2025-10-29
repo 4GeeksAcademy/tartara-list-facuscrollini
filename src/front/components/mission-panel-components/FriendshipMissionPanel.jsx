@@ -3,6 +3,7 @@ import { fetchFriendshipMission } from "../../api/friendshipMissions"
 import useGlobalReducer from "../../hooks/useGlobalReducer"
 import { saveFriendships } from "../../api/friendships"
 import { useStorage } from "../../hooks/useStorage"
+import { useLocation } from "react-router-dom"
 
 const FriendshipMissionPanel = () => {
 
@@ -13,6 +14,8 @@ const FriendshipMissionPanel = () => {
         description: "",
         friendship_id: ""
     })
+
+    const location = useLocation()
 
     const {user_id} = useStorage()
 
@@ -141,16 +144,24 @@ const FriendshipMissionPanel = () => {
     }, [])
 
     
-    useEffect(() => {
-        console.log(store)
-    }, [store])
 
-
-
+    //useEffect que evalue que hayan cargado las amistades del usuario para poder dirigirlo al id de su amigo seleccionado en la vista de Dashboard
+    useEffect(()=>{
+    
+        if(store.friendships && location){
+            
+            console.log(location)
+            const user_name = location.hash.replace("#", "")
+            const element = document.getElementById(user_name)
+            if(element){
+                element.scrollIntoView({behavior: "smooth"})
+            }
+        }
+    },[location, store.friendships])
 
     return (
 
-        <div className="bg-white m-4 p-4 rounded-5 border border-3 border-black">
+        <div  className="bg-white m-4 p-4 rounded-5 border border-3 border-black">
             <p className="display-1 text-center">Friendships Missions</p>
 
             <form onSubmit={handleSubmit} className="rounded-3 bg-dark text-light p-2 " data-bs-theme="dark">
@@ -177,7 +188,7 @@ const FriendshipMissionPanel = () => {
             {
                 store.friendships.map((friendship) => (
 
-                    <div className="border rounded border-2 border-dark m-3 p-3" key={friendship.id}>
+                    <div id={friendship.user_from} className="border rounded border-2 border-dark m-3 p-3" key={friendship.id}>
 
                         <p className="display-3 text-dark">{friendship.user_from}</p>
                         <p>Friendship id: {friendship.id}</p>

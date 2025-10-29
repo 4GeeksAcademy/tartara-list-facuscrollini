@@ -867,7 +867,7 @@ def set_friendship_request():
             db.session.delete(friendship_request)
             db.session.commit()
 
-            return jsonify({"message": f"friendship between {user_from.user_name} and {user_to.user_name} was successfully created"}), 200
+            return jsonify(friendship.serialize()), 200
         else:
             return jsonify({"error": "just the user who recieve the request can accept it"}), 400
 
@@ -924,4 +924,4 @@ def create_friendship_request():
     db.session.add(friendship_request)
     db.session.commit()
 
-    return jsonify({"message": f"friendship request from id {user_from.id}({user_from.user_name}) to id {user_to.id}({user_to.user_name}) was successfully created"})
+    return jsonify(friendship_request.serialize())

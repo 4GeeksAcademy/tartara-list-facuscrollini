@@ -2,8 +2,9 @@ import { useEffect, useState } from "react"
 import { fetchGetAllUsers } from "../../../api/users"
 import useGlobalReducer from "../../../hooks/useGlobalReducer"
 import { useStorage } from "../../../hooks/useStorage"
-import { changeRequestState } from "../../../api/friendships"
+import { changeRequestState, sendRequest } from "../../../api/friendships"
 import { useRefresh } from "../../../hooks/useRefresh"
+import { useNavigate } from "react-router-dom"
 const SearchZone = () => {
 
 
@@ -23,11 +24,16 @@ const SearchZone = () => {
 
     //Traigo el nombre del usuario y lo guardo en una variable
 
-    const {user_id, user_name } = useStorage()
+    const { user_id, user_name } = useStorage()
+
+
+    //Importo useNavigate para usarlo para el boton de "Our Missions"
+
+    const navigate = useNavigate()
 
 
 
-    const { switchLoading, store,dispatch } = useGlobalReducer()
+    const { switchLoading, store, dispatch } = useGlobalReducer()
 
     //handleChange guarda en searchData cada letra que escribimos en el input 
     const handleChange = (event) => {
@@ -77,7 +83,7 @@ const SearchZone = () => {
             //Guardo en un array el user_name de cada uno de ellos
             const searchResult = searchFilter.map((user) => {
                 if (user.user_name != user_name) {
-                    return {user_name : user.user_name, user_id: user.id}
+                    return { user_name: user.user_name, user_id: user.id }
                 }
             }).filter(Boolean)
 
@@ -109,19 +115,19 @@ const SearchZone = () => {
         const friendshipUsers = store.friendships.map((friendship) => {
             const userNameFriend = friendship.user_from != user_name ? friendship.user_from : friendship.user_to
 
-            return {user_name : userNameFriend, friendship_id: friendship.id}
+            return { user_name: userNameFriend, friendship_id: friendship.id }
         })
 
         setFriends(friendshipUsers)
 
         const requestsFromStore = store.requests_from.map((request) => {
-            return {friendship_request_id: request.friendship_request_id, user_name: request.to}
+            return { friendship_request_id: request.friendship_request_id, user_name: request.to }
         })
 
         setRequestsFrom(requestsFromStore)
 
         const requestsToStore = store.requests_to.map((request) => {
-            return {friendship_request_id: request.friendship_request_id, user_name: request.from}
+            return { friendship_request_id: request.friendship_request_id, user_name: request.from }
         })
 
         setRequestsTo(requestsToStore)
@@ -134,21 +140,23 @@ const SearchZone = () => {
     const cancelRequest = (request_id) => {
         changeRequestState(user_id, request_id, "denied", dispatch, switchLoading)
         setShowSearchModal(false)
-        useRefresh(user_id, dispatch, switchLoading)
+      
     }
 
     const acceptRequest = (request_id) => {
         changeRequestState(user_id, request_id, "accepted", dispatch, switchLoading)
-         setShowSearchModal(false)
-         useRefresh(user_id, dispatch, switchLoading)
+        setShowSearchModal(false)
+
 
     }
 
-    useEffect(()=>{
 
-console.log(store)
+   const handleOurMissions = (user_name)=>{
+    
+    navigate(`/auth/mission-panel#${user_name}`)
 
-    },[store])
+   }
+
 
 
 
@@ -184,18 +192,18 @@ console.log(store)
 
                                                         let requiredData;
 
-                                                        if(userFrom){
-                                                            requiredData = requestsFrom.find(request => request.user_name === found.user_name) 
+                                                        if (userFrom) {
+                                                            requiredData = requestsFrom.find(request => request.user_name === found.user_name)
                                                         }
-                                                        else if(userTo){
+                                                        else if (userTo) {
                                                             requiredData = requestsTo.find(request => request.user_name === found.user_name)
-                                                        } else if(friend){
+                                                        } else if (friend) {
                                                             requiredData = friends.find(request => request.user_name, found.user_name)
-                                                        }else{
+                                                        } else {
                                                             requiredData = found
                                                         }
-
-                                                        console.log("requiredData --->",requiredData)
+                                                        
+                                    
 
 
                                                         return <div key={index} className="d-flex justify-content-between"><p >{found.user_name}</p><div className="btn-group dropend">
@@ -206,18 +214,18 @@ console.log(store)
                                                                 <li><p className="dropdown-item">See profile</p></li>
                                                                 {
                                                                     userFrom ?
-                                                                        <li className="dropdown-item"><button className="btn btn-danger">Cancel request</button></li>
+                                                                        <li className="dropdown-item"><button onClick={()=> cancelRequest(requiredData.friendship_request_id)}className="btn btn-danger">Cancel request</button></li>
                                                                         :
                                                                         userTo ?
                                                                             <>
-                                                                                <li className="dropdown-item"><button onClick={()=> acceptRequest(requiredData.friendship_request_id)} className="btn btn-success">Accept request</button></li>
-                                                                                <li className="dropdown-item"><button onClick={()=> cancelRequest(requiredData.friendship_request_id)} className="btn btn-danger">Deny request</button></li>
+                                                                                <li className="dropdown-item"><button onClick={() => acceptRequest(requiredData.friendship_request_id)} className="btn btn-success">Accept request</button></li>
+                                                                                <li className="dropdown-item"><button onClick={() => cancelRequest(requiredData.friendship_request_id)} className="btn btn-danger">Deny request</button></li>
                                                                             </>
                                                                             :
                                                                             friend ?
-                                                                                <li className="dropdown-item"><button className="btn btn-primary">Our missions</button></li>
+                                                                                <li onClick={()=>handleOurMissions(found.user_name)} className="dropdown-item"><button className="btn btn-primary">Our missions</button></li>
                                                                                 :
-                                                                                <li className="dropdown-item"><button className="btn btn-warning">Send request</button></li>
+                                                                                <li onClick={() => sendRequest(found.user_id, user_id, found.user_name, dispatch, switchLoading)} className="dropdown-item"><button className="btn btn-warning">Send request</button></li>
 
                                                                 }
                                                             </ul>
