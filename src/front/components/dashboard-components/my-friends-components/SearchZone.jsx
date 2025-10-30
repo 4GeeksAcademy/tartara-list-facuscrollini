@@ -112,7 +112,7 @@ const SearchZone = () => {
 
     useEffect(() => {
 
-        const friendshipUsers = store.friendships?.map((friendship) => {
+        const friendshipUsers = store.friendships.map((friendship) => {
             const userNameFriend = friendship.user_from != user_name ? friendship.user_from : friendship.user_to
 
             return { user_name: userNameFriend, friendship_id: friendship.id }
