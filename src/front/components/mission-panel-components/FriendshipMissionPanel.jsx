@@ -19,7 +19,8 @@ const FriendshipMissionPanel = () => {
 
     const {user_id} = useStorage()
 
-    
+    const {user_name} = useStorage()
+
 
 
     const handleChange = (event) => {
@@ -62,7 +63,7 @@ const FriendshipMissionPanel = () => {
             friendship_mission_id: mission_id
         }
 
-        const fetchDeleleteMisison = await fetchFriendshipMission(fetchBody, "DELETE", false)
+        await fetchFriendshipMission(fetchBody, "DELETE", false)
 
         dispatch({ type: "delete_friendship_mission", payload: fetchBody })
         switchLoading()
@@ -190,7 +191,7 @@ const FriendshipMissionPanel = () => {
 
                     <div id={friendship.user_from} className="border rounded border-2 border-dark m-3 p-3" key={friendship.id}>
 
-                        <p className="display-3 text-dark">{friendship.user_from}</p>
+                        <p className="display-3 text-dark">{friendship.user_from != user_name ? friendship.user_from : friendship.user_to }</p>
                         <p>Friendship id: {friendship.id}</p>
                         <hr/>
 

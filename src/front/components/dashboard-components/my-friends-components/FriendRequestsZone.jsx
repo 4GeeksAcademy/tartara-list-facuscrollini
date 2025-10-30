@@ -10,13 +10,13 @@ const FriendRequestsZone = () => {
     const user_id = localStorage.getItem("user_id") || sessionStorage.getItem("user_id")
 
 
-    const cancelRequest = async(request_id) => {
+    const cancelRequest = async (request_id) => {
         await changeRequestState(user_id, request_id, "denied", dispatch, switchLoading)
 
 
     }
 
-    const acceptRequest = async(request_id) => {
+    const acceptRequest = async (request_id) => {
 
         await changeRequestState(user_id, request_id, "accepted", dispatch, switchLoading)
 
@@ -38,6 +38,18 @@ const FriendRequestsZone = () => {
                     </h2>
                     <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                         <div className="accordion-body">
+
+                            <div className="border bg-ligth border-dark text-dark  rounded p-2 mt-2">
+                                {store.requests_to.length > 0 ? <><p className="fs-3">Recieved</p>
+                                    <hr />
+                                    {store.requests_to.map((request, index) => (
+                                        <div key={index}>
+                                            <p>{request.from}</p>
+                                            <button onClick={() => acceptRequest(request.friendship_request_id)} >Accept</button>
+                                            <button onClick={() => cancelRequest(request.friendship_request_id)}>Deny</button>
+                                        </div>
+                                    ))}</> : <p>There is no invitation recieved</p>}
+                            </div>
                             <div className="border bg-dark text-light rounded p-2">
                                 {store.requests_from.length > 0 ? <>
 
@@ -50,17 +62,6 @@ const FriendRequestsZone = () => {
                                         </div>
                                     ))}
                                 </> : <><p>Theres no sended friendship requests</p></>}
-                            </div>
-                            <div className="border bg-ligth border-dark text-dark  rounded p-2 mt-2">
-                                {store.requests_to.length > 0 ? <><p className="fs-3">Recieved</p>
-                                    <hr />
-                                    {store.requests_to.map((request, index) => (
-                                        <div key={index}>
-                                            <p>{request.from}</p>
-                                            <button onClick={() => acceptRequest(request.friendship_request_id)} >Accept</button>
-                                            <button onClick={() => cancelRequest(request.friendship_request_id)}>Deny</button>
-                                        </div>
-                                    ))}</> : <p>There is no invitation recieved</p>}
                             </div>
 
 

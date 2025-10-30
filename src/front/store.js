@@ -160,7 +160,6 @@ export default function storeReducer(store, action = {}) {
       return { ...store, requests_to: action.payload };
 
     case "delete_request":
-
       const fromRequest = store.requests_from.find(
         (request) => request.friendship_request_id == action.payload
       );
@@ -176,10 +175,9 @@ export default function storeReducer(store, action = {}) {
           (request) => request.friendship_request_id != action.payload
         );
 
-
         return { ...store, requests_from: requests };
       } else if (toRequest) {
-         requests = store.requests_to.filter(
+        requests = store.requests_to.filter(
           (request) => request.friendship_request_id != action.payload
         );
 
@@ -187,12 +185,21 @@ export default function storeReducer(store, action = {}) {
       }
 
     case "send_request":
-
-      return {...store, requests_from: [...store.requests_from, action.payload]}
+      return {
+        ...store,
+        requests_from: [...store.requests_from, action.payload],
+      };
 
     case "add_friendship":
+      return { ...store, friendships: [...store.friendships, action.payload] };
 
-      return {...store, friendships: [...store.friendships, action.payload]}
+    case "delete_friendship":
+      return {
+        ...store,
+        friendships: store.friendships.filter((friendship) => {
+          return friendship.id != action.payload;
+        }),
+      };
 
     default:
       throw Error("Unknown action.");

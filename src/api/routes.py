@@ -296,13 +296,16 @@ def delete_friendship():
     friendship = Friendship.query.filter(and_(
         Friendship.user_from_id == user_from_id, Friendship.user_to_id == user_to_id)).first()
 
+
     if not friendship:
         return jsonify({"error": "friendship not founded"}), 400
+    
+    friendship_id = friendship.id
 
     db.session.delete(friendship)
     db.session.commit()
 
-    return jsonify({"message": "friendship deleted successfully"}), 200
+    return jsonify({"deleted_friendship_id": friendship_id}), 200
 
 
 # -------------------------------------------FIN CRUD FRIEND --------------------------------------------------------------------------------------------#

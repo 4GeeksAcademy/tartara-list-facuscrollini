@@ -22,10 +22,10 @@ export const fetchFriendship = async (fetchData, method) => {
   const optionsObject =
     method == "GET"
       ? {
-          method: method,
+          method
         }
       : {
-          method: method,
+          method,
           headers: {
             "Content-Type": "application/json",
           },
@@ -40,7 +40,7 @@ export const fetchFriendship = async (fetchData, method) => {
       `${FETCH_URL}${
         method == "GET" && fetchData.user_id
           ? `s?user_id=${fetchData.user_id}`
-          : `to_id=${fetchData.user_to_id}?user_from_id=${fetchData.user_from_id}`
+          : `?to_id=${fetchData.user_to_id}&user_from_id=${fetchData.user_from_id}`
       }`,
       optionsObject
     );

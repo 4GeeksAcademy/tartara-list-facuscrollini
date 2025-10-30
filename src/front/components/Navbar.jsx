@@ -64,7 +64,7 @@ export const Navbar = () => {
 			<li onClick={()=>navToDashboard("my-profile")}><button className="dropdown-item item-dropdown" type="button">My profile</button></li>
 			<li><button onClick={()=>navToDashboard("my-friends")} className="dropdown-item  item-dropdown" type="button">My friends</button></li>
 			<li><hr className="dropdown-divider" /></li>
-			<li className="text-end"><button onClick={useLogout} className="dropdown-item button-color-2 w-auto ms-auto me-1 rounded-2 font-color-3 " type="button">Log out</button></li>
+			<li className="text-end"><button onClick={()=> useLogout(dispatch)} className="dropdown-item button-color-2 w-auto ms-auto me-1 rounded-2 font-color-3 " type="button">Log out</button></li>
 		</ul>
 	</div>
 

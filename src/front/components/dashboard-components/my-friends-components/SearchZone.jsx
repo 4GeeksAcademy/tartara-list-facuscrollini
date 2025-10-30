@@ -162,8 +162,8 @@ const SearchZone = () => {
 
 
     return (
-        <div>
-            <div>
+        <div className="w-100">
+            <div className="w-100">
                 <input onKeyDown={handleKeyDown} onChange={handleChange} value={searchData} type="text"></input>
                 <button onClick={() => searchFriends(searchData)} type="button" className="btn btn-primary">
                     <i className="fa-solid fa-search"></i>

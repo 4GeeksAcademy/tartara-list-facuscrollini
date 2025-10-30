@@ -5,6 +5,7 @@ import { Footer } from "../components/Footer"
 import { useEffect } from "react"
 import useGlobalReducer from "../hooks/useGlobalReducer"
 import { saveRequestsFrom, saveRequestsTo } from "../api/friendships"
+import { useStorage } from "../hooks/useStorage"
 
 
 
@@ -18,7 +19,7 @@ export const ProtectedLayout = () => {
 
 
 
-    const { store, dispatch, switchLoading} = useGlobalReducer()
+    const { store, dispatch, switchLoading } = useGlobalReducer()
 
 
 
@@ -26,24 +27,27 @@ export const ProtectedLayout = () => {
 
         if (!store.login && !user_id) {
             navigate("/missing-permissions")
-        } 
+        }
 
-}, [store])
+    }, [store])
 
 
-    useEffect(()=>{
+    useEffect(() => {
 
         saveRequestsFrom(user_id, dispatch, switchLoading)
         saveRequestsTo(user_id, dispatch, switchLoading)
 
-    },[])
+    }, [])
 
-   
+
 
     return (
         <ScrollToTop>
+            <div className="min-vh-100 d-flex flex-column">
             <Navbar />
+            <div className="flex-grow-1 d-flex">
             <Outlet />
+            </div>
             {store.loading &&
                 <div className="modal fade show d-block text-center" tabIndex="-1">
                     <div className="modal-dialog">
@@ -58,6 +62,7 @@ export const ProtectedLayout = () => {
                 </div>
             }
             <Footer />
+            </div>
         </ScrollToTop>
     )
 }

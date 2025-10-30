@@ -20,18 +20,18 @@ export const PublicLayout = () => {
                 <div className="flex-grow-1 d-flex">
                     <Outlet />
                 </div>
-        {store.loading && 
-                <div className="modal fade show d-block text-center" tabIndex="-1">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-body">
-                                <h1>Loading</h1>
-                                <div className="spinner-border" role="status">
+                {store.loading &&
+                    <div className="modal fade show d-block text-center" tabIndex="-1">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-body">
+                                    <h1>Loading</h1>
+                                    <div className="spinner-border" role="status">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 }
                 <Footer />
             </div>

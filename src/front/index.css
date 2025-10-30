@@ -301,3 +301,12 @@ background-color: #a80404!important;
     outline:none!important;
     box-shadow:none!important;
 }
+
+
+.modal-profile-card{
+    height: 50vh;
+    width:25rem;
+}
+
+
+/*Estilo para los dropdown que no queremos que tengan hover ni focus*/

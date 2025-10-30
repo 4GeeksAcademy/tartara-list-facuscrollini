@@ -17,7 +17,7 @@ const MyFriends = () => {
 
 
     return (
-        <div>
+        <div className="container">
             <button onClick={()=>useRefresh(user_id, dispatch, switchLoading)} className="btn btn-secondary">Refresh<i className="fa-solid fa-arrows-rotate"></i></button>
            <SearchZone/>
             <FriendRequestsZone/>
