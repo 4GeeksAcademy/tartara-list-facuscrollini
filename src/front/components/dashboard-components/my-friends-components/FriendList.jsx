@@ -69,7 +69,7 @@ const FriendListZone = () => {
 
                 <ul className="list-group">
 
-                    {store.friendships.map((friendship) => {
+                    {store.friendships?.map((friendship) => {
 
                         const friendshipTitle = user_name != friendship.user_from ? friendship.user_from : friendship.user_to
 

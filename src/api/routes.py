@@ -39,7 +39,7 @@ def login():
 
     access_token = create_access_token(identity=str(user.id))
 
-    return jsonify({"token": access_token, "user_id": user.id, "user_name": user.user_name}), 200
+    return jsonify({"token": access_token, "user_id": user.id, "user_name": user.user_name, "email": user.email}), 200
 
 # -----------------------------TOKEN VERIFICATION--------------------------#
 
@@ -151,7 +151,7 @@ def delete_user(id):
 
 # --------------------------EDIT USER------------------------------#
 @api.route('/user', methods=['PATCH'])
-def edit_user(id):
+def edit_user():
 
 
     user_id = request.args.get("user_id")
@@ -165,16 +165,23 @@ def edit_user(id):
 
     if not data:
         return {"error": "please send information to update "}
+    
+    user_id = int(user_id)
 
     for key, value in data.items():
 
-        user_founded = User.query.filter(getattr(User, key) == value).first()
+            if key != "password":
+            
+                user_founded = User.query.filter(getattr(User, key) == value).first()
+    
+    
+                if user_founded and user_founded.id != user_id:
+                    return jsonify({"error": f"user_name o email already exist, try using another one. "}), 400
+        
 
-        if user_founded and user_founded.id != id:
-            return jsonify({"error": "user_name o email already exist, try using another one"}), 400
-
-        if hasattr(user, key):
-            setattr(user, key, value)
+            if hasattr(user, key):
+                setattr(user, key, value)
+        
 
     db.session.commit()
 

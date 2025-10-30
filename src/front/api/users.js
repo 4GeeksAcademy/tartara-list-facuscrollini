@@ -67,12 +67,11 @@ export const fetchGetUser = async(user_id) =>{
     }else{
 
       try {
-        const data = response.json()
+        const data = await response.json()
         return data
       } catch (error) {
         throw new Error("Fetch has sended an invalid JSON response")
       }
-      
       
     }
   } catch (error) {
@@ -80,3 +79,32 @@ export const fetchGetUser = async(user_id) =>{
   }
 }
 
+export const fetchEditUser = async(user_id, fetchBody) => {
+
+  try {
+    const response = await fetch(API_URL +  `user?user_id=${user_id}`,{
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body : JSON.stringify(fetchBody)
+    })
+
+    if(!response.ok){
+      throw new Error(response.statusText)
+    } else {
+      
+      try {
+        const data = await response.json()
+        return data
+      } catch (error) {
+        throw new Error("Fetch has sended an invalid JSON response")
+      }
+    }
+
+  } catch (error) {
+    return {error}
+  }
+
+
+}

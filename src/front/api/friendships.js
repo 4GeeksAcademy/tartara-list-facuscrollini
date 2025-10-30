@@ -6,7 +6,7 @@ const FETCH_URL = `${API_URL}user/friendship`;
 export const saveFriendships = async (dispatch, user_id) => {
   await dispatch({ type: "loading" });
   const friendships = await fetchFriendship({ user_id: user_id }, "GET");
-
+  console.log(friendships)
   if(!friendships.error){
   
     dispatch({ type: "save_friendships", payload: friendships.friendships});
@@ -50,12 +50,12 @@ export const fetchFriendship = async (fetchData, method) => {
     try {
       data = await response.json();
     } catch (error) {
-      throw new Error("Fetch has sended an invalid JSON response");
+      return "Fetch has sended an invalid JSON response";
     }
 
     if (!response.ok) {
       const message = data?.error;
-      throw new Error(message);
+      return message;
     }
 
     return data;

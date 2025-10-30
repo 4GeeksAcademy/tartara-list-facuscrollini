@@ -20,7 +20,6 @@ const FriendRequestsZone = () => {
 
         await changeRequestState(user_id, request_id, "accepted", dispatch, switchLoading)
 
-
     }
 
 

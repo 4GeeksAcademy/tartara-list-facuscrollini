@@ -109,7 +109,9 @@ const AuthForm = ({ color, fields }) => {
 
             const user_login = await login(formData.identificator, formData.password)
 
-            const { token, user_id, user_name } = await user_login
+            const { token, user_id, user_name, email } = await user_login
+
+            console.log(user_login)
 
             if (!token || !user_id) {
                 setFormError({ title: "LOGIN ERROR", message: user_login })
@@ -135,10 +137,12 @@ const AuthForm = ({ color, fields }) => {
                     localStorage.setItem("token", token)
                     localStorage.setItem("user_id", user_id)
                     localStorage.setItem("user_name", user_name)
+                    localStorage.setItem("email", email)
                 } else {
                     sessionStorage.setItem("token", token)
                     sessionStorage.setItem("user_id", user_id)
                     sessionStorage.setItem("user_name", user_name)
+                    sessionStorage.setItem("email", email)
                 }
             }
 
