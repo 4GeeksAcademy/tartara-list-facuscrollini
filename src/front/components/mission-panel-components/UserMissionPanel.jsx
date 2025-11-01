@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { createUserMission, deleteUserMission, getAllUserMissions, modifyUserMission, switchMissionState } from "../../api/missions"
+import { createUserMission, deleteUserMission, getAllUserMissions, modifyUserMission, switchMissionState } from "../../services/missions"
 import useGlobalReducer from "../../hooks/useGlobalReducer"
 
 const UserMissionPanel = () => {
@@ -68,11 +68,11 @@ const UserMissionPanel = () => {
 
         const fetchData = { ...resto, mission_id: id, user_id: user_id }
 
-            const fetchModifyUserMission = await modifyUserMission(fetchData)
-            clearForm()
-            dispatch({ type: "edit_user_mission", payload: formData })
+        const fetchModifyUserMission = await modifyUserMission(fetchData)
+        clearForm()
+        dispatch({ type: "edit_user_mission", payload: formData })
 
-        
+
         setLoading(false)
 
     }
@@ -80,7 +80,7 @@ const UserMissionPanel = () => {
 
     //Funcion que marca una tarea como hecha/no hecha, es decir, cambia is_active a true o false
 
-    const handleMissionIsActive = async(user_id, mission_id) =>{
+    const handleMissionIsActive = async (user_id, mission_id) => {
 
         setLoading(true)
 
@@ -89,9 +89,9 @@ const UserMissionPanel = () => {
             mission_id: mission_id
         }
 
-        
+
         const fetchMissionIsActive = await switchMissionState(fetchData)
-        dispatch({type:"switch_state_user_mission", payload: mission_id})
+        dispatch({ type: "switch_state_user_mission", payload: mission_id })
 
 
         setLoading(false)
@@ -154,7 +154,7 @@ const UserMissionPanel = () => {
         if (user_id) {
             showAllMissions(user_id)
         }
-    },[])
+    }, [])
 
 
 
@@ -164,9 +164,9 @@ const UserMissionPanel = () => {
 
         setAllUserMissions(store.allMissions)
 
-        setActiveMissions(store.allMissions.filter((mission)=> mission.is_active))
+        setActiveMissions(store.allMissions.filter((mission) => mission.is_active))
 
-        setInactiveMissions(store.allMissions.filter((mission)=> !mission.is_active))
+        setInactiveMissions(store.allMissions.filter((mission) => !mission.is_active))
 
     }, [store])
 
@@ -174,7 +174,7 @@ const UserMissionPanel = () => {
 
     return (
         <div className="bg-white m-4 p-4 border border-3 border-black rounded-5">
-        <h1 className="display-1 text-center">User missions</h1>
+            <h1 className="display-1 text-center">User missions</h1>
             {loading &&
                 <div className="alert alert-info" role="alert">
                     Cargando... <div className="spinner-border"></div>
@@ -199,67 +199,67 @@ const UserMissionPanel = () => {
 
             </form>
             <div className="container">
-            <div className="row">
-            <div className="col-6">
-                <h2>Misiones activas</h2>
-                {activeMissions != 0 ? 
-                
-                activeMissions.map((mission, index)=>(
+                <div className="row">
+                    <div className="col-6">
+                        <h2>Misiones activas</h2>
+                        {activeMissions != 0 ?
 
-                    <div key={index} className="rounded-4 border border-4 border-black m-5">
-                        <h2 className="text-center">{mission.title}</h2>
-                        <button onClick={() => handleDeleteUserMission(mission.id, user_id)} type="button" className="btn btn-danger">
-                            <i className="fa-solid fa-trash"></i>
-                        </button>
-                        <button className="btn btn-warning" onClick={() => setFormData(mission)}>
-                            <i className="fa-solid fa-pen"></i>
-                        </button>
-                        <button onClick={()=>handleMissionIsActive(user_id, mission.id)}className="btn btn-info">
-                            <i className={`fa-${mission.is_active ? "regular" : "solid"} fa-circle`}></i>
-                        </button>
-                        <h4>Description </h4>
-                        <hr />
-                        <p className="text-center" >{mission.description}</p>
-                        <hr />
-                        <h4>State</h4>
-                        <hr />
-                        <p className="text-center">{mission.is_active ? "Active" : "Inactive"}</p>
-                        <p className="display-1">{mission.id}</p>
+                            activeMissions.map((mission, index) => (
 
+                                <div key={index} className="rounded-4 border border-4 border-black m-5">
+                                    <h2 className="text-center">{mission.title}</h2>
+                                    <button onClick={() => handleDeleteUserMission(mission.id, user_id)} type="button" className="btn btn-danger">
+                                        <i className="fa-solid fa-trash"></i>
+                                    </button>
+                                    <button className="btn btn-warning" onClick={() => setFormData(mission)}>
+                                        <i className="fa-solid fa-pen"></i>
+                                    </button>
+                                    <button onClick={() => handleMissionIsActive(user_id, mission.id)} className="btn btn-info">
+                                        <i className={`fa-${mission.is_active ? "regular" : "solid"} fa-circle`}></i>
+                                    </button>
+                                    <h4>Description </h4>
+                                    <hr />
+                                    <p className="text-center" >{mission.description}</p>
+                                    <hr />
+                                    <h4>State</h4>
+                                    <hr />
+                                    <p className="text-center">{mission.is_active ? "Active" : "Inactive"}</p>
+                                    <p className="display-1">{mission.id}</p>
+
+                                </div>
+                            ))
+
+                            : "There aren't active missions"}
                     </div>
-                ))
-                
-                : "There aren't active missions"}
-            </div>
-            <div className="col-6">
-                <h2>Misiones inactivas</h2>
-                {inactiveMissions != 0 ? 
-                inactiveMissions.map((mission,index)=>(
-                    <div key={index} className="rounded-4 border border-4 border-black m-5">
-                        <h2 className="text-center">{mission.title}</h2>
-                        <button onClick={() => handleDeleteUserMission(mission.id, user_id)} type="button" className="btn btn-danger">
-                            <i className="fa-solid fa-trash"></i>
-                        </button>
-                        <button className="btn btn-warning" onClick={() => setFormData(mission)}>
-                            <i className="fa-solid fa-pen"></i>
-                        </button>
-                        <button onClick={()=>handleMissionIsActive(user_id, mission.id)}className="btn btn-info">
-                            <i className={`fa-${mission.is_active ? "regular" : "solid"} fa-circle`}></i>
-                        </button>
-                        <h4>Description </h4>
-                        <hr />
-                        <p className="text-center" >{mission.description}</p>
-                        <hr />
-                        <h4>State</h4>
-                        <hr />
-                        <p className="text-center">{mission.is_active ? "Active" : "Inactive"}</p>
-                        <p className="display-1">{mission.id}</p>
+                    <div className="col-6">
+                        <h2>Misiones inactivas</h2>
+                        {inactiveMissions != 0 ?
+                            inactiveMissions.map((mission, index) => (
+                                <div key={index} className="rounded-4 border border-4 border-black m-5">
+                                    <h2 className="text-center">{mission.title}</h2>
+                                    <button onClick={() => handleDeleteUserMission(mission.id, user_id)} type="button" className="btn btn-danger">
+                                        <i className="fa-solid fa-trash"></i>
+                                    </button>
+                                    <button className="btn btn-warning" onClick={() => setFormData(mission)}>
+                                        <i className="fa-solid fa-pen"></i>
+                                    </button>
+                                    <button onClick={() => handleMissionIsActive(user_id, mission.id)} className="btn btn-info">
+                                        <i className={`fa-${mission.is_active ? "regular" : "solid"} fa-circle`}></i>
+                                    </button>
+                                    <h4>Description </h4>
+                                    <hr />
+                                    <p className="text-center" >{mission.description}</p>
+                                    <hr />
+                                    <h4>State</h4>
+                                    <hr />
+                                    <p className="text-center">{mission.is_active ? "Active" : "Inactive"}</p>
+                                    <p className="display-1">{mission.id}</p>
 
+                                </div>
+                            ))
+                            : "There aren't inactive missions"}
                     </div>
-                ))
-                : "There aren't inactive missions"}
-            </div>
-            </div>
+                </div>
             </div>
 
             {/* 

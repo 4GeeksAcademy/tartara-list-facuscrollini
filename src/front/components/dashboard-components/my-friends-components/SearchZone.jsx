@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import { fetchGetAllUsers } from "../../../api/users"
+import { fetchGetAllUsers } from "../../../services/users"
 import useGlobalReducer from "../../../hooks/useGlobalReducer"
 import { useStorage } from "../../../hooks/useStorage"
-import { changeRequestState, sendRequest } from "../../../api/friendships"
+import { changeRequestState, sendRequest } from "../../../services/friendships"
 import { useRefresh } from "../../../hooks/useRefresh"
 import { useNavigate } from "react-router-dom"
 const SearchZone = () => {
@@ -140,7 +140,7 @@ const SearchZone = () => {
     const cancelRequest = (request_id) => {
         changeRequestState(user_id, request_id, "denied", dispatch, switchLoading)
         setShowSearchModal(false)
-      
+
     }
 
     const acceptRequest = (request_id) => {
@@ -151,11 +151,11 @@ const SearchZone = () => {
     }
 
 
-   const handleOurMissions = (user_name)=>{
-    
-    navigate(`/auth/mission-panel#${user_name}`)
+    const handleOurMissions = (user_name) => {
 
-   }
+        navigate(`/auth/mission-panel#${user_name}`)
+
+    }
 
 
 
@@ -202,8 +202,8 @@ const SearchZone = () => {
                                                         } else {
                                                             requiredData = found
                                                         }
-                                                        
-                                    
+
+
 
 
                                                         return <div key={index} className="d-flex justify-content-between"><p >{found.user_name}</p><div className="btn-group dropend">
@@ -214,7 +214,7 @@ const SearchZone = () => {
                                                                 <li><p className="dropdown-item">See profile</p></li>
                                                                 {
                                                                     userFrom ?
-                                                                        <li className="dropdown-item"><button onClick={()=> cancelRequest(requiredData.friendship_request_id)}className="btn btn-danger">Cancel request</button></li>
+                                                                        <li className="dropdown-item"><button onClick={() => cancelRequest(requiredData.friendship_request_id)} className="btn btn-danger">Cancel request</button></li>
                                                                         :
                                                                         userTo ?
                                                                             <>
@@ -223,7 +223,7 @@ const SearchZone = () => {
                                                                             </>
                                                                             :
                                                                             friend ?
-                                                                                <li onClick={()=>handleOurMissions(found.user_name)} className="dropdown-item"><button className="btn btn-primary">Our missions</button></li>
+                                                                                <li onClick={() => handleOurMissions(found.user_name)} className="dropdown-item"><button className="btn btn-primary">Our missions</button></li>
                                                                                 :
                                                                                 <li onClick={() => sendRequest(found.user_id, user_id, found.user_name, dispatch, switchLoading)} className="dropdown-item"><button className="btn btn-warning">Send request</button></li>
 

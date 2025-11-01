@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import { useStorage } from "../../../../hooks/useStorage"
-import { login } from "../../../../api/auth"
-import useGlobalReducer from "../../../../hooks/useGlobalReducer"
-import {fetchEditUser } from "../../../../api/users"
+import { useStorage } from "../../../hooks/useStorage"
+import { login } from "../../../services/auth"
+import useGlobalReducer from "../../../hooks/useGlobalReducer"
+import { fetchEditUser } from "../../../services/users"
 
 const ProfileData = () => {
 
@@ -12,7 +12,12 @@ const ProfileData = () => {
 
     const [showModalPassword, setshowModalPassword] = useState(false)
     const [showFormPassword, setshowFormassword] = useState(false)
-    const [formData, setFormData] = useState({})
+    const [password, setPassword] = useState("password")
+    const [formData, setFormData] = useState({
+        email: "",
+        user_name: "",
+        password: password
+    })
 
 
 
@@ -27,7 +32,6 @@ const ProfileData = () => {
     const [authorization, setAuthorization] = useState(0)
 
 
-    const [password, setPassword] = useState("password")
 
 
 
@@ -62,14 +66,14 @@ const ProfileData = () => {
         const userNameDifferent = formData.user_name != user_name
 
         if (emailDifferent || passwordDifferent || userNameDifferent) {
-           const fetchEdit = await fetchEditUser(user_id, formData)
-           if(fetchEdit.email){
+            const fetchEdit = await fetchEditUser(user_id, formData)
+            if (fetchEdit.email) {
 
-               const fetchEmail = fetchEdit.email
-               const fetchUserName = fetchEdit.user_name
-               useStorage().setItem("email", fetchEmail)
-               useStorage().setItem("user_name", fetchUserName)
-           }
+                const fetchEmail = fetchEdit.email
+                const fetchUserName = fetchEdit.user_name
+                useStorage().setItem("email", fetchEmail)
+                useStorage().setItem("user_name", fetchUserName)
+            }
         }
         else {
             console.log("ninguno de ellos es diferente")

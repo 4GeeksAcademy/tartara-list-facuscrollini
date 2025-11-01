@@ -1,4 +1,4 @@
-import { saveFriendships, saveRequestsFrom, saveRequestsTo } from "../api/friendships"
+import { saveFriendships, saveRequestsFrom, saveRequestsTo } from "../services/friendships"
 
 export const useRefresh = async (user_id, dispatch, switchLoading) => {
 

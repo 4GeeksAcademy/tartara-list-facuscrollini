@@ -2,22 +2,22 @@ import { useEffect } from "react";
 import ClosingSection from "../../components/home-components/features-section-components/ClosingSection";
 import FeaturesSection from "../../components/home-components/FeaturesSection";
 import Jumbotron from "../../components/home-components/Jumbotron";
-import { login } from "../../api/auth";
+import { login } from "../../services/auth";
 
 
 
 export const Home = () => {
 
-	useEffect(()=>{
+	useEffect(() => {
 
-		login("facu","1234")
-	},[])
+		login("facu", "1234")
+	}, [])
 
 	return (
 		<div className="container py-5">
-			<Jumbotron/>
-			<FeaturesSection/>
-			<ClosingSection/>
+			<Jumbotron />
+			<FeaturesSection />
+			<ClosingSection />
 		</div>
 	);
 }; 

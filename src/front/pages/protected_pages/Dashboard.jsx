@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import { fetchFriendship, saveFriendships } from "../../api/friendships"
+import { fetchFriendship, saveFriendships } from "../../services/friendships"
 import useGlobalReducer from "../../hooks/useGlobalReducer"
 import { useNavigate, useParams } from "react-router-dom"
-import { fetchGetAllUsers } from "../../api/users"
+import { fetchGetAllUsers } from "../../services/users"
 import MyFriends from "../../components/dashboard-components/MyFriends"
 import MyProfile from "../../components/dashboard-components/MyProfile"
 import { useStorage } from "../../hooks/useStorage"
@@ -17,8 +17,8 @@ const Dashboard = () => {
 
 
     const { dispatch } = useGlobalReducer()
-    const {user_id} = useStorage()
-    
+    const { user_id } = useStorage()
+
 
 
 
@@ -29,9 +29,9 @@ const Dashboard = () => {
     }
 
 
-    useEffect(()=>{
-saveFriendships(dispatch,user_id)
-    },[])
+    useEffect(() => {
+        saveFriendships(dispatch, user_id)
+    }, [])
 
 
     return (
@@ -48,10 +48,10 @@ saveFriendships(dispatch,user_id)
                 <div className="col-10">
                     {
                         params.section === "my-profile" ?
-                            <MyProfile/>
+                            <MyProfile />
                             :
                             params.section === "my-friends" ?
-                                <MyFriends/>
+                                <MyFriends />
 
                                 :
                                 <div>Invalid param</div>

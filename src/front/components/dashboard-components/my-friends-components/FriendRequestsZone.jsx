@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import useGlobalReducer from "../../../hooks/useGlobalReducer"
-import { changeRequestState } from "../../../api/friendships"
+import { changeRequestState } from "../../../services/friendships"
 import { useRefresh } from "../../../hooks/useRefresh"
 
 

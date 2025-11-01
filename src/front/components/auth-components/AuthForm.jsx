@@ -1,19 +1,21 @@
 import { useEffect, useReducer, useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
-import { login } from "../../api/auth"
-import { createAccount } from "../../api/users"
+import { login } from "../../services/auth"
+import { createAccount } from "../../services/users"
 import Loading from "./auth-form-components/LoadingModal"
 import FormErrorModal from "./auth-form-components/FormErrorModal"
 import FormSuccessModal from "./auth-form-components/FormSuccessModal"
 import TermsAndConditionsModal from "./auth-form-components/TermsAndConditionsModal"
 import LoadingModal from "./auth-form-components/LoadingModal"
 import useGlobalReducer from "../../hooks/useGlobalReducer"
-import { saveFriendships } from "../../api/friendships"
+import { saveFriendships } from "../../services/friendships"
+import storeReducer from "../../store"
 
 const AuthForm = ({ color, fields }) => {
 
     const [formData, setFormData] = useState({})
     const [loading, setLoading] = useState(false)
+    const {store, switchLoading} = useGlobalReducer()
 
     const [showTermsAndConditions, setShowTermsAndConditions] = useState(false)
 
@@ -105,19 +107,17 @@ const AuthForm = ({ color, fields }) => {
     const handleSubmit = async (event) => {
         event.preventDefault()
         if (formType == "login") {
-            setLoading(true)
+            switchLoading()
 
             const user_login = await login(formData.identificator, formData.password)
 
             const { token, user_id, user_name, email } = await user_login
 
-            console.log(user_login)
-
             if (!token || !user_id) {
                 setFormError({ title: "LOGIN ERROR", message: user_login })
                 setFormState("error")
                 setShowModal(true)
-                setLoading(false)
+                switchLoading()
                 return
             } else {
 
@@ -126,7 +126,7 @@ const AuthForm = ({ color, fields }) => {
                 saveFriendships(dispatch, user_id)
                 setFormState("success")
                 setShowModal(true)
-                setLoading(false)
+                 switchLoading()
 
                 //Uso el dispatch, y pongo login : true
 
@@ -146,10 +146,10 @@ const AuthForm = ({ color, fields }) => {
                 }
             }
 
-            setLoading(false)
+            switchLoading()
         } else if (formType == "signup") {
 
-            setLoading(true)
+           switchLoading()
 
             const user_created = await createAccount(formData.user_name, formData.email, formData.password)
 
@@ -162,7 +162,7 @@ const AuthForm = ({ color, fields }) => {
                 setFormState("success")
                 setShowModal(true)
             }
-            setLoading(false)
+             switchLoading()
         }
 
     }
@@ -244,7 +244,7 @@ const AuthForm = ({ color, fields }) => {
 
             {/* Modal cuando esta cargando la informacion al acceder o crear cuenta */}
             {
-                loading && (
+                store.loading && (
                    <LoadingModal/>
                 )
             }

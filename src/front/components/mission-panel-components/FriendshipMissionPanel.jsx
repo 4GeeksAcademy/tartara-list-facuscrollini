@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { fetchFriendshipMission } from "../../api/friendshipMissions"
+import { fetchFriendshipMission } from "../../services/friendshipMissions"
 import useGlobalReducer from "../../hooks/useGlobalReducer"
-import { saveFriendships } from "../../api/friendships"
+import { saveFriendships } from "../../services/friendships"
 import { useStorage } from "../../hooks/useStorage"
 import { useLocation } from "react-router-dom"
 
@@ -17,9 +17,9 @@ const FriendshipMissionPanel = () => {
 
     const location = useLocation()
 
-    const {user_id} = useStorage()
+    const { user_id } = useStorage()
 
-    const {user_name} = useStorage()
+    const { user_name } = useStorage()
 
 
 
@@ -144,25 +144,25 @@ const FriendshipMissionPanel = () => {
 
     }, [])
 
-    
+
 
     //useEffect que evalue que hayan cargado las amistades del usuario para poder dirigirlo al id de su amigo seleccionado en la vista de Dashboard
-    useEffect(()=>{
-    
-        if(store.friendships && location){
-            
+    useEffect(() => {
+
+        if (store.friendships && location) {
+
             console.log(location)
             const user_name = location.hash.replace("#", "")
             const element = document.getElementById(user_name)
-            if(element){
-                element.scrollIntoView({behavior: "smooth"})
+            if (element) {
+                element.scrollIntoView({ behavior: "smooth" })
             }
         }
-    },[location, store.friendships])
+    }, [location, store.friendships])
 
     return (
 
-        <div  className="bg-white m-4 p-4 rounded-5 border border-3 border-black">
+        <div className="bg-white m-4 p-4 rounded-5 border border-3 border-black">
             <p className="display-1 text-center">Friendships Missions</p>
 
             <form onSubmit={handleSubmit} className="rounded-3 bg-dark text-light p-2 " data-bs-theme="dark">
@@ -191,9 +191,9 @@ const FriendshipMissionPanel = () => {
 
                     <div id={friendship.user_from} className="border rounded border-2 border-dark m-3 p-3" key={friendship.id}>
 
-                        <p className="display-3 text-dark">{friendship.user_from != user_name ? friendship.user_from : friendship.user_to }</p>
+                        <p className="display-3 text-dark">{friendship.user_from != user_name ? friendship.user_from : friendship.user_to}</p>
                         <p>Friendship id: {friendship.id}</p>
-                        <hr/>
+                        <hr />
 
                         <p className="fw-bold">Actives</p>
 
