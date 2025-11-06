@@ -151,7 +151,6 @@ const FriendshipMissionPanel = () => {
 
         if (store.friendships && location) {
 
-            console.log(location)
             const user_name = location.hash.replace("#", "")
             const element = document.getElementById(user_name)
             if (element) {
@@ -187,7 +186,7 @@ const FriendshipMissionPanel = () => {
             </form>
 
             {
-                store.friendships.map((friendship) => (
+                store.friendships?.map((friendship) => (
 
                     <div id={friendship.user_from} className="border rounded border-2 border-dark m-3 p-3" key={friendship.id}>
 
@@ -218,8 +217,8 @@ const FriendshipMissionPanel = () => {
                         {/*Map con las misiones inactivas de esta amistad */}
                         {
 
-                            friendship.friendship_missions.filter(mission => !mission.is_active).length > 0 ? (
-                                friendship.friendship_missions.filter(mission => !mission.is_active).map((mission, index) => (
+                            friendship.friendship_missions?.filter(mission => !mission.is_active).length > 0 ? (
+                                friendship.friendship_missions?.filter(mission => !mission.is_active).map((mission, index) => (
                                     <div key={index}>
                                         <p className="fw-bold">{mission.title}</p>
                                         <button onClick={() => deleteMission(friendship.id, mission.id)} type="button" className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>

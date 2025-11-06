@@ -207,7 +207,7 @@ def get_frienship():
         (Friendship.user_from_id == user_id) | (Friendship.user_to_id == user_id)).all()
 
     if not friendships:
-        return jsonify({"error": "none friendships founded for the given user_id"}), 400
+        return jsonify({"friendship": []}), 200
 
     return jsonify({"friendships": [friendship.serialize() for friendship in friendships]}), 200
 

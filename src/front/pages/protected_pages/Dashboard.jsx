@@ -19,11 +19,6 @@ const Dashboard = () => {
     const { dispatch } = useGlobalReducer()
     const { user_id } = useStorage()
 
-
-
-
-
-
     const navigateInside = (section) => {
         navigate(`/auth/dashboard/${section}`)
     }

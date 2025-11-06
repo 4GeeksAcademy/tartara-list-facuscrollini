@@ -17,8 +17,21 @@ export const Footer = () => (
 				</div>
 				<div className="col-lg-2 col-3 d-flex  flex-column justify-content-center align-items-start">
 					<ul className="p-0" style={{ "listStyle": "none" }}>
-						<li ><p className="text-start m-0 fw-semibold">facuscrollinic@gmail.com</p></li>
-						<li><p className="text-start m-0 fw-semibold">facuscrollinic</p></li>
+						<a className="text-decoration-none text-white" href="mailto:facuscrollinic@gmail.com">
+							<li >
+								<p className="text-start m-0 fw-semibold"><i className="fa-solid fa-at"></i>facuscrollinic@gmail.com</p>
+							</li>
+						</a>
+						<li>
+							<a className="text-decoration-none text-white" target="_blank" href="https://instagram.com/facuscrollini">
+								<p className="text-start m-0 fw-semibold"><i className="fa-brands fa-instagram"></i>facuscrollini</p>
+							</a>
+						</li>
+						<li>
+							<a className="text-decoration-none text-white" target="_blank" href="https://es.linkedin.com/in/facundoscrollini">
+								<p className="text-start m-0 fw-semibold"><i className="fa-brands fa-linkedin"></i>facundoscrollini</p>
+							</a>
+						</li>
 					</ul>
 
 				</div>
@@ -40,11 +53,6 @@ export const Footer = () => (
 						<li>
 							<Link to="/auth/mission-panel" className="text-decoration-none">
 								<p className="text-start m-0 fw-semibold font-color-3">Missions</p>
-							</Link>
-						</li>
-						<li>
-							<Link to="/auth/dashboard" className="text-decoration-none">
-								<p className="text-start m-0 fw-semibold font-color-3">My dashboard</p>
 							</Link>
 						</li>
 						<li>

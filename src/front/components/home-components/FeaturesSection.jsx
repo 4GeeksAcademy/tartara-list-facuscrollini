@@ -15,7 +15,7 @@ const FeaturesSection = () => {
                 {
                     featureCardsInfo.map((card, index)=>{
                         return(
-                            <FeatureCard title={card.title} description={card.description} buttonText={card.buttonText} imgUrl={card.imgUrl} last={index == featureCardsInfo.length - 1}/>
+                            <FeatureCard key={index} title={card.title} description={card.description} buttonText={card.buttonText} imgUrl={card.imgUrl} last={index == featureCardsInfo.length - 1}/>
                         )
                     })
                 }

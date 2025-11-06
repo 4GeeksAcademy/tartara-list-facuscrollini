@@ -62,6 +62,7 @@ const FriendListZone = () => {
 
 
 
+
     return (
         <div className="my-4 container">
             <div className="w-100 back-color-1 rounded-top-4 p-3 text-end pe-5 fs-3 font-color-11">Friends</div>
@@ -69,14 +70,14 @@ const FriendListZone = () => {
 
                 <ul className="list-group">
 
-                    {store.friendships?.map((friendship) => {
+                    {store.friendships?.map((friendship, index) => {
 
                         const friendshipTitle = user_name != friendship.user_from ? friendship.user_from : friendship.user_to
 
                         const friendId = user_name != friendship.user_from ? friendship.user_from_id : friendship.user_to_id
 
                         // return <li className="list-group-item back-color-10 font-color-11 d-flex justify-content-between">{friendshipTitle}<span className="font-color-1"><i className="fa-solid fa-ellipsis-vertical"></i></span></li>
-                        return <li className="list-group-item back-color-10 font-color-11 d-flex justify-content-between dropend">
+                        return <li key={index} className="list-group-item back-color-10 font-color-11 d-flex justify-content-between dropend">
 
                             {friendshipTitle}
                             <button type="button" className="button-color-10 border-0 h-100 font-color-1 fs-3" data-bs-toggle="dropdown" aria-expanded="false">

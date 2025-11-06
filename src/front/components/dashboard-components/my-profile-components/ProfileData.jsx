@@ -3,12 +3,14 @@ import { useStorage } from "../../../hooks/useStorage"
 import { login } from "../../../services/auth"
 import useGlobalReducer from "../../../hooks/useGlobalReducer"
 import { fetchEditUser } from "../../../services/users"
+import { useLogout } from "../../../hooks/useLogout"
+import { useNavigate } from "react-router-dom"
 
 const ProfileData = () => {
 
     const { user_id, user_name, email } = useStorage()
 
-    const { switchLoading } = useGlobalReducer()
+    const { switchLoading, dispatch } = useGlobalReducer()
 
     const [showModalPassword, setshowModalPassword] = useState(false)
     const [showFormPassword, setshowFormassword] = useState(false)
@@ -18,7 +20,9 @@ const ProfileData = () => {
         user_name: "",
         password: password
     })
+    const [userChanges, setUserChanges] = useState(false)
 
+    const navigate = useNavigate()
 
 
     /*Guia autorizacion
@@ -68,7 +72,7 @@ const ProfileData = () => {
         if (emailDifferent || passwordDifferent || userNameDifferent) {
             const fetchEdit = await fetchEditUser(user_id, formData)
             if (fetchEdit.email) {
-
+                setUserChanges(true)
                 const fetchEmail = fetchEdit.email
                 const fetchUserName = fetchEdit.user_name
                 useStorage().setItem("email", fetchEmail)
@@ -76,10 +80,18 @@ const ProfileData = () => {
             }
         }
         else {
-            console.log("ninguno de ellos es diferente")
+            console.log("One of them must be different")
         }
 
 
+
+    }
+
+    const handleChangesSuccessfully = async () => {
+        setUserChanges(false)
+         useLogout(dispatch)
+        // //Una vez deslogeado dirigimos al usuario a home otra vez
+       navigate("/auth", {state:{ type: "login"}})
 
     }
 
@@ -101,9 +113,10 @@ const ProfileData = () => {
 
 
 
+
+
     return (
         <>
-            <button onClick={() => console.log(formData)}>Mostrar formData</button>
             <button
                 className="btn btn-warning"
                 disabled={authorization == 2}>
@@ -179,6 +192,28 @@ const ProfileData = () => {
                 </div>
             </div>
 
+
+            {/*Modal aviso cierre de sesion por cambios en el usuario*/}
+            {userChanges &&
+                <div>
+
+                    <div className="modal fade show d-block" tabIndex="-1" aria-hidden="true">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-body">
+                                    Changes saved successfully.
+                                    Please log in again to confirm your identity.
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleChangesSuccessfully}>Continue</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="modal-backdrop fade show" onClick={handleChangesSuccessfully}></div>
+                </div>
+
+            }
         </>
     )
 

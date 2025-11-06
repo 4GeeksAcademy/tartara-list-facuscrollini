@@ -2,11 +2,9 @@ import { useEffect, useReducer, useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { login } from "../../services/auth"
 import { createAccount } from "../../services/users"
-import Loading from "./auth-form-components/LoadingModal"
 import FormErrorModal from "./auth-form-components/FormErrorModal"
 import FormSuccessModal from "./auth-form-components/FormSuccessModal"
 import TermsAndConditionsModal from "./auth-form-components/TermsAndConditionsModal"
-import LoadingModal from "./auth-form-components/LoadingModal"
 import useGlobalReducer from "../../hooks/useGlobalReducer"
 import { saveFriendships } from "../../services/friendships"
 import storeReducer from "../../store"
@@ -93,13 +91,10 @@ const AuthForm = ({ color, fields }) => {
         )
 
 
-
-
     const handleInputChange = (event) => {
         const { name, type, value, checked } = event.target
         setFormData(prev => ({ ...prev, [name]: type === "checkbox" ? checked : value }))
     }
-
 
 
     //Funcion para manejar el envio del formulario
@@ -126,7 +121,7 @@ const AuthForm = ({ color, fields }) => {
                 saveFriendships(dispatch, user_id)
                 setFormState("success")
                 setShowModal(true)
-                 switchLoading()
+                switchLoading()
 
                 //Uso el dispatch, y pongo login : true
 
@@ -146,7 +141,7 @@ const AuthForm = ({ color, fields }) => {
                 }
             }
 
-            switchLoading()
+
         } else if (formType == "signup") {
 
            switchLoading()
@@ -243,11 +238,6 @@ const AuthForm = ({ color, fields }) => {
 
 
             {/* Modal cuando esta cargando la informacion al acceder o crear cuenta */}
-            {
-                store.loading && (
-                   <LoadingModal/>
-                )
-            }
 
             {
                 showTermsAndConditions && (

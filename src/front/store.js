@@ -191,7 +191,9 @@ export default function storeReducer(store, action = {}) {
       };
 
     case "add_friendship":
+    
       return { ...store, friendships: [...store.friendships, action.payload] };
+      return store
 
     case "delete_friendship":
       return {

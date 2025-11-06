@@ -112,7 +112,7 @@ const SearchZone = () => {
 
     useEffect(() => {
 
-        const friendshipUsers = store.friendships.map((friendship) => {
+        const friendshipUsers = store.friendships?.map((friendship) => {
             const userNameFriend = friendship.user_from != user_name ? friendship.user_from : friendship.user_to
 
             return { user_name: userNameFriend, friendship_id: friendship.id }
@@ -120,13 +120,13 @@ const SearchZone = () => {
 
         setFriends(friendshipUsers)
 
-        const requestsFromStore = store.requests_from.map((request) => {
+        const requestsFromStore = store.requests_from?.map((request) => {
             return { friendship_request_id: request.friendship_request_id, user_name: request.to }
         })
 
         setRequestsFrom(requestsFromStore)
 
-        const requestsToStore = store.requests_to.map((request) => {
+        const requestsToStore = store.requests_to?.map((request) => {
             return { friendship_request_id: request.friendship_request_id, user_name: request.from }
         })
 
@@ -184,11 +184,11 @@ const SearchZone = () => {
                                             (
                                                 <>
                                                     <p>users founded with <b>{searchData}</b></p>
-                                                    {founded.map((found, index) => {
+                                                    {founded?.map((found, index) => {
 
-                                                        const userFrom = requestsFrom.some(user => user.user_name === found.user_name)
-                                                        const userTo = requestsTo.some(user => user.user_name === found.user_name)
-                                                        const friend = friends.some(user => user.user_name === found.user_name)
+                                                        const userFrom = requestsFrom?.some(user => user.user_name === found.user_name)
+                                                        const userTo = requestsTo?.some(user => user.user_name === found.user_name)
+                                                        const friend = friends?.some(user => user.user_name === found.user_name)
 
                                                         let requiredData;
 

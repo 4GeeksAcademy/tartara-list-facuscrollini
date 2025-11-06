@@ -3,7 +3,7 @@ import { fetchGetAllUsers } from "../../services/users"
 import useGlobalReducer from "../../hooks/useGlobalReducer"
 import SearchZone from "./my-friends-components/SearchZone"
 import FriendRequestsZone from "./my-friends-components/FriendRequestsZone"
-import FriendListZone from "./my-friends-components/FriendList"
+import FriendListZone from "./my-friends-components/FriendListZone"
 import { saveFriendships, saveRequestsFrom, saveRequestsTo } from "../../services/friendships"
 import { useRefresh } from "../../hooks/useRefresh"
 

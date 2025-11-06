@@ -8,11 +8,6 @@ import { login } from "../../services/auth";
 
 export const Home = () => {
 
-	useEffect(() => {
-
-		login("facu", "1234")
-	}, [])
-
 	return (
 		<div className="container py-5">
 			<Jumbotron />

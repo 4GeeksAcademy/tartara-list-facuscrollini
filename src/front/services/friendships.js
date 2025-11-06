@@ -5,12 +5,12 @@ const FETCH_URL = `${API_URL}user/friendship`;
 
 export const saveFriendships = async (dispatch, user_id) => {
   await dispatch({ type: "loading" });
-  const friendships = await fetchFriendship({ user_id: user_id }, "GET");
-
-  if(!friendships.error){
-  
-    console.log(friendships)
-    dispatch({ type: "save_friendships", payload: friendships.friendships});
+  try {
+    const friendships = await fetchFriendship({ user_id: user_id }, "GET");
+    dispatch({ type: "save_friendships", payload: friendships.friendships || [] });
+  } catch (error) {
+    console.log("Error");
+  } finally {
     await dispatch({ type: "loading" });
   }
 };
@@ -20,6 +20,8 @@ export const saveFriendships = async (dispatch, user_id) => {
 //method puede ser: "GET", "POST", "PATCH", "DELETE"
 
 export const fetchFriendship = async (fetchData, method) => {
+
+
   const optionsObject =
     method == "GET"
       ? {
@@ -61,7 +63,7 @@ export const fetchFriendship = async (fetchData, method) => {
 
     return data;
   } catch (error) {
-    return {error}
+    return { error };
   }
 };
 
@@ -141,7 +143,7 @@ const fetchChangeRequestState = async (fetchData) => {
   }
 };
 
-export const changeRequestState = async(
+export const changeRequestState = async (
   user_id,
   request_id,
   state,
@@ -158,27 +160,23 @@ export const changeRequestState = async(
 
   const fetchRequest = await fetchChangeRequestState(fetchData);
 
-  console.log(fetchRequest)
 
   if (fetchRequest.error) {
     console.log(fetchRequest);
-    return
-  } 
-  if(fetchRequest.message){
-    dispatch({ type: "delete_request", payload: request_id });
-  }else if(fetchRequest.id){
-    dispatch({ type: "delete_request", payload: request_id });
-    dispatch({type: "add_friendship", payload: fetchRequest})
-
+    return;
   }
-  
+  if (fetchRequest.message) {
+    dispatch({ type: "delete_request", payload: request_id });
+  } else if (fetchRequest.id) {
+    dispatch({ type: "delete_request", payload: request_id });
+    dispatch({ type: "add_friendship", payload: fetchRequest });
+  }
 
   loading();
 };
 
-export const fetchSendRequest = async(fetchData)=>{
-
-try {
+export const fetchSendRequest = async (fetchData) => {
+  try {
     const response = await fetch(`${API_URL}user/friendship/request`, {
       method: "POST",
       headers: {
@@ -205,40 +203,39 @@ try {
   }
 };
 
-export const sendRequest = async(user_to_id, user_from_id, user_name_to,dispatch,loading) => {
-
+export const sendRequest = async (
+  user_to_id,
+  user_from_id,
+  user_name_to,
+  dispatch,
+  loading
+) => {
   const fetchData = {
     user_to_id: user_to_id,
-    user_from_id: user_from_id
+    user_from_id: user_from_id,
+  };
+
+  loading();
+
+  const fetchRequest = await fetchSendRequest(fetchData);
+
+  if (fetchRequest.error) {
+    console.log(fetchRequest);
+    return;
   }
 
 
-  loading()
 
-  const fetchRequest = await fetchSendRequest(fetchData)
+  const friendship_request_id = fetchRequest.id;
 
-  if(fetchRequest.error){
-    console.log(fetchRequest)
-    return
-  }
-
-  console.log(fetchRequest)
-
-  const friendship_request_id = fetchRequest.id
-
-  const to = fetchRequest.to
+  const to = fetchRequest.to;
 
   const payload = {
     friendship_request_id,
-    to
-  }
+    to,
+  };
 
-  dispatch({type:"send_request", payload})
+  dispatch({ type: "send_request", payload });
 
-
-  console.log(fetchRequest)
-
-  console.log(fetchRequest)
-  loading()
-}
-
+  loading();
+};
