@@ -25,12 +25,9 @@ const FriendListZone = () => {
 
 
     const handleShowCard = async (user_id) => {
-
         switchLoading()
-
         const fetchUserData = await fetchGetUser(user_id)
         setCardData(fetchUserData)
-
         switchLoading()
     }
 

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'  // Global styles for your application
+import './index.css' // Global styles for your application
+import "./personalized-bootstrap-styles.css" // Personalized bootstrap style for your application
 import { BrowserRouter, Route, RouterProvider, Routes } from "react-router-dom";  // Import RouterProvider to use the router
 import { StoreProvider } from './hooks/useGlobalReducer';  // Import the StoreProvider for global state management
 import { BackendURL } from './components/BackendURL';

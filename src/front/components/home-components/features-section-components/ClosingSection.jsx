@@ -1,7 +1,7 @@
 const ClosingSection = () => {
 
     return (
-        <div className="closing-section back-color-4 rounded-5">
+        <div className="closing-section back-color-5 rounded-5">
             <div className="d-flex flex-column align-items-center p-4 h-100">
                 <div className="closing-img">
                     <img className="object-fit-cover h-100" src="https://res.cloudinary.com/dra2cr3uw/image/upload/v1760182053/Elio_ejemplo_zqfn5o.png"></img>

@@ -17,7 +17,7 @@ export const PublicLayout = () => {
         <ScrollToTop>
             <div className="min-vh-100 d-flex flex-column">
                 <Navbar />
-                <div className="flex-grow-1 d-flex">
+                <div className="flex-grow-1 d-flex back-color-5">
                     <Outlet />
                 </div>
                 {store.loading &&

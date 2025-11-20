@@ -1,4 +1,4 @@
- /*Estilos fondos con colores de diseño*/
+ /*Estilos fondos con colores de diseño
 
 .back-color-1{
 background-color: #780000!important;
@@ -104,7 +104,7 @@ background-color: #780000!important;
 }
 
 
-/*Estilos botones con los colores del diseño*/
+Estilos botones con los colores del diseño
 .button-color-1{
 background-color: #780000!important;
 }
@@ -213,7 +213,7 @@ background-color: #a80404!important;
 
 
 
-/* Estilos bordes con todos los colores */
+/* Estilos bordes con todos los colores 
 .border-color-1 {
     border-color: #780000 !important;
 }
@@ -310,3 +310,170 @@ background-color: #a80404!important;
 
 
 /*Estilo para los dropdown que no queremos que tengan hover ni focus*/
+/*Estilos fondos con colores de diseño*/
+
+.back-color-1{ background-color: #1d3557 !important; }
+.back-color-2{ background-color: #45769d !important; }
+.back-color-3{ background-color: #a8dadc !important; }
+.back-color-4{ background-color: #ccebed !important; }
+.back-color-5{ background-color: #f1faee !important; }
+.back-color-6{ background-color: #e63946 !important; }
+.back-color-7{ background-color: #ee626a !important; }
+.back-color-8{ background-color: #f58c92 !important; }
+
+
+/* Colores de fuente */
+
+.font-color-1{ color: #1d3557 !important; }
+.font-color-2{ color: #45769d !important; }
+.font-color-3{ color: #a8dadc !important; }
+.font-color-4{ color: #ccebed !important; }
+.font-color-5{ color: #f1faee !important; }
+.font-color-6{ color: #e63946 !important; }
+.font-color-7{ color: #ee626a !important; }
+.font-color-8{ color: #f58c92 !important; }
+
+
+/* Botones */
+
+.button-color-1{
+    background-color: #1d3557 !important;
+}
+.button-color-1:hover{
+    background-color: #274673 !important;
+}
+
+.button-color-2{
+    background-color: #45769d !important;
+}
+.button-color-2:hover{
+    background-color: #5b89ad !important;
+}
+
+.button-color-3{
+    background-color: #a8dadc !important;
+}
+.button-color-3:hover{
+    background-color: #bfe8e9 !important;
+}
+
+.button-color-4{
+    background-color: #ccebed !important;
+}
+.button-color-4:hover{
+    background-color: #e2f6f7 !important;
+}
+
+.button-color-5{
+    background-color: #f1faee !important;
+}
+.button-color-5:hover{
+    background-color: #ffffff !important;
+}
+
+.button-color-6{
+    background-color: #e63946 !important;
+}
+.button-color-6:hover{
+    background-color: #c92e3a !important;
+}
+
+.button-color-7{
+    background-color: #ee626a !important;
+}
+.button-color-7:hover{
+    background-color: #d6545c !important;
+}
+
+.button-color-8{
+    background-color: #f58c92 !important;
+}
+.button-color-8:hover{
+    background-color: #e97a83 !important;
+}
+
+
+/* Bordes */
+
+.border-color-1{ border-color: #1d3557 !important; }
+.border-color-2{ border-color: #45769d !important; }
+.border-color-3{ border-color: #a8dadc !important; }
+.border-color-4{ border-color: #ccebed !important; }
+.border-color-5{ border-color: #f1faee !important; }
+.border-color-6{ border-color: #e63946 !important; }
+.border-color-7{ border-color: #ee626a !important; }
+.border-color-8{ border-color: #f58c92 !important; }
+
+
+/* Otros estilos */
+
+.footer-filled {
+    width:100%;
+    height: 2.5rem;
+}
+
+.navbar-filled{
+    width: 100%;
+    height: 1rem;
+}
+
+.jumbotron {
+    height: 27rem;
+}
+
+
+
+.jumbotron-base {
+    height: 15rem;
+}
+
+
+.jumbotron-image {
+    width: 20em;
+}
+
+.jumbotron-text{
+    height: 10em;
+    background-color: red;
+}
+
+.closing-section {
+    height:30rem;
+}
+
+.closing-img {
+    height:13rem;
+}
+
+.img-footer {
+    height:10rem;
+}
+
+.link-color-5{
+    cursor:pointer !important;
+    color:#f1faee !important;
+    text-decoration: underline !important;
+}
+
+.link-color-5:hover{
+    color:#ccebed !important;
+}
+
+.item-dropdown:hover {
+    background-color: #a8dadc !important;
+}
+
+.no-ring:focus {
+    outline:none !important;
+    box-shadow:none !important;
+}
+
+.modal-profile-card{
+    height: 50vh;
+    width:25rem;
+}
+
+
+
+
+
