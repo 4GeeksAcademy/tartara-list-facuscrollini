@@ -36,7 +36,7 @@ const Jumbotron = () => {
                         <img className="object-fit-cover rounded-circle" src="https://res.cloudinary.com/dra2cr3uw/image/upload/v1763641479/barco_tartara_ejemplo_ziznas.jpg" alt="" />
                     </div>
                 </div> 
-                <button className="btn button-color-7 font-color-4 fs-3 rounded-4"> Start a mission</button>
+                <button className="btn button-color-7 font-color-5 fs-3 rounded-4"> Start a mission</button>
             </div>
         </div>
     )
