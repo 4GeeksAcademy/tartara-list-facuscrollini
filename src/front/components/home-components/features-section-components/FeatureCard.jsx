@@ -6,7 +6,7 @@ const FeatureCard = ({ title, description, buttonText,imgUrl, last }) => {
                     <div className="ratio ratio-1x1">
                     <img src={imgUrl} className="object-fit-cover rounded-circle" alt="..."/>
                     </div>
-                        <div className="card-body p-0 d-flex flex-column justify-content-between align-items-center ">
+                        <div className="card-body font-color-2  p-0 d-flex flex-column justify-content-between align-items-center ">
                             <div className="py-4">
                             <h5 className="card-title fs-4">{title}</h5>
                             <p className="card-text ">{description}</p>
