@@ -494,5 +494,11 @@ background-color: #a80404!important;
 
 
 
+@media(min-width:1200px){
+    .border-xl-end {
+        border-bottom: 0!important;
+        border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+    }
+}
 
 
