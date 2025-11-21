@@ -1,7 +1,13 @@
+import { Link } from "react-router-dom"
+import useGlobalReducer from "../../hooks/useGlobalReducer"
 
 
 
 const Jumbotron = () => {
+
+
+    const {store} = useGlobalReducer()
+ 
     return (
         // <div className="jumbotron bg-light rounded-5 border border-5 border-black overflow-hidden" >
 
@@ -35,8 +41,10 @@ const Jumbotron = () => {
                     <div className="ratio ratio-1x1">
                         <img className="object-fit-cover rounded-circle" src="https://res.cloudinary.com/dra2cr3uw/image/upload/v1763641479/barco_tartara_ejemplo_ziznas.jpg" alt="" />
                     </div>
-                </div> 
-                <button className="btn button-color-7 font-color-5 fs-3 rounded-4"> Start a mission</button>
+                </div>
+
+                <Link to={store.login ? "auth/mission-panel" : "/auth"} state={store.loging && {type: "login"}} className="btn button-color-7 font-color-5 fs-3 rounded-4"> Start a mission</Link> {/* Al hacer click aqui,
+                si no esta logeado, debe hacerlo, y si si lo esta, lo lleva a la seccion de crear mision */}
             </div>
         </div>
     )

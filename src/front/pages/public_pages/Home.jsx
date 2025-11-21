@@ -9,7 +9,7 @@ import { login } from "../../services/auth";
 export const Home = () => {
 
 	return (
-		<div className=" container-fluid p-0">
+		<div className=" container-fluid p-0 mb-5 pb-5">
 			
 			<Jumbotron />
 			<div className="container">
