@@ -39,7 +39,9 @@ def login():
 
     access_token = create_access_token(identity=str(user.id))
 
-    return jsonify({"token": access_token, "user_id": user.id}), 200
+
+    return jsonify({"token": access_token, "user_id": user.id, "user_name": user.user_name, "email": user.email}), 200
+
 
 # -----------------------------TOKEN VERIFICATION--------------------------#
 
@@ -76,9 +78,15 @@ def get_users():
 
 # ----------------GET SPECIFIC USER----------------------------------#
 
-@api.route('/user/<int:id>', methods=['GET'])
-def get_user(id):
-    user = User.query.get(id)
+@api.route('/user', methods=['GET'])
+def get_user():
+
+    user_id = request.args.get("user_id")
+
+    if not user_id:
+        return {"error": "user_id was not provided on query params"}
+    
+    user = User.query.get(user_id)
     if not user:
         return jsonify({"error": "please use a correct user id, no user founded with the gived one "})
     return jsonify(user.serialize())
@@ -94,10 +102,28 @@ def create_user():
     email = recieved.get("email")
     password = recieved.get("password")
 
+
     if not user_name or not email:
-        return jsonify({"message": "user_name and email are obligatory"}), 400
+        return jsonify({"error": "user_name and email are obligatory"}), 400
     if not password:
-        return jsonify({"message": "password are obligatory"}), 400
+        return jsonify({"error": "password are obligatory"}), 400
+    
+    existing_user_email = User.query.filter(and_(User.user_name == user_name, User.email == email)).first()
+
+    if existing_user_email:
+        return jsonify({"error": "already exist a user with provided user_name or email"}),400
+    
+    existing_user_name = User.query.filter_by(user_name = user_name).first()
+
+    if existing_user_name:
+        return jsonify({"error" : "already exist a user with provided user_name"}),400
+    
+    existing_email = User.query.filter_by(email= email).first()
+
+    if existing_email:
+        return jsonify({"error" : "already exist a user with provided email"}),400
+    
+
 
     user = User(user_name=user_name, email=email, password=password)
     db.session.add(user)
@@ -108,9 +134,15 @@ def create_user():
 # --------------------------DELETE USER----------------------------#
 
 
-@api.route('/user/<int:id>', methods=['DELETE'])
+@api.route('/user', methods=['DELETE'])
 def delete_user(id):
-    user = User.query.get(id)
+
+    user_id = request.args.get("user_id")
+
+    if not user_id:
+        return {"error": "user_id was not provided on query params"}
+
+    user = User.query.get(user_id)
     if not user:
         return jsonify({"error": "please send a correct id user to delete"})
     user_name = user.user_name
@@ -120,44 +152,61 @@ def delete_user(id):
 
 
 # --------------------------EDIT USER------------------------------#
-@api.route('/user/<int:id>', methods=['PATCH'])
-def edit_user(id):
+@api.route('/user', methods=['PATCH'])
+def edit_user():
 
-    user = User.query.get(id)
+
+    user_id = request.args.get("user_id")
+
+
+    if not user_id:
+        return {"error": "user_id was not provided on query params"}
+
+    user = User.query.get(user_id)
 
     data = request.get_json()
+
     if not data:
         return {"error": "please send information to update "}
+    
+    user_id = int(user_id)
 
     for key, value in data.items():
 
-        user_founded = User.query.filter(getattr(User, key) == value).first()
+            if key != "password":
+            
+                user_founded = User.query.filter(getattr(User, key) == value).first()
+    
+    
+                if user_founded and user_founded.id != user_id:
+                    return jsonify({"error": f"user_name o email already exist, try using another one. "}), 400
+        
 
-        if user_founded and user_founded.id != id:
-            return jsonify({"error": "user_name o email already exist, try using another one"}), 400
 
-        if hasattr(user, key):
-            setattr(user, key, value)
+            if hasattr(user, key):
+                setattr(user, key, value)
+        
 
     db.session.commit()
 
+
     return jsonify(user.serialize()), 200
+
 
 
 # ------------------------------------------------------FIN CRUD USERS----------------------------------------------------------------------------#
 
 # ------------------------------------------------------FRIEND CRUD--------------------------------------------------------------------------------#
 
+
 # -----------------------GET USER FRIENDSHIPS---------------------------#
 @api.route('user/friendships/', methods=['GET'])
 def get_frienship():
 
-    data = request.get_json()
+  
 
-    if not data:
-        return jsonify({"error": "please send a body with the user_id information"}), 400
+    user_id = request.args.get("user_id")
 
-    user_id = data["user_id"]
 
     if not user_id:
         return jsonify({"error": "please send a user_id information on the body"}), 400
@@ -166,7 +215,7 @@ def get_frienship():
         (Friendship.user_from_id == user_id) | (Friendship.user_to_id == user_id)).all()
 
     if not friendships:
-        return jsonify({"error": "none friendships founded for the given user_id"}), 400
+        return jsonify({"friendship": []}), 200
 
     return jsonify({"friendships": [friendship.serialize() for friendship in friendships]}), 200
 
@@ -262,13 +311,16 @@ def delete_friendship():
     friendship = Friendship.query.filter(and_(
         Friendship.user_from_id == user_from_id, Friendship.user_to_id == user_to_id)).first()
 
+
     if not friendship:
         return jsonify({"error": "friendship not founded"}), 400
+    
+    friendship_id = friendship.id
 
     db.session.delete(friendship)
     db.session.commit()
 
-    return jsonify({"message": "friendship deleted successfully"}), 200
+    return jsonify({"deleted_friendship_id": friendship_id}), 200
 
 
 # -------------------------------------------FIN CRUD FRIEND --------------------------------------------------------------------------------------------#
@@ -280,15 +332,10 @@ def delete_friendship():
 @api.route('/user/missions', methods=['GET'])
 def get_user_missions():
 
-    data = request.get_json()
-
-    if not data:
-        return jsonify({"error": "send a body with info to create a friendship"}), 400
-
-    user_id = data["user_id"]
+    user_id = request.args.get('user_id')
 
     if not user_id:
-        return jsonify({"error": "missing user_id field on the body"}), 400
+        return jsonify({"error": "missing user_id field on params"}), 400
 
     missions = Mission.query.filter_by(user_id=user_id).all()
 
@@ -299,6 +346,13 @@ def get_user_missions():
 
  # -----------------GET UNIQUE USER Mission------------------#
 
+    return jsonify([mission.serialize() for mission in missions]), 200
+
+ # -----------------GET UNIQUE USER Mission------------------#
+
+
+@api.route('/user/mission', methods=['GET'])
+def get_user_mission():
 
 @api.route('/user/mission', methods=['GET'])
 def get_user_mission():
@@ -420,10 +474,27 @@ def edit_user_mission():
     if not title and not description:
         return jsonify({"error": "no fields to update, please provide a title or a description"}), 400
 
-    if title:
+
+    if title and description:
+        old_title = mission.title.replace(" ", "").lower()
+        new_title = title.replace(" ", "").lower()
+        old_description = mission.description.replace(" ", "").lower()
+        new_description = description.replace(" ", "").lower()
+
+        if old_title == new_title and old_description == new_description:
+            return {"error": "new title and new description must be diffetent than the old ones"}
         mission.title = title
-    if description:
         mission.description = description
+
+    elif title:
+        
+        old_title = mission.title.replace(" ", "").lower()
+        new_title = title.replace(" ", "").lower()
+
+        if old_title == new_title:
+            return {"error": "new title must be different to the previous one"}
+
+        mission.title = title
 
     db.session.commit()
 
@@ -462,27 +533,29 @@ def set_mission_active():
 ## -----------------------------VER INACTIVE/ACTIVE UNIQUE User Missions---------------------#
 
 
-@api.route('/user/missions/active', methods=["GET"])
-def get_active_missions():
+# Comentado ya que la funcion no es necesaria al no tener que hacer una llamada a la api para ver las misiones inactivas/activas
 
-    data = request.get_json()
+# @api.route('/user/missions/active', methods=["GET"])
+# def get_active_missions():
 
-    if not data:
-        return jsonify({"error": "send a body with user_id and missions_state"}), 400
+#     data = request.get_json()
 
-    user_id = data.get("user_id")
-    missions_state = data.get("missions_state")
+#     if not data:
+#         return jsonify({"error": "send a body with user_id and missions_state"}), 400
 
-    if not user_id and not missions_state:
-        return jsonify({"error": "user_id and missions_state field is missing"})
+#     user_id = data.get("user_id")
+#     missions_state = data.get("missions_state")
 
-    missions = Mission.query.filter_by(
-        user_id=user_id, is_active=missions_state).all()
+#     if not user_id and not missions_state:
+#         return jsonify({"error": "user_id and missions_state field is missing"})
 
-    if not missions:
-        return jsonify({"error": f"user {user_id} hasn't missions with the state: {missions_state}"}), 400
+#     missions = Mission.query.filter_by(
+#         user_id=user_id, is_active=missions_state).all()
 
-    return jsonify([mission.serialize() for mission in missions])
+#     if not missions:
+#         return jsonify({"error": f"user {user_id} hasn't missions with the state: {missions_state}"}), 400
+
+#     return jsonify([mission.serialize() for mission in missions])
 
 
 # -------------------------------------------FIN CRUD Mission --------------------------------------------------------------------------------------------#
@@ -493,12 +566,8 @@ def get_active_missions():
 @api.route('/friendship/missions', methods=['GET'])
 def get_friendship_missions():
 
-    data = request.get_json()
 
-    if not data:
-        return jsonify({"error": "frienship_id field is missing"}), 400
-
-    friendship_id = data.get("friendship_id")
+    friendship_id = request.args.get("friendship_id")
 
     if not friendship_id:
         return jsonify({"error": "none friendship_id provided"}), 400
@@ -573,6 +642,7 @@ def create_friendship_mission():
 
  # -----------------DELETE UNIQUE FRIEND Mission------------------#
 
+ # -----------------DELETE UNIQUE FRIEND Mission------------------#
 
 @api.route('/friendship/mission', methods=['DELETE'])
 def delete_friendship_mission():
@@ -644,7 +714,19 @@ def edit_friendship_mission():
     if not title and not description:
         return jsonify({"error": "please provide a title or a description data to modify the actual friendship_mission"}), 400
 
-    if title:
+    if description and title:
+        old_title = friendship_mission.title.replace(" ", "").lower()
+        old_description = friendship_mission.description.replace(
+            " ", "").lower()
+        new_description = description.replace(" ", "").lower()
+        new_title = title.replace(" ", "").lower()
+
+        if old_description == new_description and old_title == new_title:
+            return jsonify({"error": "new description and new title can not be the same as the older ones"}), 400
+        friendship_mission.title = title
+        friendship_mission.description = description
+
+    elif title:
 
         old_title = friendship_mission.title.replace(" ", "").lower()
         new_title = title.replace(" ", "").lower()
@@ -654,16 +736,6 @@ def edit_friendship_mission():
 
         friendship_mission.title = title
 
-    if description:
-
-        old_description = friendship_mission.description.replace(
-            " ", "").lower()
-        new_description = description.replace(" ", "").lower()
-
-        if old_description == new_description:
-            return jsonify({"error": "new description can not be the same as the older one"}), 400
-
-        friendship_mission.description = description
 
     db.session.commit()
 
@@ -741,13 +813,8 @@ def get_active_friendship_missions():
 @api.route('/user/friendship/requests', methods=['GET'])
 def get_friendship_requests():
 
-    data = request.get_json()
-
-    if not data:
-        return jsonify({"error": "body was not found, please send user_id field"}), 400
-
-    user_id = data.get("user_id")
-    direction = data.get("direction")
+    user_id = request.args.get("user_id")
+    direction = request.args.get("direction")
 
     if not user_id or not direction:
         return jsonify({"error": "user_id and direction fields are necessary"}), 400
@@ -807,6 +874,9 @@ def set_friendship_request():
 
     if not state:
         return jsonify({"error": "state field was missing"}), 400
+    
+
+    user_id = int(user_id)
 
     if state == "accepted":
         if friendship_request.user_to_id == user_id:
@@ -823,7 +893,7 @@ def set_friendship_request():
             db.session.delete(friendship_request)
             db.session.commit()
 
-            return jsonify({"message": f"friendship between {user_from.user_name} and {user_to.user_name} was successfully created"}), 200
+            return jsonify(friendship.serialize()), 200
         else:
             return jsonify({"error": "just the user who recieve the request can accept it"}), 400
 
@@ -880,4 +950,4 @@ def create_friendship_request():
     db.session.add(friendship_request)
     db.session.commit()
 
-    return jsonify({"message": f"friendship request from id {user_from.id}({user_from.user_name}) to id {user_to.id}({user_to.user_name}) was successfully created"})
+    return jsonify(friendship_request.serialize())

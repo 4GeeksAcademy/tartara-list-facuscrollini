@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'  // Global styles for your application
+import './index.css' // Global styles for your application
+import "./personalized-bootstrap-styles.css" // Personalized bootstrap style for your application
 import { BrowserRouter, Route, RouterProvider, Routes } from "react-router-dom";  // Import RouterProvider to use the router
 import { StoreProvider } from './hooks/useGlobalReducer';  // Import the StoreProvider for global state management
 import { BackendURL } from './components/BackendURL';
@@ -9,8 +10,10 @@ import { ProtectedLayout } from './pages/ProtectedLayout';
 import { Home } from './pages/public_pages/Home';
 import Auth from './pages/public_pages/Auth';
 import AboutUs from './pages/public_pages/AboutUs';
-import TodoPanel from './pages/protected_pages/TodoPanel';
+import MissionPanel from './pages/protected_pages/MissionPanel';
 import Dashboard from './pages/protected_pages/Dashboard';
+import MissingPermissions from './pages/public_pages/MissingPermissions';
+import NotFound from './pages/public_pages/NotFound';
 
 
 const Main = () => {
@@ -20,22 +23,34 @@ const Main = () => {
             <BackendURL />
         </React.StrictMode>
     );
+
+
+
+
+
     return (
         <React.StrictMode>
             {/* Provide global state to all components */}
             <StoreProvider>
                 {/* Set up routing for the application */}
-
+                
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={<PublicLayout />} errorElement={<h1>Not found!</h1>} >
+                        <Route path="/" element={<PublicLayout />} >
                             <Route path="" element={<Home />} />
                             <Route path="auth" element={<Auth />} />
                             <Route path="about-us" element={<AboutUs />} />
+                            <Route path="missing-permissions" element={<MissingPermissions />} />
+
+                            {/* Url not found */}
+
+                            <Route path="*" element={<NotFound />} />
+
+
                         </Route>
                         <Route path="auth" element={<ProtectedLayout />} errorElement={<h1>Not found!</h1>} >
-                            <Route path="todo-panel" element={<TodoPanel />} />
-                            <Route path="dashboard" element={<Dashboard />} />
+                            <Route path="mission-panel" element={<MissionPanel />} />
+                            <Route path="dashboard/:section" element={<Dashboard />} />
 
                         </Route>
                     </Routes>

@@ -1,40 +1,121 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer";
+import { useStorage } from "../hooks/useStorage";
+import { useLogout } from "../hooks/useLogout";
 
 export const Navbar = () => {
+
+
+	const navigate = useNavigate()
+
+	const [logged, setLogged] = useState(false)
+
+	const user_local = localStorage.getItem("user_name")
+
+	const user_session = sessionStorage.getItem("user_name")
+
+
+
+	const { store, dispatch } = useGlobalReducer()
+
+
+
+
+	//funcion para navegar a Dashboard presionando en el dropdown menu del navbar cuando esta logeado
+	const navToDashboard = (section) => {
+		navigate(`/auth/dashboard/${section}`)
+	}
+
+
+	//useEffect para cambiar estado de logged(el que maneja el dropdown del usuario cuando esta logeado)
+	//si se logea, se cambia el estado en store.login, por lo que el estado logged  cambia su valor y el boton se muestra diferente
+
+	useEffect(() => {
+
+		setLogged(store.login)
+
+	}, [store.login])
+
+
+
+	//useEffect para cuando se monta el navbar sin haber hecho el paso del login(abrir la pagina y que ya este el usuario en localstorage)
+	//Evalua si store.login es false, y hay un usuario guardado en localStorage o sessionStorage y en ese caso lo pone en true
+	//Con esto el boton del navbar siempre va a estar cambiado dependiendo si el usuario esta logeado o no
+
+
+	useEffect(() => {
+		if (!store.login) {
+			if (user_session || user_local) {
+				dispatch({ type: "login" })
+			}
+		}
+	})
+
+
+
+	//Codigo del boton cuando esta logeado
+
+	const buttonWithLogin = <div className="btn-group">
+		<button type="button" className="btn button-color-7 dropdown-toggle font-color-5" data-bs-toggle="dropdown" aria-expanded="false">
+			Hi <span className="text-decoration-underline fw-bold  m-0 ">{user_local || user_session}</span> !
+		</button>
+		<ul className="dropdown-menu dropdown-menu-end back-color-5 ">
+			<li onClick={() => navToDashboard("my-profile")}><button className="dropdown-item item-dropdown" type="button">My profile</button></li>
+			<li><button onClick={() => navToDashboard("my-friends")} className="dropdown-item  item-dropdown" type="button">My friends</button></li>
+			<li><hr className="dropdown-divider" /></li>
+			<li className="text-end"><button onClick={() => useLogout(dispatch)} className="dropdown-item button-color-6 w-auto ms-auto me-1 rounded-2 font-color-5 " type="button">Log out</button></li>
+		</ul>
+	</div>
+
+
+	//Codigo del boton sin estar logeado
+
+	const buttonWithOutLogin = <Link to="/auth" state={{ type: "login" }}>
+		<button type="button" className="btn back-color-2 button-color-7 font-color-5 fw-semibold">Log in</button>
+	</Link>
+
+
 
 	return (
 		<div>
 
-			<nav className="navbar navbar-expand-lg back-color-5 " >
+			<nav className="navbar navbar-expand-lg d-flex align-items-center back-color-2 pt-2 pb-4" >
 				<div className="container">
-					<Link to="/" className="text-decoration-none">
-						<p className="font-color-1 fw-semibold fs-4" href="/">Tartara</p>
-					</Link>
+					<div className="button-color-5 rounded-2">
+
+						<Link to="/" className="text-decoration-none">
+							<p className="font-color-2 fw-semibold fs-2 m-0 px-5 " href="/">Tartara</p>
+						</Link>
+					</div>
 					<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-						<i className="fa-solid fa-bars font-color-1 fs-2" ></i>
+						<i className="fa-solid fa-bars font-color-5 fs-2" ></i>
 					</button>
 					<div className="collapse navbar-collapse" id="navbarNav">
-						<ul className="navbar-nav ms-auto">
-							<li className="nav-item d-flex align-items-center font-color-3 ">
-								<Link className="nav-link  py-0 text-center fw-semibold font-color-3" to="/auth/todo-panel"
-								>Missions</Link> |
+						<ul className="navbar-nav ms-auto text-lg-start text-end ">
+
+							<li className="nav-item ">
+								<Link className="nav-link fw-semibold font-color-5" to="/auth/mission-panel"
+								>Missions</Link> 
+							</li> 
+							<li className="nav-item align-items-center d-none d-lg-flex">
+								<p className="m-0 font-color-5"> 
+								|
+								</p>
 							</li>
-							<li className="nav-item d-flex align-items-center font-color-3 ">
-								<Link className="nav-link fw-semibold font-color-3" to="/about-us"
-								>About us</Link> 
+						
+							<li className="nav-item">
+								<Link className="nav-link fw-semibold font-color-5" to="/about-us"
+								>About us</Link>
 							</li>
 							<li className="nav-item">
-								<Link to="/auth" state={{ type: "login" }}>
-									<button type="button" className="btn back-color-2 button-color-1 font-color-3 fw-semibold">Log in</button>
-								</Link>
+								{logged ? buttonWithLogin : buttonWithOutLogin}
 							</li>
 
 						</ul>
 					</div>
 				</div>
 			</nav>
-			<div className="navbar-filled back-color-4">
-			</div>
 		</div>
 	);
 };

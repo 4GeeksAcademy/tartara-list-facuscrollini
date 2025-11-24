@@ -1,4 +1,4 @@
-
+ /*Estilos fondos con colores de diseño
 
 .back-color-1{
 background-color: #780000!important;
@@ -20,6 +20,36 @@ background-color: #780000!important;
     background-color: #669bbc!important;
 }
 
+.back-color-6{
+    background-color: #eec699!important;
+}
+.back-color-7 {
+    background-color: #b68f5f !important;
+}
+
+.back-color-8 {
+    background-color: #f5d6b6 !important;
+}
+
+.back-color-9 {
+    background-color: #fff6f0 !important;
+}
+
+.back-color-10 {
+    background-color: #f05964 !important;
+}
+
+.back-color-11 {
+    background-color: #ffe8eb !important;
+}
+
+.back-color-12 {
+    background-color: #9ccff0 !important;
+}
+
+.back-color-13 {
+    background-color: #edf6ff !important;
+}
 
 
 
@@ -38,7 +68,43 @@ background-color: #780000!important;
 .font-color-5{
    color:#669bbc!important;
 }
+.font-color-6{
+    color:  #eec699!important;
+}
+.font-color-6 {
+    color: #eec699 !important;
+}
 
+.font-color-7 {
+    color: #b68f5f !important;
+}
+
+.font-color-8 {
+    color: #f5d6b6 !important;
+}
+
+.font-color-9 {
+    color: #fff6f0 !important;
+}
+
+.font-color-10 {
+    color: #f05964 !important;
+}
+
+.font-color-11 {
+    color: #ffe8eb !important;
+}
+
+.font-color-12 {
+    color: #9ccff0 !important;
+}
+
+.font-color-13 {
+    color: #edf6ff !important;
+}
+
+
+Estilos botones con los colores del diseño
 .button-color-1{
 background-color: #780000!important;
 }
@@ -50,7 +116,7 @@ background-color: #a80404!important;
     background-color:#c1121f!important;
 }
 .button-color-2:hover{
-    background-color:#e93440!important;
+    background-color:#b9111c!important;
 }
 
 .button-color-3{
@@ -66,13 +132,69 @@ background-color: #a80404!important;
 .button-color-4:hover{
     background-color: #054f77!important;
 }
-
 .button-color-5{
     background-color: #669bbc!important;
 }
 .button-color-5:hover{
     background-color: #79accc!important;
 }
+
+.button-color-6{
+    background-color:  #eec699!important;
+}
+.button-color-6:hover{
+    background-color: #c58850!important;
+}
+.button-color-7 {
+    background-color: #b68f5f !important;
+}
+.button-color-7:hover {
+    background-color: #9c784d !important;
+}
+
+.button-color-8 {
+    background-color: #f5d6b6 !important;
+}
+.button-color-8:hover {
+    background-color: #eec9a1 !important;
+}
+
+.button-color-9 {
+    background-color: #fff6f0 !important;
+}
+.button-color-9:hover {
+    background-color: #fffaf7 !important;
+}
+
+.button-color-10 {
+    background-color: #f05964 !important;
+}
+.button-color-10:hover {
+    background-color: #cc4953 !important;
+}
+
+.button-color-11 {
+    background-color: #ffe8eb !important;
+}
+.button-color-11:hover {
+    background-color: #ffdce1 !important;
+}
+
+.button-color-12 {
+    background-color: #9ccff0 !important;
+}
+.button-color-12:hover {
+    background-color: #89c4ee !important;
+}
+
+.button-color-13 {
+    background-color: #edf6ff !important;
+}
+.button-color-13:hover {
+    background-color: #d8ecff !important;
+}
+
+
 
 
 .footer-filled {
@@ -90,21 +212,60 @@ background-color: #a80404!important;
 }
 
 
-.border-color-1{
-    border-color: #780000!important;
+
+/* Estilos bordes con todos los colores 
+.border-color-1 {
+    border-color: #780000 !important;
 }
-.border-color-2{
-    border-color: #c1121f!important;
+
+.border-color-2 {
+    border-color: #c1121f !important;
 }
-.border-color-3{
-    border-color: #fdf0d5!important;
+
+.border-color-3 {
+    border-color: #fdf0d5 !important;
 }
-.border-color-4{
-    border-color: #003049!important;
+
+.border-color-4 {
+    border-color: #669bbc !important;
 }
-.border-color-5{
-    border-bottom: solid 0.2rem #669bbc!important;
+
+.border-color-5 {
+    border-color: #003049 !important;
 }
+
+.border-color-6 {
+    border-color: #e9cc92 !important;
+}
+
+.border-color-7 {
+    border-color: #b68f5f !important;
+}
+
+.border-color-8 {
+    border-color: #f5d6b6 !important;
+}
+
+.border-color-9 {
+    border-color: #fff6f0 !important;
+}
+
+.border-color-10 {
+    border-color: #f05964 !important;
+}
+
+.border-color-11 {
+    border-color: #ffe8eb !important;
+}
+
+.border-color-12 {
+    border-color: #9ccff0 !important;
+}
+
+.border-color-13 {
+    border-color: #edf6ff !important;
+}
+
 
 .closing-section {
     height:30rem;
@@ -114,35 +275,224 @@ background-color: #a80404!important;
     height:13rem;
 }
 
-.button-2-color-2{
-   border : solid 0.3rem#c1121f!important;
-}
-.button-2-color-2:hover{
-    border-color:#e93440!important;
-}
 
-.button-2-color-3{
-    border : solid 0.3rem #fdf0d5!important;
-}
-.button-2-color-3:hover{
-    border-color: #fffdf8!important;
-}
-
-.button-2-color-4{
-   border : solid 0.3rem #003049!important;
-}
-.button-2-color-4:hover{
-    border-color: #054f77!important;
-}
-
-.button-2-color-5{
-  border : solid 0.3rem #669bbc!important;
-}
-.button-2-color-5:hover{
-   border-color: #79accc!important;
-}
 
 .img-footer {
     height:10rem;
 }
+
+
+.link-color-5{
+    cursor:pointer!important;
+    color:#669bbc!important;
+    text-decoration: underline!important;
+}
+
+.link-color-5:hover{
+    color:#366c8d!important;
+}
+
+
+.item-dropdown:hover {
+    background-color:  #eec699!important;
+}
+
+.no-ring:focus {
+    outline:none!important;
+    box-shadow:none!important;
+}
+
+
+.modal-profile-card{
+    height: 50vh;
+    width:25rem;
+}
+
+
+/*Estilo para los dropdown que no queremos que tengan hover ni focus*/
+/*Estilos fondos con colores de diseño*/
+
+.back-color-1{ background-color: #1d3557 !important; }
+.back-color-2{ background-color: #45769d !important; }
+.back-color-3{ background-color: #a8dadc !important; }
+.back-color-4{ background-color: #ccebed !important; }
+.back-color-5{ background-color: #f1faee !important; }
+.back-color-6{ background-color: #e63946 !important; }
+.back-color-7{ background-color: #ee626a !important; }
+.back-color-8{ background-color: #f58c92 !important; }
+
+
+/* Colores de fuente */
+
+.font-color-1{ color: #1d3557 !important; }
+.font-color-2{ color: #45769d !important; }
+.font-color-3{ color: #a8dadc !important; }
+.font-color-4{ color: #ccebed !important; }
+.font-color-5{ color: #f1faee !important; }
+.font-color-6{ color: #e63946 !important; }
+.font-color-7{ color: #ee626a !important; }
+.font-color-8{ color: #f58c92 !important; }
+
+
+/* Botones */
+
+.button-color-1{
+    background-color: #1d3557 !important;
+}
+.button-color-1:hover{
+    background-color: #274673 !important;
+}
+
+.button-color-2{
+    background-color: #45769d !important;
+}
+.button-color-2:hover{
+    background-color: #5b89ad !important;
+}
+
+.button-color-3{
+    background-color: #a8dadc !important;
+}
+.button-color-3:hover{
+    background-color: #bfe8e9 !important;
+}
+
+.button-color-4{
+    background-color: #ccebed !important;
+}
+.button-color-4:hover{
+    background-color: #e2f6f7 !important;
+}
+
+.button-color-5{
+    background-color: #f1faee !important;
+}
+.button-color-5:hover{
+    background-color: #ffffff !important;
+}
+
+.button-color-6{
+    background-color: #e63946 !important;
+}
+.button-color-6:hover{
+    background-color: #c92e3a !important;
+}
+
+.button-color-7{
+    background-color: #ee626a !important;
+}
+.button-color-7:hover{
+    background-color: #d6545c !important;
+}
+
+.button-color-8{
+    background-color: #f58c92 !important;
+}
+.button-color-8:hover{
+    background-color: #e97a83 !important;
+}
+
+
+/* Bordes */
+
+.border-color-1{ border-color: #1d3557 !important; }
+.border-color-2{ border-color: #45769d !important; }
+.border-color-3{ border-color: #a8dadc !important; }
+.border-color-4{ border-color: #ccebed !important; }
+.border-color-5{ border-color: #f1faee !important; }
+.border-color-6{ border-color: #e63946 !important; }
+.border-color-7{ border-color: #ee626a !important; }
+.border-color-8{ border-color: #f58c92 !important; }
+
+
+/* Otros estilos */
+
+.footer-filled {
+    width:100%;
+    height: 2.5rem;
+}
+
+.navbar-filled{
+    width: 100%;
+    height: 1rem;
+}
+
+.jumbotron {
+    height: 27rem;
+}
+
+
+/*Clases de ancho en porcentaje */
+
+
+.w-10 { width: 10%; }
+.w-20 { width: 20%; }
+.w-25 { width: 25%; }
+.w-30 { width: 30%; }
+.w-35 { width: 35%; }
+.w-40 { width: 40%; }
+.w-45 { width: 45%; }
+.w-50 { width: 50%; }
+.w-55 { width: 55%; }
+.w-60 { width: 60%; }
+.w-65 { width: 65%; }
+.w-70 { width: 70%; }
+.w-75 { width: 75%; }
+.w-80 { width: 80%; }
+.w-85 { width: 85%; }
+.w-90 { width: 90%; }
+.w-95 { width: 95%; }
+.w-100 { width: 100%; }
+
+
+
+.jumbotron-base {
+    height: 15rem;
+}
+
+
+.jumbotron-image {
+    width: 20em;
+}
+
+.jumbotron-text{
+    height: 10em;
+    background-color: red;
+}
+
+.img-closing-section{
+    height:7rem;
+}
+
+
+
+
+
+.link-color-5{
+    cursor:pointer !important;
+    color:#f1faee !important;
+    text-decoration: underline !important;
+}
+
+.link-color-5:hover{
+    color:#ccebed !important;
+}
+
+.item-dropdown:hover {
+    background-color: #a8dadc !important;
+}
+
+.no-ring:focus {
+    outline:none !important;
+    box-shadow:none !important;
+}
+
+.modal-profile-card{
+    height: 50vh;
+    width:25rem;
+}
+
+
+
+
 

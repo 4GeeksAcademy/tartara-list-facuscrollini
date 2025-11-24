@@ -1,0 +1,23 @@
+@media (min-width: 576px){
+    .fs-sm-1 { font-size: 2.5rem!important;}
+    .fs-sm-2 { font-size: 2rem!important;}
+    .fs-sm-3 {font-size: 1.75rem!important;}
+    .fs-sm-5 {font-size: 1.5rem!important;}
+    .fs-sm-6 {font-size: 1rem!important;}
+}
+
+@media(min-width: 768px){
+    .fs-md-1 { font-size: 2.5rem!important;}
+    .fs-md-2 { font-size: 2rem!important;}
+    .fs-md-3 {font-size: 1.75rem!important;}
+    .fs-md-5 {font-size: 1.5rem!important;}
+    .fs-md-6 {font-size: 1rem!important;}
+}
+
+@media (min-width:992px){
+    .fs-lg-1 { font-size: 2.5rem!important;}
+    .fs-lg-2 { font-size: 2rem!important;}
+    .fs-lg-3 {font-size: 1.75rem!important;}
+    .fs-lg-5 {font-size: 1.5rem!important;}
+    .fs-lg-6 {font-size: 1rem!important;}
+}

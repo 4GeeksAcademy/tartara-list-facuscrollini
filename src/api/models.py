@@ -100,7 +100,7 @@ class FriendshipMission(db.Model):
         return {
             "id": self.id,
             "title": self.title,
-            "decription": self.description,
+            "description": self.description,
             "is_active": self.is_active
         }
     
