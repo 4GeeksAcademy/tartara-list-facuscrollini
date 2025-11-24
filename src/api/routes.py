@@ -39,7 +39,9 @@ def login():
 
     access_token = create_access_token(identity=str(user.id))
 
+
     return jsonify({"token": access_token, "user_id": user.id, "user_name": user.user_name, "email": user.email}), 200
+
 
 # -----------------------------TOKEN VERIFICATION--------------------------#
 
@@ -156,6 +158,7 @@ def edit_user():
 
     user_id = request.args.get("user_id")
 
+
     if not user_id:
         return {"error": "user_id was not provided on query params"}
 
@@ -179,18 +182,22 @@ def edit_user():
                     return jsonify({"error": f"user_name o email already exist, try using another one. "}), 400
         
 
+
             if hasattr(user, key):
                 setattr(user, key, value)
         
 
     db.session.commit()
 
+
     return jsonify(user.serialize()), 200
+
 
 
 # ------------------------------------------------------FIN CRUD USERS----------------------------------------------------------------------------#
 
 # ------------------------------------------------------FRIEND CRUD--------------------------------------------------------------------------------#
+
 
 # -----------------------GET USER FRIENDSHIPS---------------------------#
 @api.route('user/friendships/', methods=['GET'])
@@ -199,6 +206,7 @@ def get_frienship():
   
 
     user_id = request.args.get("user_id")
+
 
     if not user_id:
         return jsonify({"error": "please send a user_id information on the body"}), 400
@@ -338,6 +346,13 @@ def get_user_missions():
 
  # -----------------GET UNIQUE USER Mission------------------#
 
+    return jsonify([mission.serialize() for mission in missions]), 200
+
+ # -----------------GET UNIQUE USER Mission------------------#
+
+
+@api.route('/user/mission', methods=['GET'])
+def get_user_mission():
 
 @api.route('/user/mission', methods=['GET'])
 def get_user_mission():
@@ -627,6 +642,7 @@ def create_friendship_mission():
 
  # -----------------DELETE UNIQUE FRIEND Mission------------------#
 
+ # -----------------DELETE UNIQUE FRIEND Mission------------------#
 
 @api.route('/friendship/mission', methods=['DELETE'])
 def delete_friendship_mission():
